@@ -104,8 +104,8 @@ export default function TrendsPage() {
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={pawnTrendData}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                    <XAxis 
-                      dataKey="month" 
+                    <XAxis
+                      dataKey="month"
                       className="text-xs"
                       tick={{ fill: "hsl(var(--muted-foreground))" }}
                     />
@@ -149,7 +149,7 @@ export default function TrendsPage() {
                       yAxisId="left"
                       type="monotone"
                       dataKey="count"
-                      stroke="hsl(var(--primary))"
+                      stroke="#3b82f6"
                       strokeWidth={2}
                       dot={{ r: 4 }}
                       name="จำนวนครั้ง"
@@ -158,7 +158,7 @@ export default function TrendsPage() {
                       yAxisId="right"
                       type="monotone"
                       dataKey="amount"
-                      stroke="hsl(142 76% 36%)"
+                      stroke="#60a5fa"
                       strokeWidth={2}
                       dot={{ r: 4 }}
                       name="มูลค่า"
@@ -230,8 +230,8 @@ export default function TrendsPage() {
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={goldPriceTrendData}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                    <XAxis 
-                      dataKey="week" 
+                    <XAxis
+                      dataKey="week"
                       className="text-xs"
                       tick={{ fill: "hsl(var(--muted-foreground))" }}
                     />
@@ -252,16 +252,16 @@ export default function TrendsPage() {
                       yAxisId="left"
                       type="monotone"
                       dataKey="price"
-                      stroke="hsl(45 93% 47%)"
-                      fill="hsl(45 93% 47% / 0.2)"
+                      stroke="#60a5fa"
+                      fill="rgba(59, 130, 246, 0.2)"
                       name="ราคาทอง"
                     />
                     <Area
                       yAxisId="right"
                       type="monotone"
                       dataKey="volume"
-                      stroke="hsl(var(--primary))"
-                      fill="hsl(var(--primary) / 0.2)"
+                      stroke="#3b82f6"
+                      fill="rgba(59, 130, 246, 0.2)"
                       name="ปริมาณจำนำ"
                     />
                   </AreaChart>
@@ -281,8 +281,8 @@ export default function TrendsPage() {
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={seasonalData}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                    <XAxis 
-                      dataKey="period" 
+                    <XAxis
+                      dataKey="period"
                       className="text-xs"
                       tick={{ fill: "hsl(var(--muted-foreground))" }}
                     />
@@ -302,14 +302,14 @@ export default function TrendsPage() {
                     <Bar
                       yAxisId="left"
                       dataKey="avgPawns"
-                      fill="hsl(var(--primary))"
+                      fill="#3b82f6"
                       name="จำนวนครั้งเฉลี่ย"
                       radius={[8, 8, 0, 0]}
                     />
                     <Bar
                       yAxisId="right"
                       dataKey="avgAmount"
-                      fill="hsl(142 76% 36%)"
+                      fill="#60a5fa"
                       name="มูลค่าเฉลี่ย"
                       radius={[8, 8, 0, 0]}
                     />

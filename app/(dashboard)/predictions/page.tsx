@@ -154,12 +154,12 @@ export default function PredictionsOverviewPage() {
                                     <AreaChart data={predictionData}>
                                         <defs>
                                             <linearGradient id="colorActual" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                                                <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                                                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                                                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                                             </linearGradient>
                                             <linearGradient id="colorPredicted" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor="hsl(142 76% 36%)" stopOpacity={0.3} />
-                                                <stop offset="95%" stopColor="hsl(142 76% 36%)" stopOpacity={0} />
+                                                <stop offset="5%" stopColor="#60a5fa" stopOpacity={0.3} />
+                                                <stop offset="95%" stopColor="#60a5fa" stopOpacity={0} />
                                             </linearGradient>
                                         </defs>
                                         <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
@@ -205,7 +205,7 @@ export default function PredictionsOverviewPage() {
                                         <Area
                                             type="monotone"
                                             dataKey="actual"
-                                            stroke="hsl(var(--primary))"
+                                            stroke="#3b82f6"
                                             fillOpacity={1}
                                             fill="url(#colorActual)"
                                             strokeWidth={2}
@@ -214,7 +214,7 @@ export default function PredictionsOverviewPage() {
                                         <Area
                                             type="monotone"
                                             dataKey="predicted"
-                                            stroke="hsl(142 76% 36%)"
+                                            stroke="#60a5fa"
                                             fillOpacity={1}
                                             fill="url(#colorPredicted)"
                                             strokeWidth={2}

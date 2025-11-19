@@ -140,8 +140,8 @@ export default function ForfeitedAssetsPredictionPage() {
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={forfeitedForecast}>
                 <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                <XAxis 
-                  dataKey="month" 
+                <XAxis
+                  dataKey="month"
                   className="text-xs"
                   tick={{ fill: "hsl(var(--muted-foreground))" }}
                 />
@@ -181,7 +181,7 @@ export default function ForfeitedAssetsPredictionPage() {
                 <Line
                   type="monotone"
                   dataKey="actual"
-                  stroke="hsl(var(--primary))"
+                  stroke="#3b82f6"
                   strokeWidth={2}
                   dot={{ r: 5 }}
                   name="จำนวนจริง"
@@ -189,7 +189,7 @@ export default function ForfeitedAssetsPredictionPage() {
                 <Line
                   type="monotone"
                   dataKey="predicted"
-                  stroke="hsl(25 95% 53%)"
+                  stroke="#60a5fa"
                   strokeWidth={2}
                   strokeDasharray="5 5"
                   dot={{ r: 5 }}
@@ -219,8 +219,8 @@ export default function ForfeitedAssetsPredictionPage() {
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={categoryBreakdown}>
                     <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-                    <XAxis 
-                      dataKey="category" 
+                    <XAxis
+                      dataKey="category"
                       className="text-xs"
                       tick={{ fill: "hsl(var(--muted-foreground))" }}
                     />
@@ -232,13 +232,13 @@ export default function ForfeitedAssetsPredictionPage() {
                     <Legend />
                     <Bar
                       dataKey="current"
-                      fill="hsl(var(--primary))"
+                      fill="#3b82f6"
                       name="ปัจจุบัน"
                       radius={[8, 8, 0, 0]}
                     />
                     <Bar
                       dataKey="predicted"
-                      fill="hsl(25 95% 53%)"
+                      fill="#60a5fa"
                       name="คาดการณ์ (3 เดือน)"
                       radius={[8, 8, 0, 0]}
                     />
@@ -273,8 +273,8 @@ export default function ForfeitedAssetsPredictionPage() {
                           <td className="p-3 text-sm text-right">{item.current}</td>
                           <td className="p-3 text-sm text-right">{item.predicted}</td>
                           <td className="p-3 text-right">
-                            <Badge 
-                              variant="outline" 
+                            <Badge
+                              variant="outline"
                               className={change > 0 ? "text-orange-600 border-orange-600" : "text-green-600 border-green-600"}
                             >
                               {change > 0 ? <TrendingUp className="h-3 w-3 mr-1 inline" /> : <TrendingDown className="h-3 w-3 mr-1 inline" />}
@@ -306,12 +306,12 @@ export default function ForfeitedAssetsPredictionPage() {
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <h3 className="font-semibold">{segment.risk}</h3>
-                        <Badge 
+                        <Badge
                           variant="outline"
                           className={
                             index === 0 ? "text-red-600 border-red-600" :
-                            index === 1 ? "text-orange-600 border-orange-600" :
-                            "text-green-600 border-green-600"
+                              index === 1 ? "text-orange-600 border-orange-600" :
+                                "text-green-600 border-green-600"
                           }
                         >
                           {segment.percentage}%
@@ -323,12 +323,11 @@ export default function ForfeitedAssetsPredictionPage() {
                       </div>
                     </div>
                     <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
-                      <div 
-                        className={`h-full rounded-full ${
-                          index === 0 ? "bg-red-500" :
+                      <div
+                        className={`h-full rounded-full ${index === 0 ? "bg-red-500" :
                           index === 1 ? "bg-orange-500" :
-                          "bg-green-500"
-                        }`}
+                            "bg-green-500"
+                          }`}
                         style={{ width: `${segment.percentage}%` }}
                       />
                     </div>

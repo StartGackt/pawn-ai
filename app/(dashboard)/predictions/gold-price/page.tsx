@@ -158,8 +158,8 @@ export default function GoldPricePredictionPage() {
                             <AreaChart data={goldPriceForecast}>
                                 <defs>
                                     <linearGradient id="colorPredicted" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor="hsl(142 76% 36%)" stopOpacity={0.3} />
-                                        <stop offset="95%" stopColor="hsl(142 76% 36%)" stopOpacity={0} />
+                                        <stop offset="5%" stopColor="#60a5fa" stopOpacity={0.3} />
+                                        <stop offset="95%" stopColor="#60a5fa" stopOpacity={0} />
                                     </linearGradient>
                                     <linearGradient id="colorConfidence" x1="0" y1="0" x2="0" y2="1">
                                         <stop offset="5%" stopColor="hsl(var(--muted))" stopOpacity={0.5} />
@@ -235,7 +235,7 @@ export default function GoldPricePredictionPage() {
                                 <Line
                                     type="monotone"
                                     dataKey="actual"
-                                    stroke="hsl(var(--primary))"
+                                    stroke="#3b82f6"
                                     strokeWidth={2}
                                     dot={{ r: 4 }}
                                     name="ราคาจริง"
@@ -243,7 +243,7 @@ export default function GoldPricePredictionPage() {
                                 <Line
                                     type="monotone"
                                     dataKey="predicted"
-                                    stroke="hsl(142 76% 36%)"
+                                    stroke="#60a5fa"
                                     strokeWidth={2}
                                     strokeDasharray="5 5"
                                     dot={{ r: 4 }}
@@ -287,8 +287,8 @@ export default function GoldPricePredictionPage() {
                                         <div className="h-2 w-full bg-muted rounded-full overflow-hidden">
                                             <div
                                                 className={`h-full rounded-full ${factor.impact >= 80 ? "bg-green-500" :
-                                                        factor.impact >= 60 ? "bg-blue-500" :
-                                                            "bg-amber-500"
+                                                    factor.impact >= 60 ? "bg-blue-500" :
+                                                        "bg-amber-500"
                                                     }`}
                                                 style={{ width: `${factor.impact}%` }}
                                             />

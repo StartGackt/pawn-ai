@@ -173,14 +173,14 @@ export default function ComparisonPage() {
                                         <Bar
                                             yAxisId="left"
                                             dataKey="pawns"
-                                            fill="hsl(var(--primary))"
+                                            fill="#3b82f6"
                                             name="จำนวนจำนำ"
                                             radius={[8, 8, 0, 0]}
                                         />
                                         <Bar
                                             yAxisId="right"
                                             dataKey="amount"
-                                            fill="hsl(142 76% 36%)"
+                                            fill="#60a5fa"
                                             name="มูลค่า (บาท)"
                                             radius={[8, 8, 0, 0]}
                                         />
@@ -310,7 +310,7 @@ export default function ComparisonPage() {
                                         <Line
                                             type="monotone"
                                             dataKey="thisYear"
-                                            stroke="hsl(var(--primary))"
+                                            stroke="#3b82f6"
                                             strokeWidth={2}
                                             dot={{ r: 4 }}
                                             name="ปีนี้ (2025)"
@@ -353,22 +353,22 @@ export default function ComparisonPage() {
                                         <Radar
                                             name="สาขากลาง"
                                             dataKey="สาขากลาง"
-                                            stroke="hsl(var(--primary))"
-                                            fill="hsl(var(--primary))"
+                                            stroke="#3b82f6"
+                                            fill="#3b82f6"
                                             fillOpacity={0.3}
                                         />
                                         <Radar
                                             name="สาขาเหนือ"
                                             dataKey="สาขาเหนือ"
-                                            stroke="hsl(142 76% 36%)"
-                                            fill="hsl(142 76% 36%)"
+                                            stroke="#60a5fa"
+                                            fill="#60a5fa"
                                             fillOpacity={0.3}
                                         />
                                         <Radar
                                             name="สาขาใต้"
                                             dataKey="สาขาใต้"
-                                            stroke="hsl(45 93% 47%)"
-                                            fill="hsl(45 93% 47%)"
+                                            stroke="#93c5fd"
+                                            fill="#93c5fd"
                                             fillOpacity={0.3}
                                         />
                                         <Legend />

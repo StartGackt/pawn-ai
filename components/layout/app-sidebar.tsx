@@ -133,9 +133,9 @@ export function AppSidebar() {
         <Sidebar>
             <SidebarHeader className="flex h-16 flex-row items-center border-b px-6">
                 <div className="flex items-center gap-3">
-                    <Image 
-                        src="/stgk-logo.png" 
-                        alt="สธค. Logo" 
+                    <Image
+                        src="/logo.png"
+                        alt="สธค. Logo"
                         width={40}
                         height={40}
                         className="object-contain"

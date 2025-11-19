@@ -143,7 +143,7 @@ export default function GoldPricesPage() {
                                     yAxisId="left"
                                     type="monotone"
                                     dataKey="domestic"
-                                    stroke="hsl(var(--primary))"
+                                    stroke="#3b82f6"
                                     strokeWidth={2}
                                     dot={{ r: 4 }}
                                     name="ในประเทศ"
@@ -152,7 +152,7 @@ export default function GoldPricesPage() {
                                     yAxisId="right"
                                     type="monotone"
                                     dataKey="global"
-                                    stroke="hsl(45 93% 47%)"
+                                    stroke="#60a5fa"
                                     strokeWidth={2}
                                     dot={{ r: 4 }}
                                     name="โลก"
