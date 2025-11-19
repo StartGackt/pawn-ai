@@ -103,6 +103,11 @@ const navItems = [
                 icon: Sparkles,
             },
             {
+                title: "Predictive Model",
+                href: "/predictions/model",
+                icon: Cpu,
+            },
+            {
                 title: "AI Chatbot",
                 href: "/chat",
                 icon: MessageSquare,
