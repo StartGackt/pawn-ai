@@ -10,7 +10,6 @@ import {
     Wallet,
     TrendingUp,
     Archive,
-    Users,
     DollarSign,
     Coins,
     Globe,

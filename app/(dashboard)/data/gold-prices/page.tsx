@@ -2,9 +2,8 @@
 
 import * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip } from "recharts";
-import { TrendingUp, TrendingDown, Coins } from "lucide-react";
+import { TrendingUp, Coins } from "lucide-react";
 
 const goldPriceData = [
     { date: "1 พ.ย.", domestic: 32500, global: 2015 },

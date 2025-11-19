@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Download, Calendar as CalendarIcon, FileSpreadsheet, Printer, Eye, FileIcon } from "lucide-react";
+import { FileText, Download, FileSpreadsheet, Printer, Eye, FileIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const reportTemplates = [
