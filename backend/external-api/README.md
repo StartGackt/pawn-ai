@@ -268,15 +268,259 @@ Get average inflation for a specific year
 }
 ```
 
-### 6. Gold Thai API (Coming Soon)
+### 6. Thai Gold API
+
+**Purpose**: Get latest Thai gold prices from ทองคําราคา.com
 
 **Service**: `GoldThaiApiService`
-**Purpose**: Get gold prices from Thai gold market
+**Controller**: `GoldThaiApiController`
+**Base URL**: `https://api.chnwt.dev/thai-gold-api`
 
-### 7. Gold Global API (Coming Soon)
+**Note**: This is a public API with no authentication required
+
+#### Endpoints
+
+##### GET /api/external-api/gold-thai/latest
+
+Get latest Thai gold prices (buy/sell) for both gold bars and gold ornaments
+
+**Response Example**:
+
+```json
+{
+  "status": "success",
+  "response": {
+    "date": "18 พฤษภาคม 2565",
+    "update_time": "เวลา 16:37 น.",
+    "price": {
+      "gold": {
+        "buy": "30,300.00",
+        "sell": "29,167.84"
+      },
+      "gold_bar": {
+        "buy": "29,800.00",
+        "sell": "29,700.00"
+      },
+      "change": {
+        "compare_previous": "+50",
+        "compare_yesterday": "-100"
+      }
+    }
+  }
+}
+```
+
+**Price Types**:
+
+- **Gold Bar** (ทองคำแท่ง): Gold bars 96.5% purity, used for investment
+- **Gold Ornament** (ทองรูปพรรณ): Gold jewelry/ornaments, includes crafting cost
+
+**Price Fields**:
+
+- `buy`: Price the shop buys gold from customers (THB per baht)
+- `sell`: Price customers pay to buy gold from shop (THB per baht)
+- `compare_previous`: Change from previous update
+- `compare_yesterday`: Change from yesterday
+
+##### GET /api/external-api/gold-thai/bar
+
+Get gold bar prices as numeric values (no commas)
+
+**Response Example**:
+
+```json
+{
+  "buy": 29800.0,
+  "sell": 29700.0,
+  "date": "18 พฤษภาคม 2565",
+  "updateTime": "เวลา 16:37 น."
+}
+```
+
+##### GET /api/external-api/gold-thai/ornament
+
+Get gold ornament prices as numeric values (no commas)
+
+**Response Example**:
+
+```json
+{
+  "buy": 30300.0,
+  "sell": 29167.84,
+  "date": "18 พฤษภาคม 2565",
+  "updateTime": "เวลา 16:37 น."
+}
+```
+
+### 7. Gold Global API
+
+**Purpose**: Get international precious metals prices from MetalPriceAPI
 
 **Service**: `GoldGlobalApiService`
-**Purpose**: Get international gold prices
+**Controller**: `GoldGlobalApiController`
+**Base URL**: `https://api.metalpriceapi.com/v1`
+**Authentication**: API Key required
+
+#### Endpoints
+
+##### GET /api/external-api/gold-global/latest
+
+Get latest precious metals and currency exchange rates
+
+**Query Parameters**:
+
+- `base`: Base currency (default: USD)
+- `currencies`: Comma-separated list (e.g., XAU,XAG,THB,EUR)
+
+**Response Example**:
+
+```json
+{
+  "success": true,
+  "base": "USD",
+  "timestamp": 1625609377,
+  "rates": {
+    "EUR": 0.8255334,
+    "XAG": 0.03602543,
+    "XAU": 0.00053853,
+    "THB": 33.25
+  }
+}
+```
+
+**Metal Codes**:
+
+- **XAU**: Gold (Troy Ounce)
+- **XAG**: Silver (Troy Ounce)
+- **XPT**: Platinum (Troy Ounce)
+- **XPD**: Palladium (Troy Ounce)
+
+**Note**: Rates show how much 1 USD equals in the metal. To get price per ounce, use: `1 / rate`
+
+##### GET /api/external-api/gold-global/gold
+
+Get current gold price in USD and THB per troy ounce
+
+**Response Example**:
+
+```json
+{
+  "price_per_oz": 1856.91,
+  "price_in_thb": 61742.24,
+  "timestamp": 1625609377,
+  "date": "2021-07-07T03:29:37.000Z"
+}
+```
+
+##### GET /api/external-api/gold-global/silver
+
+Get current silver price in USD and THB per troy ounce
+
+**Response Example**:
+
+```json
+{
+  "price_per_oz": 27.76,
+  "price_in_thb": 922.53,
+  "timestamp": 1625609377,
+  "date": "2021-07-07T03:29:37.000Z"
+}
+```
+
+##### GET /api/external-api/gold-global/all-metals
+
+Get all precious metals prices (Gold, Silver, Platinum, Palladium)
+
+**Response Example**:
+
+```json
+{
+  "gold": { "price_per_oz": 1856.91, "price_in_thb": 61742.24 },
+  "silver": { "price_per_oz": 27.76, "price_in_thb": 922.53 },
+  "platinum": { "price_per_oz": 1145.23, "price_in_thb": 38078.89 },
+  "palladium": { "price_per_oz": 2845.67, "price_in_thb": 94618.53 },
+  "timestamp": 1625609377,
+  "date": "2021-07-07T03:29:37.000Z"
+}
+```
+
+##### GET /api/external-api/gold-global/convert
+
+Convert amount between currencies/metals
+
+**Query Parameters**:
+
+- `from`: Source currency/metal code (e.g., USD, THB, XAU)
+- `to`: Target currency/metal code
+- `amount`: Amount to convert
+
+**Example**: Convert 100 USD to Gold (XAU)
+
+```
+GET /api/external-api/gold-global/convert?from=USD&to=XAU&amount=100
+```
+
+**Response Example**:
+
+```json
+{
+  "success": true,
+  "query": { "from": "USD", "to": "XAU", "amount": 100 },
+  "info": { "quote": 0.0005628, "timestamp": 1619150400 },
+  "result": 0.05628031
+}
+```
+
+##### GET /api/external-api/gold-global/historical/:date
+
+Get historical metal prices for a specific date
+
+**Path Parameters**:
+
+- `date`: Date in YYYY-MM-DD format (e.g., 2024-01-15)
+
+**Query Parameters**:
+
+- `base`: Base currency (default: USD)
+- `currencies`: Comma-separated list of currencies/metals
+
+**Example**:
+
+```
+GET /api/external-api/gold-global/historical/2024-01-15?currencies=XAU,XAG,THB
+```
+
+##### GET /api/external-api/gold-global/change
+
+Get price change over time period
+
+**Query Parameters**:
+
+- `start_date`: Start date (YYYY-MM-DD) - Required
+- `end_date`: End date (YYYY-MM-DD) - Required
+- `base`: Base currency (default: USD)
+- `currencies`: Comma-separated list (default: XAU,XAG)
+
+**Response Example**:
+
+```json
+{
+  "success": true,
+  "base": "USD",
+  "start_date": "2024-01-01",
+  "end_date": "2024-01-31",
+  "rates": {
+    "XAU": {
+      "start_rate": 0.00059101,
+      "end_rate": 0.00059256,
+      "change": 0.00000155,
+      "change_pct": 0.2623
+    }
+  }
+}
+```
+
+**Troy Ounce**: International standard unit for precious metals (31.1035 grams)
 
 ## Usage
 

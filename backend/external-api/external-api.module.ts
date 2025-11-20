@@ -11,7 +11,9 @@ import { PolicyRateApiController } from './policy-rate-api/policy-rate-api.contr
 import { InflationApiService } from './inflation-api/inflation-api.service';
 import { InflationApiController } from './inflation-api/inflation-api.controller';
 import { GoldThaiApiService } from './gold-thai-api/gold-thai-api.service';
+import { GoldThaiApiController } from './gold-thai-api/gold-thai-api.controller';
 import { GoldGlobalApiService } from './gold-global-api/gold-global-api.service';
+import { GoldGlobalApiController } from './gold-global-api/gold-global-api.controller';
 
 @Module({
   imports: [HttpModule],
@@ -21,6 +23,8 @@ import { GoldGlobalApiService } from './gold-global-api/gold-global-api.service'
     HolidayApiController,
     PolicyRateApiController,
     InflationApiController,
+    GoldThaiApiController,
+    GoldGlobalApiController,
   ],
   providers: [
     BotApiService,
