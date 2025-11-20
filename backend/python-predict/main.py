@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api import predictions, health
+from app.api import predictions, health, trends
 from app.config import settings
 import uvicorn
 
@@ -26,6 +26,7 @@ app.include_router(health.router, tags=["Health"])
 app.include_router(
     predictions.router, prefix="/api/v1/predictions", tags=["Predictions"]
 )
+app.include_router(trends.router, prefix="/api/v1", tags=["Google Trends"])
 
 
 @app.get("/")

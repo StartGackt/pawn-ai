@@ -343,6 +343,52 @@ GET /
 GET /health
 ```
 
+### Google Trends Analysis (New! 🎉)
+
+**บริการวิเคราะห์แนวโน้มการค้นหาทองคำในไทย**
+
+พัฒนาด้วย Pytrends เพื่อวิเคราะห์:
+
+- 📊 **Seasonal Patterns** - รูปแบบตามฤดูกาล (ตรุษจีน, วาเลนไทน์)
+- 🎯 **Behavioral Insights** - พฤติกรรมการค้นหา (ซื้อทอง, จำนำทอง)
+- 📈 **Trend Momentum** - ทิศทางแนวโน้มปัจจุบัน (เพิ่มขึ้น/ลดลง)
+- 🏆 **Keyword Comparison** - เปรียบเทียบคำค้นหา
+
+**คำค้นหาที่ติดตาม:**
+
+- Seasonal: "ซื้อทองตรุษจีน", "ของขวัญวาเลนไทน์", "ออมทอง"
+- General: "ราคาทอง", "ซื้อทอง", "ขายทอง", "จำนำทอง"
+- Investment: "ลงทุนทอง", "กองทุนทอง", "ซื้อทองออนไลน์"
+
+**📚 Documentation:** [app/services/README_TRENDS.md](./app/services/README_TRENDS.md)
+
+```
+GET  /api/v1/trends/health           # Health check
+POST /api/v1/trends/fetch            # Fetch trends data
+POST /api/v1/trends/seasonal         # Seasonal analysis
+POST /api/v1/trends/compare          # Compare keywords
+POST /api/v1/trends/score            # Current trend score
+POST /api/v1/trends/behavioral       # Behavioral insights
+GET  /api/v1/trends/keywords         # List keywords
+GET  /api/v1/trends/festivals        # List festivals
+```
+
+**ตัวอย่างการใช้งาน:**
+
+```bash
+# วิเคราะห์แนวโน้มช่วงตรุษจีน
+curl -X POST http://localhost:8001/api/v1/trends/seasonal \
+  -H "Content-Type: application/json" \
+  -d '{"keywords": ["ซื้อทองตรุษจีน"], "timeframe": "today 12-m"}'
+
+# เปรียบเทียบ ซื้อทอง vs จำนำทอง
+curl -X POST http://localhost:8001/api/v1/trends/compare \
+  -H "Content-Type: application/json" \
+  -d '{"keywords": ["ซื้อทอง", "จำนำทอง"], "timeframe": "today 12-m"}'
+```
+
+---
+
 ### Gold Price Predictions
 
 ```
