@@ -14,6 +14,10 @@ import { GoldThaiApiService } from './gold-thai-api/gold-thai-api.service';
 import { GoldThaiApiController } from './gold-thai-api/gold-thai-api.controller';
 import { GoldGlobalApiService } from './gold-global-api/gold-global-api.service';
 import { GoldGlobalApiController } from './gold-global-api/gold-global-api.controller';
+import { AlphaVantageApiService } from './alpha-vantage-api/alpha-vantage-api.service';
+import { AlphaVantageApiController } from './alpha-vantage-api/alpha-vantage-api.controller';
+import { WorldBankApiService } from './world-bank-api/world-bank-api.service';
+import { WorldBankApiController } from './world-bank-api/world-bank-api.controller';
 
 @Module({
   imports: [HttpModule],
@@ -25,6 +29,8 @@ import { GoldGlobalApiController } from './gold-global-api/gold-global-api.contr
     InflationApiController,
     GoldThaiApiController,
     GoldGlobalApiController,
+    AlphaVantageApiController,
+    WorldBankApiController,
   ],
   providers: [
     BotApiService,
@@ -34,6 +40,8 @@ import { GoldGlobalApiController } from './gold-global-api/gold-global-api.contr
     InflationApiService,
     GoldThaiApiService,
     GoldGlobalApiService,
+    AlphaVantageApiService,
+    WorldBankApiService,
   ],
   exports: [
     BotApiService,
@@ -43,6 +51,8 @@ import { GoldGlobalApiController } from './gold-global-api/gold-global-api.contr
     InflationApiService,
     GoldThaiApiService,
     GoldGlobalApiService,
+    AlphaVantageApiService,
+    WorldBankApiService,
   ],
 })
 export class ExternalApiModule {}
