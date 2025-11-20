@@ -39,6 +39,7 @@ async function bootstrap() {
     .addTag('ml', 'Machine Learning predictions')
     .addTag('llm', 'LLM chatbot integration')
     .addTag('analytics', 'Business analytics')
+    .addTag('external-api', 'External API integrations (BOT, Gold prices, etc.)')
     .addBearerAuth()
     .build();
 
