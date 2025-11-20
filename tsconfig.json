@@ -19,7 +19,11 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@/*": ["backend/*"]
-    },
-    "ignoreDeprecations": "6.0"
-  }
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "frontend",
+    "backend/python-predict"
+  ]
 }
