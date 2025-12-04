@@ -13,11 +13,10 @@
 
 ## 🎯 ภาพรวมระบบ
 
-Pawn AI เป็นระบบ Monorepo ที่ประกอบด้วย 3 ส่วนหลัก:
+Pawn AI เป็นระบบ Dashboard สำหรับจัดการร้านรับจำนำอัจฉริยะ ที่ประกอบด้วย:
 
 1. **Frontend** - Next.js Dashboard สำหรับแสดงผลและจัดการข้อมูล
-2. **Backend API** - NestJS REST API สำหรับจัดการ Business Logic
-3. **ML Service** - Python FastAPI สำหรับ Machine Learning Models
+2. **Notebook** - Jupyter Notebooks สำหรับวิเคราะห์ข้อมูลและสร้าง ML Models
 
 ## 📁 โครงสร้างโปรเจค
 
@@ -29,15 +28,10 @@ pawn-ai/
 │   ├── lib/              # Utilities
 │   └── public/           # Static Assets
 │
-├── pawn-ai-backend/      # NestJS API Service
-│   ├── src/              # Source Code
-│   └── test/             # Unit Tests
+├── notebook/             # Jupyter Notebooks
+│   ├── data/             # Dataset
+│   └── *.ipynb           # Analysis & ML Notebooks
 │
-├── ml-service/           # Python ML Service
-│   ├── main.py           # FastAPI Application
-│   └── models/           # ML Models
-│
-├── ARCHITECTURE.md       # สถาปัตยกรรมระบบ
 └── README.md            # เอกสารนี้
 ```
 
@@ -52,28 +46,21 @@ pawn-ai/
 - **Charts**: Recharts 2.15.4
 - **Icons**: Lucide React
 
-### Backend API
+### Data Analysis (Notebook)
 
-- **Framework**: NestJS 11
-- **Language**: TypeScript 5
-- **Runtime**: Node.js 22+
-- **Database**: (TBD - PostgreSQL/MongoDB)
-
-### ML Service
-
-- **Framework**: FastAPI
 - **Language**: Python 3.13+
-- **ML Libraries**:
-  - Prophet (Time Series Forecasting)
-  - TensorFlow/PyTorch (LSTM Models)
-  - Scikit-learn (XGBoost, K-Means)
+- **Libraries**:
+  - Pandas, NumPy (Data Processing)
+  - Matplotlib, Plotly (Visualization)
+  - Statsmodels (ARIMA, SARIMAX)
+  - Scikit-learn (ML Models)
 
 ## 🚀 การติดตั้ง
 
 ### ข้อกำหนดเบื้องต้น
 
 - Node.js 20+ และ npm/yarn
-- Python 3.13+
+- Python 3.13+ (สำหรับ Notebooks)
 - Git
 
 ### 1. Clone Repository
@@ -90,22 +77,6 @@ cd frontend
 npm install
 ```
 
-### 3. ติดตั้ง Backend API
-
-```bash
-cd ../pawn-ai-backend
-npm install
-```
-
-### 4. ติดตั้ง ML Service
-
-```bash
-cd ../ml-service
-pip install -r requirements.txt
-# หรือใช้ uv
-uv pip install -r requirements.txt
-```
-
 ## 💻 การใช้งาน
 
 ### รัน Frontend (Development)
@@ -117,28 +88,6 @@ npm run dev
 
 เปิดเบราว์เซอร์ที่ `http://localhost:3000`
 
-### รัน Backend API (Development)
-
-```bash
-cd pawn-ai-backend
-npm run start:dev
-```
-
-API จะรันที่ `http://localhost:3001`
-
-### รัน ML Service (Development)
-
-```bash
-cd ml-service
-uvicorn main:app --reload
-```
-
-ML API จะรันที่ `http://localhost:8000`
-
-### รันทั้งหมดพร้อมกัน
-
-สามารถใช้ Terminal แยกกัน 3 หน้าต่าง หรือใช้ tools เช่น `concurrently`, `pm2`, หรือ `docker-compose`
-
 ## ✨ คุณสมบัติหลัก
 
 ### 📊 Dashboard
@@ -146,16 +95,15 @@ ML API จะรันที่ `http://localhost:8000`
 - สรุปยอดธุรกรรมรายวัน/เดือน
 - กราฟแสดงราคาทองคำแบบ Real-time
 - แสดงสินค้าจำนำที่ใกล้หมดอายุ
-- กราฟคาดการณ์ราคาทองคำ 7 วัน (Prophet Model)
+- กราฟคาดการณ์ราคาทองคำ 7 วัน
 
 ### 📈 Predictive Analytics
 
-- **คาดการณ์ราคาทองคำ**: ใช้ Prophet + LSTM
-  - ระยะสั้น: 1-7 วัน (92-94% accuracy)
-  - ระยะกลาง: 1-4 สัปดาห์ (88-92% accuracy)
-  - ระยะยาว: 1-3 เดือน (85-88% accuracy)
-- **ทำนายสินทรัพย์ตีไถ่**: ใช้ XGBoost Classifier
-- **วิเคราะห์พฤติกรรมลูกค้า**: ใช้ K-Means Clustering
+- **คาดการณ์ราคาทองคำ**: ใช้ ARIMA + SARIMAX
+  - ระยะสั้น: 1-7 วัน
+  - ระยะกลาง: 1-4 สัปดาห์
+  - ระยะยาว: 1-3 เดือน
+- **Scenario Analysis**: วิเคราะห์สถานการณ์ต่างๆ
 
 ### 💬 AI Chatbot
 
@@ -166,75 +114,14 @@ ML API จะรันที่ `http://localhost:8000`
 ### 📋 Data Management
 
 - **ข้อมูลสินค้าจำนำ**: จัดการสถานะ, ราคา, ภาพถ่าย
-- **ข้อมูลลูกค้า**: ประวัติการจำนำ, Credit Score
-- **ราคาทองคำ**: บันทึกประวัติราคา, อัพเดทแบบ Real-time
+- **ข้อมูลลูกค้า**: ประวัติการจำนำ
+- **ราคาทองคำ**: บันทึกประวัติราคา
 - **สินทรัพย์ตีไถ่**: ติดตาม, ประเมินมูลค่า
 
 ### 📊 Reports & Analytics
 
 - รายงานยอดขายรายวัน/เดือน/ปี
 - วิเคราะห์ Trend และ Comparison
-- Export ข้อมูลเป็น Excel, PDF
-
-## 🏗️ สถาปัตยกรรม
-
-### Microservices Architecture
-
-```
-┌─────────────┐
-│   Frontend  │ (Next.js)
-│   :3000     │
-└──────┬──────┘
-       │
-       ├─────────────────┐
-       │                 │
-       ▼                 ▼
-┌─────────────┐   ┌─────────────┐
-│   Backend   │   │ ML Service  │
-│   (NestJS)  │◄──┤  (FastAPI)  │
-│   :3001     │   │   :8000     │
-└──────┬──────┘   └─────────────┘
-       │
-       ▼
-┌─────────────┐
-│  Database   │
-│ PostgreSQL  │
-└─────────────┘
-```
-
-### การสื่อสารระหว่าง Services
-
-- **Frontend ↔ Backend**: REST API (Fetch/Axios)
-- **Backend ↔ ML Service**: HTTP REST API
-- **Real-time Updates**: WebSocket (Socket.io - Future)
-
-## 📚 เอกสารเพิ่มเติม
-
-- [Frontend README](./frontend/README.md) - รายละเอียดการพัฒนา Frontend
-- [Backend README](./pawn-ai-backend/README.md) - API Documentation
-- [ML Service README](./ml-service/README.md) - ML Models & Endpoints
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - สถาปัตยกรรมระบบโดยละเอียด
-
-## 🔐 Environment Variables
-
-แต่ละ service จะต้องตั้งค่า Environment Variables ดูรายละเอียดใน README ของแต่ละโปรเจค
-
-## 🧪 Testing
-
-```bash
-# Frontend Tests
-cd frontend
-npm run test
-
-# Backend Tests
-cd pawn-ai-backend
-npm run test
-npm run test:e2e
-
-# ML Service Tests
-cd ml-service
-pytest
-```
 
 ## 📦 Production Build
 
@@ -243,28 +130,6 @@ pytest
 cd frontend
 npm run build
 npm run start
-
-# Backend
-cd pawn-ai-backend
-npm run build
-npm run start:prod
-
-# ML Service
-cd ml-service
-uvicorn main:app --host 0.0.0.0 --port 8000
-```
-
-## 🐳 Docker (Optional)
-
-```bash
-# Build all services
-docker-compose build
-
-# Run all services
-docker-compose up
-
-# Run specific service
-docker-compose up frontend
 ```
 
 ## 🤝 Contributing
@@ -279,18 +144,11 @@ docker-compose up frontend
 
 This project is private and proprietary.
 
-## 👥 Team
-
-- **Frontend Developer**: UI/UX Implementation
-- **Backend Developer**: API & Business Logic
-- **ML Engineer**: Predictive Models
-- **DevOps**: Deployment & Infrastructure
-
 ## 📞 Contact
 
 สำหรับข้อสงสัยหรือปัญหา กรุณาเปิด Issue ใน GitHub Repository
 
 ---
 
-**Last Updated**: November 2025
-**Version**: 0.1.0
+**Last Updated**: December 2025
+**Version**: 1.0.0

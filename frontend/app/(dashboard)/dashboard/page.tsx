@@ -74,20 +74,20 @@ const goldPrices = {
 
 // ข้อมูลกราฟราคาทอง
 const goldPriceTrend = [
-    { date: "15 พ.ย.", price: 32100 },
-    { date: "16 พ.ย.", price: 32050 },
-    { date: "17 พ.ย.", price: 32200 },
-    { date: "18 พ.ย.", price: 32350 },
-    { date: "19 พ.ย.", price: 32500 },
+    { date: "30 พ.ย.", price: 32100 },
+    { date: "1 ธ.ค.", price: 32050 },
+    { date: "2 ธ.ค.", price: 32200 },
+    { date: "3 ธ.ค.", price: 32350 },
+    { date: "4 ธ.ค.", price: 32500 },
 ];
 
 // ข้อมูลการคาดการณ์
 const predictionData = [
-    { date: "20 พ.ย.", actual: 32500, predicted: 32650 },
-    { date: "21 พ.ย.", actual: null, predicted: 32800 },
-    { date: "22 พ.ย.", actual: null, predicted: 32950 },
-    { date: "23 พ.ย.", actual: null, predicted: 33100 },
-    { date: "24 พ.ย.", actual: null, predicted: 33200 },
+    { date: "4 ธ.ค.", actual: 32500, predicted: 32650 },
+    { date: "5 ธ.ค.", actual: null, predicted: 32800 },
+    { date: "6 ธ.ค.", actual: null, predicted: 32950 },
+    { date: "7 ธ.ค.", actual: null, predicted: 33100 },
+    { date: "8 ธ.ค.", actual: null, predicted: 33200 },
 ];
 
 // ข้อมูลประเภททรัพย์
@@ -115,7 +115,7 @@ const alerts = [
     { id: 3, type: "success", message: "อัตราการไถ่ถอนเพิ่มขึ้น 3.2% เมื่อเทียบกับเดือนที่แล้ว", link: "/analytics/trends" },
 ];
 
-// Quick Actions
+// Quick Actions (ลบการอ้างอิง backend ออก)
 const quickActions = [
     { title: "ดูตั๋วจำนำทั้งหมด", icon: Package, link: "/data/pawns", color: "bg-blue-500" },
     { title: "คาดการณ์ราคาทอง", icon: LineChartIcon, link: "/predictions/gold-price", color: "bg-green-500" },
@@ -125,18 +125,18 @@ const quickActions = [
 
 // ข้อมูล Predictive Model Preview (7 วัน)
 const goldPredictionPreview = [
-    { date: "15 พ.ย.", actual: 32100, predicted: null },
-    { date: "16 พ.ย.", actual: 32050, predicted: null },
-    { date: "17 พ.ย.", actual: 32200, predicted: null },
-    { date: "18 พ.ย.", actual: 32350, predicted: null },
-    { date: "19 พ.ย.", actual: 32500, predicted: null },
-    { date: "20 พ.ย.", actual: null, predicted: 32650 },
-    { date: "21 พ.ย.", actual: null, predicted: 32800 },
-    { date: "22 พ.ย.", actual: null, predicted: 32950 },
-    { date: "23 พ.ย.", actual: null, predicted: 33100 },
-    { date: "24 พ.ย.", actual: null, predicted: 33250 },
-    { date: "25 พ.ย.", actual: null, predicted: 33400 },
-    { date: "26 พ.ย.", actual: null, predicted: 33550 },
+    { date: "30 พ.ย.", actual: 32100, predicted: null },
+    { date: "1 ธ.ค.", actual: 32050, predicted: null },
+    { date: "2 ธ.ค.", actual: 32200, predicted: null },
+    { date: "3 ธ.ค.", actual: 32350, predicted: null },
+    { date: "4 ธ.ค.", actual: 32500, predicted: null },
+    { date: "5 ธ.ค.", actual: null, predicted: 32650 },
+    { date: "6 ธ.ค.", actual: null, predicted: 32800 },
+    { date: "7 ธ.ค.", actual: null, predicted: 32950 },
+    { date: "8 ธ.ค.", actual: null, predicted: 33100 },
+    { date: "9 ธ.ค.", actual: null, predicted: 33250 },
+    { date: "10 ธ.ค.", actual: null, predicted: 33400 },
+    { date: "11 ธ.ค.", actual: null, predicted: 33550 },
 ];
 
 export default function DashboardPage() {
@@ -150,7 +150,7 @@ export default function DashboardPage() {
                         <div>
                             <h1 className="text-4xl font-bold tracking-tight mb-2">แดชบอร์ด Pawn AI</h1>
                             <p className="text-blue-100 text-lg">
-                                ภาพรวมระบบจำนำอัจฉริยะ - ข้อมูลแบบเรียลไทม์
+                                ภาพรวมระบบจำนำอัจฉริยะ - ข้อมูลแบบเรียลไทม์ (วันที่ 4 ธันวาคม 2568)
                             </p>
                         </div>
                         <div className="flex flex-col items-end gap-2">
