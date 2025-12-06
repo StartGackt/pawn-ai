@@ -97,8 +97,8 @@ export default function ChatPage() {
         setIsLoading(true);
 
         try {
-            // เรียก Chat API
-            const response = await fetch("/api/chat-simple", {
+            // เรียก Chat API พร้อม Tavily Search Tools
+            const response = await fetch("/api/chat", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

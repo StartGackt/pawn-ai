@@ -4,7 +4,8 @@ import {
   Sparkles,
   MessageSquare,
   TrendingUp,
-  BarChart3
+  BarChart3,
+  LayoutDashboard
 } from "lucide-react";
 
 export default function Home() {
@@ -37,6 +38,12 @@ export default function Home() {
               <Link href="/chat">
                 <MessageSquare className="h-5 w-5" />
                 เริ่มแชทเลย
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="gap-2 px-8">
+              <Link href="/dashboard">
+                <LayoutDashboard className="h-5 w-5" />
+                Dashboard
               </Link>
             </Button>
           </div>

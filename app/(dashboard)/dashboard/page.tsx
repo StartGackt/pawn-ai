@@ -2,6 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button"
 import { Calculator, Camera, ShieldAlert, ArrowRight, TrendingUp } from "lucide-react"
 import Link from "next/link"
+import { GoldPriceDisplay } from "@/components/gold-price-display"
+import { ExchangeRateDisplay } from "@/components/exchange-rate-display"
 
 export default function DashboardPage() {
     return (
@@ -74,34 +76,25 @@ export default function DashboardPage() {
             </div>
 
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                {/* Gold Price Card */}
-                <Card className="col-span-4 border-yellow-200 bg-linear-to-br from-yellow-50 to-white dark:border-yellow-900/50 dark:from-yellow-950/20 dark:to-slate-950">
-                    <CardHeader>
-                        <div className="flex items-center justify-between">
-                            <CardTitle className="flex items-center gap-2 text-yellow-800 dark:text-yellow-500">
-                                <TrendingUp className="h-5 w-5" /> ราคาทองคำวันนี้
-                            </CardTitle>
-                            <span className="text-xs text-muted-foreground">อัพเดท: 09:13 น.</span>
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="grid grid-cols-2 gap-8">
-                            <div>
-                                <p className="text-sm text-muted-foreground">ทองคำแท่ง</p>
-                                <p className="text-3xl font-bold text-slate-900 dark:text-white">฿63,500</p>
-                                <p className="text-xs text-green-600">+100</p>
-                            </div>
-                            <div>
-                                <p className="text-sm text-muted-foreground">ทองรูปพรรณ</p>
-                                <p className="text-3xl font-bold text-slate-900 dark:text-white">฿64,300</p>
-                                <p className="text-xs text-green-600">+100</p>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                {/* Gold Price Card - ใช้ Component จริง */}
+                <div className="col-span-4">
+                    <GoldPriceDisplay />
+                </div>
 
-                {/* Assets Promo */}
-                <Card className="col-span-3 bg-slate-900 text-white">
+                {/* Exchange Rate Widget */}
+                <div className="col-span-3">
+                    <ExchangeRateDisplay compact />
+                </div>
+            </div>
+
+            {/* Full Exchange Rate Table */}
+            <div className="grid gap-4">
+                <ExchangeRateDisplay showAllCurrencies />
+            </div>
+
+            {/* Assets Promo */}
+            <div className="grid gap-4 md:grid-cols-2">
+                <Card className="bg-slate-900 text-white">
                     <CardHeader>
                         <CardTitle className="text-white">ทรัพย์หลุดจำนำ</CardTitle>
                         <CardDescription className="text-slate-400">สินค้าคุณภาพดี ราคาคุ้มค่า</CardDescription>
@@ -116,6 +109,22 @@ export default function DashboardPage() {
                                 ดูรายการทั้งหมด <ArrowRight className="ml-2 h-4 w-4" />
                             </Button>
                         </Link>
+                    </CardContent>
+                </Card>
+
+                <Card className="border-yellow-200 bg-linear-to-br from-yellow-50 to-white dark:border-yellow-900/50 dark:from-yellow-950/20 dark:to-slate-950">
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-yellow-800 dark:text-yellow-500">
+                            <TrendingUp className="h-5 w-5" /> ทำไมต้องเลือกเรา?
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <ul className="space-y-2 text-sm text-muted-foreground">
+                            <li>✓ ดอกเบี้ยต่ำ เริ่มต้น 0.5% ต่อเดือน</li>
+                            <li>✓ ประเมินราคาโปร่งใส ตามราคาตลาด</li>
+                            <li>✓ รับเงินทันที ไม่ต้องรอนาน</li>
+                            <li>✓ บริการออนไลน์ สะดวก ปลอดภัย</li>
+                        </ul>
                     </CardContent>
                 </Card>
             </div>

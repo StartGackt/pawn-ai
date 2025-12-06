@@ -13,35 +13,31 @@ export interface WorldGoldPrice {
 // ใช้ Free API จาก metals.dev หรือ alternative
 export async function GET() {
   try {
-    // ใช้ GoldAPI.io Free tier หรือ alternative APIs
-    // Option 1: ใช้ frankfurter API สำหรับ exchange rate + estimate gold price
-    // Option 2: ใช้ metals-api (free tier)
-    
-    // ดึงข้อมูลจาก Free API
-    const response = await fetch(
-      "https://api.metals.live/v1/spot/gold",
-      { next: { revalidate: 60 } } // Cache 1 minute
-    );
+    // ลองใช้ GoldAPI.io ก่อน
+    const response = await fetch("https://www.goldapi.io/api/XAU/USD", {
+      headers: {
+        "x-access-token": "goldapi-demo",
+        "Content-Type": "application/json",
+      },
+      next: { revalidate: 60 },
+    });
 
-    if (!response.ok) {
-      // Fallback to mock data if API fails
-      return NextResponse.json(getMockGoldData());
+    if (response.ok) {
+      const data = await response.json();
+      const goldPrice: WorldGoldPrice = {
+        price: data.price || 2645,
+        change: data.ch || 0,
+        changePercent: data.chp || 0,
+        high24h: data.high_price || 2660,
+        low24h: data.low_price || 2630,
+        timestamp: new Date().toISOString(),
+        currency: "USD",
+      };
+      return NextResponse.json(goldPrice);
     }
-
-    const data = await response.json();
     
-    // Transform to our format
-    const goldPrice: WorldGoldPrice = {
-      price: data[0]?.price || 2650.50,
-      change: data[0]?.change || 12.30,
-      changePercent: data[0]?.changePercent || 0.47,
-      high24h: data[0]?.high || 2665.00,
-      low24h: data[0]?.low || 2638.00,
-      timestamp: new Date().toISOString(),
-      currency: "USD",
-    };
-
-    return NextResponse.json(goldPrice);
+    // ถ้า API ไม่ทำงาน ใช้ mock data ที่ใกล้เคียงราคาจริง
+    return NextResponse.json(getMockGoldData());
   } catch (error) {
     console.error("Error fetching world gold price:", error);
     // Return mock data on error
@@ -50,16 +46,16 @@ export async function GET() {
 }
 
 function getMockGoldData(): WorldGoldPrice {
-  // Mock data based on current market prices (Dec 2024)
-  const basePrice = 2650 + (Math.random() * 20 - 10);
-  const change = (Math.random() * 30 - 15);
+  // ราคาทองโลกปัจจุบัน ณ ธันวาคม 2024 อยู่ที่ ~$2,640-2,660/oz
+  const basePrice = 2644.58;
+  const change = -2.46;
   
   return {
-    price: Math.round(basePrice * 100) / 100,
-    change: Math.round(change * 100) / 100,
-    changePercent: Math.round((change / basePrice) * 10000) / 100,
-    high24h: Math.round((basePrice + 15) * 100) / 100,
-    low24h: Math.round((basePrice - 12) * 100) / 100,
+    price: basePrice,
+    change: change,
+    changePercent: -0.09,
+    high24h: 2659.58,
+    low24h: 2632.58,
     timestamp: new Date().toISOString(),
     currency: "USD",
   };
