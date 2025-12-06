@@ -253,45 +253,6 @@ export default function ChatPage() {
                     </p>
                 </div>
                 <div className="flex gap-2">
-                    {/* Model Selector */}
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" size="sm" className="min-w-[200px] justify-between">
-                                <span className="flex items-center gap-2">
-                                    <Bot className="h-4 w-4" />
-                                    <span>{MODEL_ICONS[selectedModel] || "🤖"}</span>
-                                    <span className="truncate">
-                                        {availableModels.find(m => m.id === selectedModel)?.name.split(" ")[0] || "Model"}
-                                    </span>
-                                </span>
-                                <ChevronDown className="h-4 w-4 opacity-50" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-[250px]">
-                            {availableModels.map((model) => (
-                                <DropdownMenuItem
-                                    key={model.id}
-                                    onClick={() => setSelectedModel(model.id)}
-                                    className={selectedModel === model.id ? "bg-accent" : ""}
-                                >
-                                    <span className="mr-2">{MODEL_ICONS[model.id] || "🤖"}</span>
-                                    <div className="flex flex-col">
-                                        <span className="font-medium">{model.name}</span>
-                                        <span className="text-xs text-muted-foreground">{model.modelName}</span>
-                                    </div>
-                                </DropdownMenuItem>
-                            ))}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-
-                    <Button variant="outline" size="sm" onClick={handleExportChat}>
-                        <Download className="mr-2 h-4 w-4" />
-                        ส่งออก
-                    </Button>
-                    <Button variant="outline" size="sm" onClick={handleClearChat}>
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        ล้างการสนทนา
-                    </Button>
                 </div>
             </div>
 
