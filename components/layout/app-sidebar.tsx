@@ -52,6 +52,16 @@ const navItems = [
                 href: "/chat",
                 icon: MessageSquare,
             },
+            {
+                title: "System Architecture",
+                href: "/architecture",
+                icon: Cpu,
+            },
+            {
+                title: "Documentation",
+                href: "/docs",
+                icon: FileText,
+            },
         ],
     },
 ];
