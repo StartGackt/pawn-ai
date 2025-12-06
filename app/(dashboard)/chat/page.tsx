@@ -13,6 +13,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { GoldPriceDisplay } from "@/components/gold-price-display";
+import { WorldGoldPriceDisplay } from "@/components/world-gold-price-display";
+import { GoldPredictionDisplay } from "@/components/gold-prediction-display";
 
 interface Message {
     role: "user" | "assistant";
@@ -345,6 +347,12 @@ export default function ChatPage() {
                 <div className="space-y-4 overflow-auto">
                     {/* Gold Price Display */}
                     <GoldPriceDisplay />
+
+                    {/* World Gold Price Display */}
+                    <WorldGoldPriceDisplay />
+
+                    {/* Gold Prediction */}
+                    <GoldPredictionDisplay />
 
                     {/* Quick Actions */}
                     <Card>
