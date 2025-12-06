@@ -12,6 +12,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { GoldPriceDisplay } from "@/components/gold-price-display";
 
 interface Message {
     role: "user" | "assistant";
@@ -342,6 +343,9 @@ export default function ChatPage() {
 
                 {/* Sidebar */}
                 <div className="space-y-4 overflow-auto">
+                    {/* Gold Price Display */}
+                    <GoldPriceDisplay />
+
                     {/* Quick Actions */}
                     <Card>
                         <CardHeader>
