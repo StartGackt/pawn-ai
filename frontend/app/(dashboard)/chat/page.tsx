@@ -5,13 +5,32 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Send, Sparkles, TrendingUp, BarChart3, FileText, MessageSquare, Trash2, Download } from "lucide-react";
+import { Send, Sparkles, TrendingUp, BarChart3, FileText, MessageSquare, Trash2, Download, Bot, ChevronDown } from "lucide-react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface Message {
     role: "user" | "assistant";
     content: string;
     timestamp: Date;
+    model?: string;
 }
+
+interface ModelOption {
+    id: string;
+    name: string;
+    modelName: string;
+}
+
+const MODEL_ICONS: Record<string, string> = {
+    gpt: "🤖",
+    claude: "🧠",
+    grok: "⚡",
+};
 
 const quickActions = [
     { icon: TrendingUp, label: "วิเคราะห์แนวโน้มราคาทอง", query: "ช่วยวิเคราะห์แนวโน้มราคาทองคำในช่วง 7 วันที่ผ่านมา" },
@@ -38,7 +57,32 @@ export default function ChatPage() {
     ]);
     const [input, setInput] = React.useState("");
     const [isLoading, setIsLoading] = React.useState(false);
+    const [selectedModel, setSelectedModel] = React.useState<string>("claude");
+    const [availableModels, setAvailableModels] = React.useState<ModelOption[]>([
+        { id: "gpt", name: "GPT-4o (OpenAI)", modelName: "openai/gpt-4o" },
+        { id: "claude", name: "Claude Sonnet 4 (Anthropic)", modelName: "anthropic/claude-sonnet-4" },
+        { id: "grok", name: "Grok 3 Beta (xAI)", modelName: "x-ai/grok-3-beta" },
+    ]);
+    const [hasApiKey, setHasApiKey] = React.useState(true);
     const messagesEndRef = React.useRef<HTMLDivElement>(null);
+
+    // Fetch available models on mount
+    React.useEffect(() => {
+        const fetchModels = async () => {
+            try {
+                const response = await fetch("/api/chat-simple");
+                if (response.ok) {
+                    const data = await response.json();
+                    setAvailableModels(data.models);
+                    setSelectedModel(data.defaultModel);
+                    setHasApiKey(data.hasApiKey);
+                }
+            } catch (error) {
+                console.error("Failed to fetch models:", error);
+            }
+        };
+        fetchModels();
+    }, []);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -61,16 +105,46 @@ export default function ChatPage() {
         setInput("");
         setIsLoading(true);
 
-        // Simulate AI response
-        setTimeout(() => {
+        try {
+            // เรียก Chat API
+            const response = await fetch("/api/chat-simple", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    messages: [...messages, userMessage].map(m => ({
+                        role: m.role,
+                        content: m.content,
+                    })),
+                    model: selectedModel,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error("API Error");
+            }
+
+            const data = await response.json();
+
             const assistantMessage: Message = {
                 role: "assistant",
-                content: generateMockResponse(input),
+                content: data.content,
                 timestamp: new Date(),
+                model: data.model || selectedModel,
             };
             setMessages(prev => [...prev, assistantMessage]);
+        } catch (error) {
+            console.error("Chat error:", error);
+            const errorMessage: Message = {
+                role: "assistant",
+                content: "ขออภัยครับ เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง",
+                timestamp: new Date(),
+            };
+            setMessages(prev => [...prev, errorMessage]);
+        } finally {
             setIsLoading(false);
-        }, 1500);
+        }
     };
 
     const generateMockResponse = (query: string): string => {
@@ -179,6 +253,37 @@ export default function ChatPage() {
                     </p>
                 </div>
                 <div className="flex gap-2">
+                    {/* Model Selector */}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="sm" className="min-w-[200px] justify-between">
+                                <span className="flex items-center gap-2">
+                                    <Bot className="h-4 w-4" />
+                                    <span>{MODEL_ICONS[selectedModel] || "🤖"}</span>
+                                    <span className="truncate">
+                                        {availableModels.find(m => m.id === selectedModel)?.name.split(" ")[0] || "Model"}
+                                    </span>
+                                </span>
+                                <ChevronDown className="h-4 w-4 opacity-50" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-[250px]">
+                            {availableModels.map((model) => (
+                                <DropdownMenuItem
+                                    key={model.id}
+                                    onClick={() => setSelectedModel(model.id)}
+                                    className={selectedModel === model.id ? "bg-accent" : ""}
+                                >
+                                    <span className="mr-2">{MODEL_ICONS[model.id] || "🤖"}</span>
+                                    <div className="flex flex-col">
+                                        <span className="font-medium">{model.name}</span>
+                                        <span className="text-xs text-muted-foreground">{model.modelName}</span>
+                                    </div>
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
                     <Button variant="outline" size="sm" onClick={handleExportChat}>
                         <Download className="mr-2 h-4 w-4" />
                         ส่งออก
@@ -211,19 +316,28 @@ export default function ChatPage() {
                             >
                                 <div
                                     className={`max-w-[80%] rounded-lg p-4 ${message.role === "user"
-                                            ? "bg-primary text-primary-foreground"
-                                            : "bg-muted"
+                                        ? "bg-primary text-primary-foreground"
+                                        : "bg-muted"
                                         }`}
                                 >
                                     <div className="flex items-start gap-2">
                                         {message.role === "assistant" && (
-                                            <Sparkles className="h-5 w-5 mt-0.5 shrink-0" />
+                                            <span className="text-lg mt-0.5 shrink-0">
+                                                {MODEL_ICONS[message.model || "claude"] || <Sparkles className="h-5 w-5" />}
+                                            </span>
                                         )}
                                         <div className="flex-1">
                                             <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                                            <p className="text-xs opacity-70 mt-2">
-                                                {message.timestamp.toLocaleTimeString("th-TH")}
-                                            </p>
+                                            <div className="flex items-center gap-2 mt-2">
+                                                <p className="text-xs opacity-70">
+                                                    {message.timestamp.toLocaleTimeString("th-TH")}
+                                                </p>
+                                                {message.role === "assistant" && message.model && (
+                                                    <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
+                                                        {message.model.toUpperCase()}
+                                                    </Badge>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -316,11 +430,11 @@ export default function ChatPage() {
                         <CardContent className="space-y-3 text-xs">
                             <div className="flex justify-between">
                                 <span className="text-muted-foreground">โมเดล</span>
-                                <Badge variant="outline">Hybrid LLM</Badge>
+                                <Badge variant="outline">Deep Agent</Badge>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-muted-foreground">ข้อมูลอัปเดต</span>
-                                <span className="font-medium">15 ม.ค. 2568</span>
+                                <span className="font-medium">4 ธ.ค. 2568</span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-muted-foreground">ภาษา</span>
@@ -328,7 +442,7 @@ export default function ChatPage() {
                             </div>
                             <div className="pt-2 border-t">
                                 <p className="text-muted-foreground">
-                                    💡 AI นี้ใช้ข้อมูลจริงจากระบบและได้รับการฝึกฝนเฉพาะทางธนานุเคราะห์
+                                    💡 AI นี้ใช้ Deep Agent + LangChain สำหรับวิเคราะห์ข้อมูลธนานุเคราะห์
                                 </p>
                             </div>
                         </CardContent>

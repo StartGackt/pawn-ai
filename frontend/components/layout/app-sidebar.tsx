@@ -45,87 +45,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const navItems = [
     {
-        title: "ภาพรวม",
-        items: [
-            {
-                title: "แดชบอร์ด",
-                href: "/dashboard",
-                icon: LayoutDashboard,
-            },
-        ],
-    },
-    {
-        title: "ข้อมูล",
-        items: [
-            {
-                title: "การจำนำ",
-                href: "/data/pawns",
-                icon: Database,
-            },
-            {
-                title: "ราคาทองคำ",
-                href: "/data/gold-prices",
-                icon: TrendingUp,
-            },
-            {
-                title: "ทรัพย์หลุดจำนำ",
-                href: "/data/forfeited-assets",
-                icon: Archive,
-            },
-            {
-                title: "ลูกค้า",
-                href: "/data/customers",
-                icon: Users,
-            },
-        ],
-    },
-    {
-        title: "การวิเคราะห์",
-        items: [
-            {
-                title: "แนวโน้ม",
-                href: "/analytics/trends",
-                icon: Activity,
-            },
-            {
-                title: "การเปรียบเทียบ",
-                href: "/analytics/comparison",
-                icon: GitCompare,
-            },
-        ],
-    },
-    {
         title: "AI & ML",
         items: [
-            {
-                title: "คาดการณ์",
-                href: "/predictions",
-                icon: Sparkles,
-            },
-            {
-                title: "Predictive Model",
-                href: "/predictions/model",
-                icon: Cpu,
-            },
             {
                 title: "AI Chatbot",
                 href: "/chat",
                 icon: MessageSquare,
-            },
-            {
-                title: "Model Info",
-                href: "/models",
-                icon: Cpu,
-            },
-        ],
-    },
-    {
-        title: "รายงาน",
-        items: [
-            {
-                title: "สร้างรายงาน",
-                href: "/reports",
-                icon: FileText,
             },
         ],
     },
