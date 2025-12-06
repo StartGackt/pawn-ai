@@ -503,6 +503,123 @@ const analyzeAndAdviseTool = tool(
   }
 );
 
+// Tool 8: ดึงอัตราดอกเบี้ยเงินกู้ธนาคารพาณิชย์จาก BOT API
+const searchLoanRateTool = tool(
+  async () => {
+    const BOT_INTEREST_RATE_TOKEN = process.env.BOT_INTEREST_RATE_TOKEN;
+    
+    try {
+      // ดึงข้อมูล 30 วันล่าสุด
+      const endDate = new Date();
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - 30);
+      
+      const formatDate = (date: Date) => date.toISOString().split('T')[0];
+      const start_period = formatDate(startDate);
+      const end_period = formatDate(endDate);
+      
+      if (BOT_INTEREST_RATE_TOKEN) {
+        const url = `https://gateway.api.bot.or.th/LoanRate/v2/avg_loan_rate/?start_period=${start_period}&end_period=${end_period}`;
+        
+        const response = await fetch(url, {
+          headers: {
+            'Authorization': BOT_INTEREST_RATE_TOKEN,
+            'Accept': 'application/json',
+          },
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          const dataDetail = data?.result?.data?.data_detail;
+          
+          if (Array.isArray(dataDetail) && dataDetail.length > 0) {
+            // หาข้อมูลล่าสุด
+            const latestPeriod = dataDetail.reduce((latest: string, item: { period: string }) => {
+              return item.period > latest ? item.period : latest;
+            }, dataDetail[0].period);
+            
+            const latestData = dataDetail.filter((item: { period: string }) => item.period === latestPeriod);
+            
+            const thaiAvg = latestData.find(
+              (item: { name_eng: string }) => item.name_eng === 'Average of Commercial Banks registered in Thailand'
+            );
+            const foreignAvg = latestData.find(
+              (item: { name_eng: string }) => item.name_eng === 'Average of Foreign Bank Branches'
+            );
+            
+            return JSON.stringify({
+              source: "ธนาคารแห่งประเทศไทย (Bank of Thailand)",
+              timestamp: new Date().toISOString(),
+              period: latestPeriod,
+              thai_commercial_banks: thaiAvg ? {
+                mor: parseFloat(thaiAvg.mor),
+                mlr: parseFloat(thaiAvg.mlr),
+                mrr: parseFloat(thaiAvg.mrr),
+                ceiling_rate: parseFloat(thaiAvg.ceiling_rate),
+                default_rate: parseFloat(thaiAvg.default_rate),
+                creditcard_min: parseFloat(thaiAvg.creditcard_min) || null,
+                creditcard_max: parseFloat(thaiAvg.creditcard_max) || null,
+              } : null,
+              foreign_banks: foreignAvg ? {
+                mor: parseFloat(foreignAvg.mor),
+                mlr: parseFloat(foreignAvg.mlr),
+                mrr: parseFloat(foreignAvg.mrr),
+                ceiling_rate: parseFloat(foreignAvg.ceiling_rate),
+                default_rate: parseFloat(foreignAvg.default_rate),
+              } : null,
+              definitions: {
+                mor: "Minimum Overdraft Rate - อัตราดอกเบี้ยเงินเบิกเกินบัญชีขั้นต่ำ",
+                mlr: "Minimum Loan Rate - อัตราดอกเบี้ยเงินกู้ลูกค้ารายใหญ่ชั้นดี",
+                mrr: "Minimum Retail Rate - อัตราดอกเบี้ยเงินกู้ลูกค้ารายย่อยชั้นดี",
+              },
+              note: "อัตราดอกเบี้ยเฉลี่ยของธนาคารพาณิชย์ (% ต่อปี) อัปเดตทุกวันทำการ 14:00 น.",
+            });
+          }
+        }
+      }
+      
+      // Fallback data
+      return JSON.stringify({
+        source: "Estimated Rate (Fallback)",
+        timestamp: new Date().toISOString(),
+        period: new Date().toISOString().split('T')[0],
+        thai_commercial_banks: {
+          mor: 7.27,
+          mlr: 7.19,
+          mrr: 7.55,
+          ceiling_rate: 20.74,
+          default_rate: 22.91,
+          creditcard_max: 16.00,
+        },
+        foreign_banks: {
+          mor: 7.06,
+          mlr: 6.68,
+          mrr: 6.33,
+        },
+        definitions: {
+          mor: "Minimum Overdraft Rate - อัตราดอกเบี้ยเงินเบิกเกินบัญชีขั้นต่ำ",
+          mlr: "Minimum Loan Rate - อัตราดอกเบี้ยเงินกู้ลูกค้ารายใหญ่ชั้นดี",
+          mrr: "Minimum Retail Rate - อัตราดอกเบี้ยเงินกู้ลูกค้ารายย่อยชั้นดี",
+        },
+        note: "ราคาโดยประมาณ กรุณาตรวจสอบจาก https://www.bot.or.th/",
+      });
+    } catch (error) {
+      console.error("Loan Rate API Error:", error);
+      return JSON.stringify({
+        error: "ไม่สามารถดึงข้อมูลอัตราดอกเบี้ยได้",
+        suggestion: "กรุณาตรวจสอบที่ https://www.bot.or.th/th/statistics/interest-rate.html",
+        timestamp: new Date().toISOString(),
+      });
+    }
+  },
+  {
+    name: "search_loan_rate",
+    description:
+      "ดึงอัตราดอกเบี้ยเงินกู้ธนาคารพาณิชย์ล่าสุด (MOR, MLR, MRR, ดอกเบี้ยบัตรเครดิต) จากธนาคารแห่งประเทศไทย",
+    schema: z.object({}),
+  }
+);
+
 // ===== System Prompt =====
 const systemPrompt = `คุณเป็น AI Assistant สำหรับระบบสำนักงานธนานุเคราะห์ (ร้านรับจำนำ)
 ชื่อของคุณคือ "Pawn AI Assistant"
@@ -515,12 +632,25 @@ const systemPrompt = `คุณเป็น AI Assistant สำหรับร�
 3. ถามเรื่อง "อัตราแลกเปลี่ยน" หรือ "USD/THB" หรือ "ค่าเงิน" → เรียก search_exchange_rate
 4. ถามเรื่อง "ข่าว" หรือ "news" → เรียก search_gold_news
 5. ถามเรื่อง "คำนวณ" ราคาทอง → เรียก calculate_thai_gold_price
+6. ถามเรื่อง "ดอกเบี้ย" หรือ "MOR" หรือ "MLR" หรือ "MRR" หรือ "interest rate" → เรียก search_loan_rate
 
 ## วิธีการตอบ:
 - ตอบเป็นภาษาไทย
 - จัดรูปแบบด้วย Markdown
-- ใช้ Emoji เพื่อความน่าอ่าน เช่น 📈💰🌍💱
+- ใช้ Emoji เพื่อความน่าอ่าน เช่น 📈💰🌍💱🏦
 - ระบุแหล่งที่มาและเวลาของข้อมูล
+
+## รูปแบบการตอบเรื่องดอกเบี้ย:
+เมื่อได้รับข้อมูลจาก search_loan_rate ให้แสดงผลในรูปแบบ:
+# 🏦 อัตราดอกเบี้ยเงินกู้ธนาคารพาณิชย์
+📅 **ข้อมูล ณ วันที่:** [วันที่]
+
+### ธนาคารพาณิชย์ไทย
+| ประเภท | อัตรา (% ต่อปี) | คำอธิบาย |
+|--------|----------------|----------|
+| MOR | X.XX% | ดอกเบี้ยเบิกเงินเกินบัญชี |
+| MLR | X.XX% | ดอกเบี้ยลูกค้ารายใหญ่ |
+| MRR | X.XX% | ดอกเบี้ยลูกค้ารายย่อย |
 
 ## ตัวอย่างการตอบ:
 เมื่อผู้ใช้ถามว่า "ราคาทองวันนี้เท่าไหร่" ให้:
@@ -536,6 +666,7 @@ const allTools = [
   calculateThaiGoldPriceTool,
   getPawnDataTool,
   analyzeAndAdviseTool,
+  searchLoanRateTool,
 ];
 
 // ===== Helper: ตรวจสอบว่าต้องเรียก tool อะไร =====
@@ -564,6 +695,14 @@ function detectRequiredTools(message: string): string[] {
   if (lowerMsg.includes("ข่าว") || lowerMsg.includes("news") || 
       lowerMsg.includes("แนวโน้ม") || lowerMsg.includes("วิเคราะห์")) {
     tools.push("search_gold_news");
+  }
+  
+  // ตรวจจับคำถามเรื่องอัตราดอกเบี้ย
+  if (lowerMsg.includes("ดอกเบี้ย") || lowerMsg.includes("mor") || 
+      lowerMsg.includes("mlr") || lowerMsg.includes("mrr") ||
+      lowerMsg.includes("loan rate") || lowerMsg.includes("interest rate") ||
+      lowerMsg.includes("บัตรเครดิต") || lowerMsg.includes("สินเชื่อ")) {
+    tools.push("search_loan_rate");
   }
   
   return tools;
