@@ -60,7 +60,6 @@ __pycache__/
 
 # Virtual environments
 venv/
-env/
 ENV/
 .venv
 ml-service/venv/

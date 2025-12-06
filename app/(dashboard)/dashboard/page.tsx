@@ -4,6 +4,7 @@ import { Calculator, Camera, ShieldAlert, ArrowRight, TrendingUp } from "lucide-
 import Link from "next/link"
 import { GoldPriceDisplay } from "@/components/gold-price-display"
 import { ExchangeRateDisplay } from "@/components/exchange-rate-display"
+import { LoanRateDisplay } from "@/components/loan-rate-display"
 
 export default function DashboardPage() {
     return (
@@ -85,6 +86,15 @@ export default function DashboardPage() {
                 <div className="col-span-3">
                     <ExchangeRateDisplay compact />
                 </div>
+            </div>
+
+            {/* Loan Rate Section */}
+            <div className="grid gap-4 md:grid-cols-2">
+                {/* Loan Rate Widget - Compact */}
+                <LoanRateDisplay mode="compact" />
+
+                {/* Loan Rate Widget - Full */}
+                <LoanRateDisplay mode="full" />
             </div>
 
             {/* Full Exchange Rate Table */}
