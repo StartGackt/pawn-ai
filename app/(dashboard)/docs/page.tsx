@@ -364,7 +364,7 @@ export default function DocumentationPage() {
                         <div>
                             <h3 className="mb-2 font-semibold">1. การใช้งาน AI Chatbot</h3>
                             <p className="mb-2 text-sm text-muted-foreground">
-                                เข้าใช้งานผ่านเมนู "AI Chatbot" พิมพ์คำถามเป็นภาษาไทยธรรมชาติ ระบบจะตอบโดยอัตโนมัติ
+                                เข้าใช้งานผ่านเมนู &ldquo;AI Chatbot&rdquo; พิมพ์คำถามเป็นภาษาไทยธรรมชาติ ระบบจะตอบโดยอัตโนมัติ
                             </p>
                             <ul className="ml-6 list-disc space-y-1 text-sm text-muted-foreground">
                                 <li>รองรับคำถามเกี่ยวกับราคาทองคำ</li>
@@ -384,7 +384,7 @@ export default function DocumentationPage() {
                         <div>
                             <h3 className="mb-2 font-semibold">3. การดูคาดการณ์ราคา</h3>
                             <p className="text-sm text-muted-foreground">
-                                Component "คาดการณ์ราคาทอง" แสดงแนวโน้ม 7/14/30 วัน พร้อมความเชื่อมั่นและช่วงราคา
+                                Component &ldquo;คาดการณ์ราคาทอง&rdquo; แสดงแนวโน้ม 7/14/30 วัน พร้อมความเชื่อมั่นและช่วงราคา
                             </p>
                         </div>
                     </div>

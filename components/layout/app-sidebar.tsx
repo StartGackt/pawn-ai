@@ -20,6 +20,10 @@ import {
     Bell,
     User,
     ChevronRight,
+    Package,
+    Building,
+    Settings2,
+    Calculator,
 } from "lucide-react";
 import {
     Sidebar,
@@ -61,6 +65,41 @@ const navItems = [
                 title: "Documentation",
                 href: "/docs",
                 icon: FileText,
+            },
+        ],
+    },
+    {
+        title: "Services",
+        items: [
+            {
+                title: "คำนวณดอกเบี้ย",
+                href: "/services/interest-calculator",
+                icon: Calculator,
+            },
+            {
+                title: "ประเมินทรัพย์สินออนไลน์",
+                href: "/services/appraisal",
+                icon: Sparkles, // Using Sparkles as a placeholder, consider adding a specific icon if available
+            },
+            {
+                title: "แจ้งตั๋วจำนำหาย",
+                href: "/services/lost-ticket",
+                icon: FileText, // Using FileText as a placeholder
+            },
+        ],
+    },
+    {
+        title: "Management",
+        items: [
+            {
+                title: "Branches",
+                href: "/branches",
+                icon: Building,
+            },
+            {
+                title: "Assets",
+                href: "/assets",
+                icon: Package,
             },
         ],
     },
