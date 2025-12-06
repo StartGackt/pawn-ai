@@ -80,11 +80,11 @@ export function WorldGoldPriceDisplay() {
     const TrendIcon = isPositive ? TrendingUp : TrendingDown;
 
     return (
-        <Card className="w-full max-w-md border-blue-500/30 bg-linear-to-br from-blue-500/5 to-blue-600/10">
+        <Card className="w-full max-w-md border-sky-400/30 bg-linear-to-br from-sky-50 to-blue-50 dark:from-sky-950/20 dark:to-blue-950/10">
             <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center gap-2 text-lg">
-                        <Globe className="h-5 w-5 text-blue-500" />
+                        <Globe className="h-5 w-5 text-sky-500" />
                         ราคาทองโลก (XAU/USD)
                     </CardTitle>
                     <Button
@@ -97,7 +97,7 @@ export function WorldGoldPriceDisplay() {
                     </Button>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Badge variant="outline" className="text-xs">
+                    <Badge variant="outline" className="text-xs border-sky-300 text-sky-600 dark:text-sky-400">
                         LIVE
                     </Badge>
                     <span>
@@ -107,7 +107,7 @@ export function WorldGoldPriceDisplay() {
             </CardHeader>
             <CardContent className="space-y-3">
                 {/* Main Price */}
-                <div className="rounded-lg border bg-background/50 p-4 backdrop-blur-sm">
+                <div className="rounded-lg border border-sky-200 dark:border-sky-800 bg-white/80 dark:bg-slate-900/50 p-4 backdrop-blur-sm">
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-3xl font-bold text-foreground">
@@ -115,7 +115,7 @@ export function WorldGoldPriceDisplay() {
                             </p>
                             <p className="text-sm text-muted-foreground">ต่อออนซ์</p>
                         </div>
-                        <div className={`flex items-center gap-1 ${isPositive ? "text-green-600" : "text-red-500"}`}>
+                        <div className={`flex items-center gap-1 ${isPositive ? "text-sky-600 dark:text-sky-400" : "text-rose-500"}`}>
                             <TrendIcon className="h-5 w-5" />
                             <div className="text-right">
                                 <p className="font-semibold">
@@ -131,15 +131,15 @@ export function WorldGoldPriceDisplay() {
 
                 {/* High/Low */}
                 <div className="grid grid-cols-2 gap-2">
-                    <div className="rounded-lg border bg-background/50 p-2 text-center">
+                    <div className="rounded-lg border border-sky-200 dark:border-sky-800 bg-white/80 dark:bg-slate-900/50 p-2 text-center">
                         <p className="text-xs text-muted-foreground">สูงสุด 24h</p>
-                        <p className="font-semibold text-green-600">
+                        <p className="font-semibold text-sky-600 dark:text-sky-400">
                             ${goldData.high24h.toLocaleString("en-US", { minimumFractionDigits: 2 })}
                         </p>
                     </div>
-                    <div className="rounded-lg border bg-background/50 p-2 text-center">
+                    <div className="rounded-lg border border-sky-200 dark:border-sky-800 bg-white/80 dark:bg-slate-900/50 p-2 text-center">
                         <p className="text-xs text-muted-foreground">ต่ำสุด 24h</p>
-                        <p className="font-semibold text-red-500">
+                        <p className="font-semibold text-blue-600 dark:text-blue-400">
                             ${goldData.low24h.toLocaleString("en-US", { minimumFractionDigits: 2 })}
                         </p>
                     </div>

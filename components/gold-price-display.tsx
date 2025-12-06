@@ -75,11 +75,11 @@ export function GoldPriceDisplay() {
     if (!goldData) return null;
 
     return (
-        <Card className="w-full max-w-md border-yellow-500/30 bg-linear-to-br from-yellow-500/5 to-yellow-600/10">
+        <Card className="w-full max-w-md border-amber-400/30 bg-linear-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/10">
             <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
                     <CardTitle className="flex items-center gap-2 text-lg">
-                        <TrendingUp className="h-5 w-5 text-yellow-500" />
+                        <TrendingUp className="h-5 w-5 text-amber-500" />
                         ราคาทองคำไทย
                     </CardTitle>
                     <Button
@@ -92,7 +92,7 @@ export function GoldPriceDisplay() {
                     </Button>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Badge variant="outline" className="text-xs">
+                    <Badge variant="outline" className="text-xs border-amber-300 text-amber-700 dark:text-amber-400">
                         {goldData.date}
                     </Badge>
                     <span>อัพเดท: {goldData.updateTime}</span>
@@ -102,19 +102,19 @@ export function GoldPriceDisplay() {
                 {goldData.data.map((item, index) => (
                     <div
                         key={index}
-                        className="rounded-lg border bg-background/50 p-3 backdrop-blur-sm"
+                        className="rounded-lg border border-amber-200 bg-white/80 dark:bg-slate-900/50 p-3 backdrop-blur-sm"
                     >
                         <p className="mb-2 font-medium text-foreground">{item.name}</p>
                         <div className="flex justify-between text-sm">
                             <div>
                                 <span className="text-muted-foreground">รับซื้อ: </span>
-                                <span className="font-semibold text-green-600">
+                                <span className="font-semibold text-sky-600 dark:text-sky-400">
                                     ฿{item.buy}
                                 </span>
                             </div>
                             <div>
                                 <span className="text-muted-foreground">ขายออก: </span>
-                                <span className="font-semibold text-red-500">
+                                <span className="font-semibold text-amber-600 dark:text-amber-400">
                                     ฿{item.sell}
                                 </span>
                             </div>

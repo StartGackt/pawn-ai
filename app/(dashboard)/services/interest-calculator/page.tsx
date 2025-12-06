@@ -42,21 +42,21 @@ export default function InterestCalculatorPage() {
     const result = calculateInterest(principal, months);
 
     return (
-        <div className="min-h-screen bg-slate-50/50 pb-10 dark:bg-slate-950">
+        <div className="min-h-screen bg-sky-50/50 pb-10 dark:bg-slate-950">
             {/* Hero Section */}
-            <div className="relative overflow-hidden bg-slate-900 py-12 text-white">
-                <div className="absolute inset-0 bg-[url('https://www.pawn.co.th/assets/images/banner/banner-03.jpg')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
-                <div className="absolute inset-0 bg-linear-to-r from-slate-900 via-slate-900/90 to-slate-900/50"></div>
+            <div className="relative overflow-hidden bg-linear-to-r from-sky-600 to-blue-700 py-12 text-white">
+                <div className="absolute inset-0 bg-[url('https://www.pawn.co.th/assets/images/banner/banner-03.jpg')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-sky-600/90 via-blue-600/80 to-blue-700/70"></div>
                 <div className="container relative mx-auto px-4">
                     <div className="flex items-center gap-4">
-                        <div className="rounded-full bg-yellow-500/20 p-3 backdrop-blur-sm">
-                            <Calculator className="h-8 w-8 text-yellow-500" />
+                        <div className="rounded-full bg-white/20 p-3 backdrop-blur-sm">
+                            <Calculator className="h-8 w-8 text-white" />
                         </div>
                         <div>
                             <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl">
-                                คำนวณดอกเบี้ย <span className="text-yellow-500">จำนำ</span>
+                                คำนวณดอกเบี้ย <span className="text-sky-200">จำนำ</span>
                             </h1>
-                            <p className="mt-2 text-slate-300">
+                            <p className="mt-2 text-sky-100">
                                 วางแผนการเงินของคุณด้วยโปรแกรมคำนวณดอกเบี้ยอัตโนมัติ แม่นยำ และโปร่งใส
                             </p>
                         </div>
@@ -67,10 +67,10 @@ export default function InterestCalculatorPage() {
             <div className="container mx-auto mt-8 px-4">
                 <div className="grid gap-8 lg:grid-cols-2">
                     {/* Calculator Form */}
-                    <Card className="border-slate-200 shadow-lg dark:border-slate-800 dark:bg-slate-900">
+                    <Card className="border-sky-200 shadow-lg dark:border-sky-900 dark:bg-slate-900">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
-                                <Coins className="h-5 w-5 text-yellow-500" />
+                                <Coins className="h-5 w-5 text-sky-500" />
                                 ระบุข้อมูลทรัพย์สิน
                             </CardTitle>
                             <CardDescription>
@@ -134,7 +134,7 @@ export default function InterestCalculatorPage() {
                                 </div>
                             </div>
 
-                            <div className="rounded-lg bg-blue-50 p-4 text-sm text-blue-700 dark:bg-blue-900/20 dark:text-blue-300">
+                            <div className="rounded-lg bg-sky-50 p-4 text-sm text-sky-700 dark:bg-sky-900/20 dark:text-sky-300">
                                 <p className="font-semibold mb-1">หมายเหตุอัตราดอกเบี้ย:</p>
                                 <ul className="list-disc list-inside space-y-1 text-xs opacity-80">
                                     <li>เงินต้นไม่เกิน 5,000 บาท ดอกเบี้ย 0.25% ต่อเดือน</li>
@@ -147,49 +147,49 @@ export default function InterestCalculatorPage() {
                     </Card>
 
                     {/* Result Card */}
-                    <Card className="border-none bg-slate-900 text-white shadow-xl">
+                    <Card className="border-none bg-linear-to-br from-sky-600 to-blue-700 text-white shadow-xl">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2 text-yellow-500">
+                            <CardTitle className="flex items-center gap-2 text-white">
                                 <Calculator className="h-5 w-5" />
                                 ผลการคำนวณ
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <div className="space-y-1">
-                                <p className="text-sm text-slate-400">อัตราดอกเบี้ยที่ได้รับ</p>
+                                <p className="text-sm text-sky-200">อัตราดอกเบี้ยที่ได้รับ</p>
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-4xl font-bold text-yellow-500">{result.rate}%</span>
-                                    <span className="text-sm text-slate-400">ต่อเดือน</span>
+                                    <span className="text-4xl font-bold text-white">{result.rate}%</span>
+                                    <span className="text-sm text-sky-200">ต่อเดือน</span>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4 rounded-lg bg-slate-800/50 p-4">
+                            <div className="grid grid-cols-2 gap-4 rounded-lg bg-white/10 p-4">
                                 <div>
-                                    <p className="text-xs text-slate-400 mb-1">ดอกเบี้ยต่อเดือน</p>
+                                    <p className="text-xs text-sky-200 mb-1">ดอกเบี้ยต่อเดือน</p>
                                     <p className="text-xl font-semibold">฿{result.monthly.toLocaleString()}</p>
                                 </div>
                                 <div>
-                                    <p className="text-xs text-slate-400 mb-1">รวมดอกเบี้ย {months} เดือน</p>
-                                    <p className="text-xl font-semibold text-red-400">฿{result.total.toLocaleString()}</p>
+                                    <p className="text-xs text-sky-200 mb-1">รวมดอกเบี้ย {months} เดือน</p>
+                                    <p className="text-xl font-semibold text-amber-300">฿{result.total.toLocaleString()}</p>
                                 </div>
                             </div>
 
-                            <div className="space-y-2 border-t border-slate-800 pt-4">
+                            <div className="space-y-2 border-t border-white/20 pt-4">
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-slate-400">เงินต้น</span>
+                                    <span className="text-sky-200">เงินต้น</span>
                                     <span>฿{principal.toLocaleString()}</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-slate-400">ดอกเบี้ยรวม</span>
-                                    <span className="text-red-400">+฿{result.total.toLocaleString()}</span>
+                                    <span className="text-sky-200">ดอกเบี้ยรวม</span>
+                                    <span className="text-amber-300">+฿{result.total.toLocaleString()}</span>
                                 </div>
-                                <div className="mt-4 flex items-center justify-between rounded-lg bg-yellow-500 p-4 text-slate-900">
+                                <div className="mt-4 flex items-center justify-between rounded-lg bg-white p-4 text-sky-700">
                                     <span className="font-bold">ยอดไถ่ถอนรวม</span>
                                     <span className="text-2xl font-black">฿{result.grandTotal.toLocaleString()}</span>
                                 </div>
                             </div>
 
-                            <Button className="w-full bg-white text-slate-900 hover:bg-slate-200" size="lg">
+                            <Button className="w-full bg-white text-sky-700 hover:bg-sky-50" size="lg">
                                 <RefreshCw className="mr-2 h-4 w-4" />
                                 คำนวณใหม่
                             </Button>

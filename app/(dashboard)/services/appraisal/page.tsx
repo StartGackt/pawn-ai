@@ -19,10 +19,10 @@ export default function AppraisalPage() {
 
     if (submitted) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-slate-50/50 p-4 dark:bg-slate-950">
-                <Card className="w-full max-w-md text-center shadow-xl">
+            <div className="flex min-h-screen items-center justify-center bg-sky-50/50 p-4 dark:bg-slate-950">
+                <Card className="w-full max-w-md text-center shadow-xl border-sky-200">
                     <CardContent className="pt-10 pb-10">
-                        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100 text-green-600">
+                        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-sky-100 text-sky-600">
                             <CheckCircle2 className="h-10 w-10" />
                         </div>
                         <h2 className="mb-2 text-2xl font-bold text-slate-900 dark:text-white">ส่งข้อมูลสำเร็จ</h2>
@@ -30,7 +30,7 @@ export default function AppraisalPage() {
                             เจ้าหน้าที่ได้รับข้อมูลการประเมินทรัพย์สินของท่านแล้ว <br />
                             จะติดต่อกลับภายใน 24 ชั่วโมง
                         </p>
-                        <Button onClick={() => setSubmitted(false)} className="w-full bg-slate-900 text-white hover:bg-slate-800">
+                        <Button onClick={() => setSubmitted(false)} className="w-full bg-sky-600 text-white hover:bg-sky-700">
                             ส่งรายการอื่น
                         </Button>
                     </CardContent>
@@ -40,21 +40,21 @@ export default function AppraisalPage() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50/50 pb-10 dark:bg-slate-950">
+        <div className="min-h-screen bg-sky-50/50 pb-10 dark:bg-slate-950">
             {/* Hero Section */}
-            <div className="relative overflow-hidden bg-slate-900 py-12 text-white">
-                <div className="absolute inset-0 bg-[url('https://www.pawn.co.th/assets/images/banner/banner-04.jpg')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
-                <div className="absolute inset-0 bg-linear-to-r from-slate-900 via-slate-900/90 to-slate-900/50"></div>
+            <div className="relative overflow-hidden bg-linear-to-r from-sky-600 to-blue-700 py-12 text-white">
+                <div className="absolute inset-0 bg-[url('https://www.pawn.co.th/assets/images/banner/banner-04.jpg')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
+                <div className="absolute inset-0 bg-linear-to-r from-sky-600/90 via-blue-600/80 to-blue-700/70"></div>
                 <div className="container relative mx-auto px-4">
                     <div className="flex items-center gap-4">
-                        <div className="rounded-full bg-blue-500/20 p-3 backdrop-blur-sm">
-                            <Camera className="h-8 w-8 text-blue-400" />
+                        <div className="rounded-full bg-white/20 p-3 backdrop-blur-sm">
+                            <Camera className="h-8 w-8 text-white" />
                         </div>
                         <div>
                             <h1 className="text-3xl font-bold tracking-tight text-white md:text-4xl">
-                                ประเมินทรัพย์สิน <span className="text-blue-400">ออนไลน์</span>
+                                ประเมินทรัพย์สิน <span className="text-sky-200">ออนไลน์</span>
                             </h1>
-                            <p className="mt-2 text-slate-300">
+                            <p className="mt-2 text-sky-100">
                                 ส่งรูปและรายละเอียดทรัพย์สินเพื่อรับราคาประเมินเบื้องต้น ฟรี! ไม่มีค่าใช้จ่าย
                             </p>
                         </div>
