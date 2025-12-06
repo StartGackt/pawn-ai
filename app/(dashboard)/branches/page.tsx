@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,24 +7,12 @@ import {
     Clock,
     Navigation,
     Search,
-    Mail,
-    Building2,
-    ShoppingBag,
-    Coins,
-    Gem,
-    Camera,
-    Watch,
-    Glasses,
-    Tv,
-    Wrench,
-    ArrowRight
+    Mail
 } from "lucide-react";
-import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -102,21 +90,6 @@ const branchAssets: Record<number, Array<Record<string, string>>> = {
         { id: "T001", name: "สว่านไร้สาย Bosch", category: "tool", price: "฿3,500", image: "https://images.unsplash.com/photo-1504148455328-c376907d081c?q=80&w=600&auto=format&fit=crop" },
     ],
     0: []
-};
-
-const getCategoryDetails = (category: string) => {
-    switch (category) {
-        case "gold": return { icon: Coins, label: "ทองคำ", color: "text-yellow-500", bg: "bg-yellow-500/10" };
-        case "silver": return { icon: Coins, label: "เงิน", color: "text-slate-400", bg: "bg-slate-400/10" };
-        case "pink_gold": return { icon: Coins, label: "นาก", color: "text-rose-400", bg: "bg-rose-400/10" };
-        case "diamond": return { icon: Gem, label: "เพชร", color: "text-cyan-400", bg: "bg-cyan-400/10" };
-        case "camera": return { icon: Camera, label: "กล้องถ่ายรูป", color: "text-blue-500", bg: "bg-blue-500/10" };
-        case "watch": return { icon: Watch, label: "นาฬิกา", color: "text-purple-500", bg: "bg-purple-500/10" };
-        case "eyeglasses": return { icon: Glasses, label: "แว่นตา", color: "text-indigo-500", bg: "bg-indigo-500/10" };
-        case "electrical": return { icon: Tv, label: "เครื่องใช้ไฟฟ้า", color: "text-green-500", bg: "bg-green-500/10" };
-        case "tool": return { icon: Wrench, label: "เครื่องมือช่าง", color: "text-orange-500", bg: "bg-orange-500/10" };
-        default: return { icon: ShoppingBag, label: "อื่นๆ", color: "text-gray-500", bg: "bg-gray-500/10" };
-    }
 };
 
 interface Branch {

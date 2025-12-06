@@ -3,7 +3,6 @@
 import * as React from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/layout/app-sidebar";
-import { Navbar } from "@/components/layout/navbar";
 
 export default function DashboardLayout({
     children,

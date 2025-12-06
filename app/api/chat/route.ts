@@ -75,7 +75,7 @@ const searchThaiGoldPriceTool = tool(
         timestamp: new Date().toISOString(),
         results: results,
       });
-    } catch (error) {
+    } catch {
       // Fallback to alternative search
       try {
         const response = await fetch(
@@ -99,7 +99,7 @@ const searchThaiGoldPriceTool = tool(
           goldOrnament: ornamentMatch ? ornamentMatch[1] : "ไม่สามารถดึงข้อมูลได้",
           note: "กรุณาตรวจสอบราคาล่าสุดจากเว็บไซต์สมาคมค้าทองคำ",
         });
-      } catch (fallbackError) {
+      } catch {
         return JSON.stringify({
           error: "ไม่สามารถดึงข้อมูลราคาทองไทยได้",
           suggestion: "กรุณาตรวจสอบที่ https://www.goldtraders.or.th/",
@@ -136,7 +136,7 @@ const searchGlobalGoldPriceTool = tool(
         timestamp: new Date().toISOString(),
         results: results,
       });
-    } catch (error) {
+    } catch {
       // Fallback: ใช้ข้อมูลจาก public API
       try {
         const response = await fetch(
@@ -151,7 +151,7 @@ const searchGlobalGoldPriceTool = tool(
           silverPriceUSD: data.rates?.XAG ? (1 / data.rates.XAG).toFixed(2) : "N/A",
           note: "ราคาโดยประมาณ กรุณาตรวจสอบแหล่งข้อมูลอื่นเพิ่มเติม",
         });
-      } catch (fallbackError) {
+      } catch {
         return JSON.stringify({
           error: "ไม่สามารถดึงข้อมูลราคาทองโลกได้",
           suggestion: "กรุณาตรวจสอบที่ https://www.kitco.com/ หรือ https://www.investing.com/",
@@ -188,7 +188,7 @@ const searchExchangeRateTool = tool(
         timestamp: new Date().toISOString(),
         results: results,
       });
-    } catch (error) {
+    } catch {
       // Fallback: ใช้ public API
       try {
         const response = await fetch(
@@ -203,7 +203,7 @@ const searchExchangeRateTool = tool(
           baseDate: data.date || new Date().toISOString().split("T")[0],
           note: "อัตราแลกเปลี่ยนกลาง อาจแตกต่างจากอัตราธนาคาร",
         });
-      } catch (fallbackError) {
+      } catch {
         return JSON.stringify({
           error: "ไม่สามารถดึงข้อมูลอัตราแลกเปลี่ยนได้",
           suggestion: "กรุณาตรวจสอบที่ https://www.bot.or.th/",
@@ -247,7 +247,7 @@ const searchGoldNewsTool = tool(
         timestamp: new Date().toISOString(),
         results: results,
       });
-    } catch (error) {
+    } catch {
       return JSON.stringify({
         error: "ไม่สามารถค้นหาข่าวได้",
         timestamp: new Date().toISOString(),
@@ -568,7 +568,6 @@ export async function POST(request: NextRequest) {
 
     // ตรวจสอบ API Keys
     const openrouterKey = process.env.OPENROUTER_API_KEY;
-    const tavilyKey = process.env.TAVILY_API_KEY;
 
     if (!openrouterKey) {
       // Fallback: ใช้ mock response ถ้าไม่มี API key

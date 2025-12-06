@@ -5,16 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import {
-    LayoutDashboard,
     TrendingUp,
     Sparkles,
     MessageSquare,
     FileText,
-    Database,
-    Users,
-    Archive,
-    Activity,
-    GitCompare,
     Cpu,
     Settings,
     Bell,
@@ -22,7 +16,6 @@ import {
     ChevronRight,
     Package,
     Building,
-    Settings2,
     Calculator,
 } from "lucide-react";
 import {
@@ -65,6 +58,16 @@ const navItems = [
                 title: "Documentation",
                 href: "/docs",
                 icon: FileText,
+            },
+            {
+                title: "Prediction Mockup",
+                href: "/predictions",
+                icon: TrendingUp,
+            },
+            {
+                title: "Gold Price (Blind)",
+                href: "/predictions/gold",
+                icon: TrendingUp,
             },
         ],
     },

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Slider } from "@/components/ui/slider"
-import { Calculator, RefreshCw, Coins, Calendar, Percent } from "lucide-react"
+import { Calculator, RefreshCw, Coins } from "lucide-react"
 
 export default function InterestCalculatorPage() {
     const [principal, setPrincipal] = useState<number>(10000)

@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Camera, Upload, MapPin, Send, CheckCircle2 } from "lucide-react"
+import { Camera, Upload, Send, CheckCircle2 } from "lucide-react"
 
 export default function AppraisalPage() {
     const [submitted, setSubmitted] = useState(false)

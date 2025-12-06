@@ -5,8 +5,7 @@ import {
     Camera, 
     ShieldAlert, 
     MapPin, 
-    ArrowRight, 
-    CreditCard,
+    ArrowRight,
     BadgePercent,
     Gavel
 } from "lucide-react";
