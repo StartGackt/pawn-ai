@@ -27,7 +27,7 @@ export default function AppraisalPage() {
                         </div>
                         <h2 className="mb-2 text-2xl font-bold text-slate-900 dark:text-white">ส่งข้อมูลสำเร็จ</h2>
                         <p className="mb-8 text-slate-500">
-                            เจ้าหน้าที่ได้รับข้อมูลการประเมินทรัพย์สินของท่านแล้ว <br/>
+                            เจ้าหน้าที่ได้รับข้อมูลการประเมินทรัพย์สินของท่านแล้ว <br />
                             จะติดต่อกลับภายใน 24 ชั่วโมง
                         </p>
                         <Button onClick={() => setSubmitted(false)} className="w-full bg-slate-900 text-white hover:bg-slate-800">
@@ -129,9 +129,9 @@ export default function AppraisalPage() {
                                     </div>
                                     <div className="col-span-2 space-y-2">
                                         <Label htmlFor="details">รายละเอียดเพิ่มเติม</Label>
-                                        <Textarea 
-                                            id="details" 
-                                            placeholder="ระบุสภาพสินค้า, ปีที่ซื้อ, อุปกรณ์ที่มี (กล่อง/ใบรับประกัน) หรือตำหนิต่างๆ" 
+                                        <Textarea
+                                            id="details"
+                                            placeholder="ระบุสภาพสินค้า, ปีที่ซื้อ, อุปกรณ์ที่มี (กล่อง/ใบรับประกัน) หรือตำหนิต่างๆ"
                                             className="min-h-[100px]"
                                         />
                                     </div>

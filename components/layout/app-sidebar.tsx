@@ -60,11 +60,6 @@ const navItems = [
                 icon: FileText,
             },
             {
-                title: "Prediction Mockup",
-                href: "/predictions",
-                icon: TrendingUp,
-            },
-            {
                 title: "Gold Price (Blind)",
                 href: "/predictions/gold",
                 icon: TrendingUp,

@@ -11,7 +11,7 @@ import { Calculator, RefreshCw, Coins } from "lucide-react"
 export default function InterestCalculatorPage() {
     const [principal, setPrincipal] = useState<number>(10000)
     const [months, setMonths] = useState<number>(1)
-    
+
     // Interest rates based on Pawn Shop Act (approximate for demo)
     // Rate: 2% for first 2,000, 1.25% for excess up to 100,000 (Standard government pawn shop rates)
     // Let's use a simplified tiered calculation for the demo based on common knowledge
@@ -21,7 +21,7 @@ export default function InterestCalculatorPage() {
     // Principal 5,001 - 10,000 : 0.75% per month
     // Principal 10,001 - 20,000 : 1.00% per month
     // Principal > 20,000 : 1.25% per month
-    
+
     const calculateInterest = (amount: number, duration: number) => {
         let rate = 0;
         if (amount <= 5000) rate = 0.0025;
@@ -83,20 +83,20 @@ export default function InterestCalculatorPage() {
                                     <Label htmlFor="principal" className="text-base font-medium">เงินต้น (บาท)</Label>
                                     <div className="flex items-center rounded-md border border-slate-200 bg-white px-3 py-1 dark:border-slate-700 dark:bg-slate-800">
                                         <span className="mr-2 text-slate-400">฿</span>
-                                        <Input 
-                                            id="principal" 
-                                            type="number" 
+                                        <Input
+                                            id="principal"
+                                            type="number"
                                             value={principal}
                                             onChange={(e) => setPrincipal(Number(e.target.value))}
                                             className="h-auto border-none p-0 text-right font-mono text-lg font-bold focus-visible:ring-0"
                                         />
                                     </div>
                                 </div>
-                                <Slider 
-                                    value={[principal]} 
-                                    min={100} 
-                                    max={100000} 
-                                    step={100} 
+                                <Slider
+                                    value={[principal]}
+                                    min={100}
+                                    max={100000}
+                                    step={100}
                                     onValueChange={(vals) => setPrincipal(vals[0])}
                                     className="py-4"
                                 />
@@ -110,9 +110,9 @@ export default function InterestCalculatorPage() {
                                 <div className="flex items-center justify-between">
                                     <Label htmlFor="months" className="text-base font-medium">ระยะเวลา (เดือน)</Label>
                                     <div className="flex items-center rounded-md border border-slate-200 bg-white px-3 py-1 dark:border-slate-700 dark:bg-slate-800">
-                                        <Input 
-                                            id="months" 
-                                            type="number" 
+                                        <Input
+                                            id="months"
+                                            type="number"
                                             value={months}
                                             onChange={(e) => setMonths(Number(e.target.value))}
                                             className="h-auto w-16 border-none p-0 text-right font-mono text-lg font-bold focus-visible:ring-0"
@@ -120,11 +120,11 @@ export default function InterestCalculatorPage() {
                                         <span className="ml-2 text-slate-400">เดือน</span>
                                     </div>
                                 </div>
-                                <Slider 
-                                    value={[months]} 
-                                    min={1} 
-                                    max={12} 
-                                    step={1} 
+                                <Slider
+                                    value={[months]}
+                                    min={1}
+                                    max={12}
+                                    step={1}
                                     onValueChange={(vals) => setMonths(vals[0])}
                                     className="py-4"
                                 />

@@ -54,7 +54,7 @@ export function GoldPredictionDisplay() {
 
     useEffect(() => {
         fetchPrediction();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [days]);
 
     if (loading) {
