@@ -87,40 +87,45 @@ function CompactView({ data, className }: { data: LoanRateResponse; className: s
     const thaiBank = data.data.thai_commercial_banks_avg;
 
     return (
-        <Card className={`${className} border-sky-200 bg-linear-to-br from-sky-50 to-blue-50 shadow-lg`}>
-            <CardHeader className="pb-2">
+        <Card className={`${className} border-slate-200 bg-white shadow-sm transition-all duration-300 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900`}>
+            <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800/50">
                 <div className="flex items-center justify-between">
-                    <CardTitle className="text-sm font-medium text-sky-800 flex items-center gap-2">
-                        <span className="text-lg">🏦</span>
+                    <CardTitle className="text-sm font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400">
+                             🏦
+                        </span>
                         อัตราดอกเบี้ยเงินกู้
                     </CardTitle>
                     {data.source === 'fallback' && (
-                        <Badge variant="outline" className="text-xs border-sky-300 text-sky-600">
+                        <Badge variant="outline" className="text-[10px] h-5 border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-500">
                             ข้อมูลประมาณการ
                         </Badge>
                     )}
                 </div>
             </CardHeader>
-            <CardContent className="pt-0">
+            <CardContent className="pt-4">
                 {thaiBank && (
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                         {/* Main Rates */}
-                        <div className="grid grid-cols-3 gap-2">
-                            <RateBox label="MOR" value={thaiBank.mor} color="sky" />
-                            <RateBox label="MLR" value={thaiBank.mlr} color="blue" />
-                            <RateBox label="MRR" value={thaiBank.mrr} color="indigo" />
+                        <div className="grid grid-cols-3 gap-3">
+                            <RateBox label="MOR" value={thaiBank.mor} color="slate" />
+                            <RateBox label="MLR" value={thaiBank.mlr} color="slate" />
+                            <RateBox label="MRR" value={thaiBank.mrr} color="blue" />
                         </div>
 
                         {/* Credit Card Rate */}
-                        <div className="flex items-center justify-between text-xs bg-white/60 rounded-lg p-2">
-                            <span className="text-gray-600">💳 ดอกเบี้ยบัตรเครดิต</span>
-                            <span className="font-semibold text-sky-700">
+                        <div className="flex items-center justify-between text-xs bg-slate-50 rounded-lg p-3 dark:bg-slate-800/50">
+                            <span className="text-slate-600 dark:text-slate-400 flex items-center gap-2">
+                                💳 <span className="font-medium">ดอกเบี้ยบัตรเครดิต</span>
+                            </span>
+                            <span className="font-bold text-slate-900 dark:text-white">
                                 {thaiBank.creditcard_max ? `${thaiBank.creditcard_max.toFixed(2)}%` : '-'}
                             </span>
                         </div>
 
                         {/* Update time */}
-                        <div className="text-[10px] text-gray-500 text-right">
+                        <div className="text-[10px] text-slate-400 text-right flex items-center justify-end gap-1">
+                             <div className="h-1.5 w-1.5 rounded-full bg-green-500"></div>
                             อัปเดต: {new Date(data.period).toLocaleDateString('th-TH', {
                                 year: 'numeric',
                                 month: 'short',
@@ -139,25 +144,25 @@ function FullView({ data, className }: { data: LoanRateResponse; className: stri
     const foreignBank = data.data.foreign_banks_avg;
 
     return (
-        <Card className={`${className} border-sky-200 bg-linear-to-br from-sky-50 to-blue-50 shadow-lg`}>
-            <CardHeader className="pb-3">
+        <Card className={`${className} border-slate-200 bg-white shadow-sm transition-all duration-300 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900`}>
+            <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800/50">
                 <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg font-semibold text-sky-800 flex items-center gap-2">
+                    <CardTitle className="text-lg font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                         <span className="text-2xl">🏦</span>
                         อัตราดอกเบี้ยเงินกู้ธนาคารพาณิชย์
                     </CardTitle>
                     <div className="flex items-center gap-2">
                         {data.source === 'fallback' && (
-                            <Badge variant="outline" className="text-xs border-sky-300 text-sky-600">
+                            <Badge variant="outline" className="text-xs border-amber-200 text-amber-600 bg-amber-50">
                                 ข้อมูลประมาณการ
                             </Badge>
                         )}
-                        <Badge className="bg-sky-500 text-white text-xs">
+                        <Badge className="bg-blue-600 text-white text-xs hover:bg-blue-700">
                             % ต่อปี
                         </Badge>
                     </div>
                 </div>
-                <p className="text-xs text-sky-600 mt-1">
+                <p className="text-xs text-slate-500 mt-1">
                     ข้อมูล ณ วันที่ {new Date(data.period).toLocaleDateString('th-TH', {
                         weekday: 'long',
                         year: 'numeric',
@@ -168,11 +173,11 @@ function FullView({ data, className }: { data: LoanRateResponse; className: stri
             </CardHeader>
             <CardContent>
                 <Tabs defaultValue="thai" className="w-full">
-                    <TabsList className="grid w-full grid-cols-2 mb-4 bg-sky-100">
-                        <TabsTrigger value="thai" className="data-[state=active]:bg-sky-500 data-[state=active]:text-white">
+                    <TabsList className="grid w-full grid-cols-2 mb-4 bg-slate-100 dark:bg-slate-800">
+                        <TabsTrigger value="thai" className="data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm">
                             🇹🇭 ธ.พ. ในประเทศ
                         </TabsTrigger>
-                        <TabsTrigger value="foreign" className="data-[state=active]:bg-sky-500 data-[state=active]:text-white">
+                        <TabsTrigger value="foreign" className="data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm">
                             🌏 สาขา ธ. ต่างประเทศ
                         </TabsTrigger>
                     </TabsList>
@@ -204,7 +209,7 @@ function BankRateDetails({ bank }: { bank: BankRateAvg }) {
                         fullName="Minimum Overdraft Rate"
                         value={bank.mor}
                         description="ดอกเบี้ยเบิกเงินเกินบัญชี"
-                        color="sky"
+                        color="slate"
                     />
                     <RateCard
                         label="MLR"
@@ -229,35 +234,35 @@ function BankRateDetails({ bank }: { bank: BankRateAvg }) {
                     <span>💳</span> อัตราดอกเบี้ยอื่นๆ
                 </h4>
                 <div className="grid grid-cols-2 gap-3">
-                    <div className="bg-white rounded-lg p-3 border border-sky-100">
+                    <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm dark:bg-slate-800 dark:border-slate-700">
                         <div className="flex justify-between items-start">
                             <div>
-                                <p className="text-xs text-gray-500">Ceiling Rate</p>
-                                <p className="text-[10px] text-gray-400">อัตราดอกเบี้ยสูงสุด</p>
+                                <p className="text-xs text-slate-500">Ceiling Rate</p>
+                                <p className="text-[10px] text-slate-400">อัตราดอกเบี้ยสูงสุด</p>
                             </div>
-                            <span className="text-lg font-bold text-sky-600">
+                            <span className="text-lg font-bold text-slate-700 dark:text-slate-200">
                                 {bank.ceiling_rate ? `${bank.ceiling_rate.toFixed(2)}%` : '-'}
                             </span>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-lg p-3 border border-sky-100">
+                    <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm dark:bg-slate-800 dark:border-slate-700">
                         <div className="flex justify-between items-start">
                             <div>
-                                <p className="text-xs text-gray-500">Default Rate</p>
-                                <p className="text-[10px] text-gray-400">ดอกเบี้ยผิดนัดชำระ</p>
+                                <p className="text-xs text-slate-500">Default Rate</p>
+                                <p className="text-[10px] text-slate-400">ดอกเบี้ยผิดนัดชำระ</p>
                             </div>
-                            <span className="text-lg font-bold text-orange-500">
+                            <span className="text-lg font-bold text-amber-500">
                                 {bank.default_rate ? `${bank.default_rate.toFixed(2)}%` : '-'}
                             </span>
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-lg p-3 border border-sky-100 col-span-2">
+                    <div className="bg-white rounded-xl p-3 border border-slate-200 shadow-sm col-span-2 dark:bg-slate-800 dark:border-slate-700">
                         <div className="flex justify-between items-center">
                             <div>
-                                <p className="text-xs text-gray-500">Credit Card Interest</p>
-                                <p className="text-[10px] text-gray-400">ดอกเบี้ยบัตรเครดิต</p>
+                                <p className="text-xs text-slate-500">Credit Card Interest</p>
+                                <p className="text-[10px] text-slate-400">ดอกเบี้ยบัตรเครดิต</p>
                             </div>
                             <div className="text-right">
                                 {bank.creditcard_min !== null && bank.creditcard_max !== null ? (
@@ -280,7 +285,7 @@ function BankRateDetails({ bank }: { bank: BankRateAvg }) {
             </div>
 
             {/* Info Note */}
-            <div className="bg-sky-50 rounded-lg p-3 text-xs text-sky-700">
+            <div className="bg-slate-50 rounded-lg p-3 text-xs text-slate-500 border border-slate-100 dark:bg-slate-900 dark:border-slate-800">
                 <p className="flex items-start gap-2">
                     <span>ℹ️</span>
                     <span>
@@ -299,12 +304,12 @@ function RateBox({
 }: {
     label: string;
     value: number | null;
-    color: 'sky' | 'blue' | 'indigo';
+    color: 'slate' | 'blue' | 'indigo';
 }) {
     const colorClasses = {
-        sky: 'bg-sky-500 text-white',
-        blue: 'bg-blue-500 text-white',
-        indigo: 'bg-indigo-500 text-white',
+        slate: 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100',
+        blue: 'bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400',
+        indigo: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-900/20 dark:text-indigo-400',
     };
 
     return (
@@ -328,16 +333,16 @@ function RateCard({
     fullName: string;
     value: number | null;
     description: string;
-    color: 'sky' | 'blue' | 'indigo';
+    color: 'slate' | 'blue' | 'indigo';
 }) {
     const colorClasses = {
-        sky: 'border-sky-200 bg-sky-50',
-        blue: 'border-blue-200 bg-blue-50',
-        indigo: 'border-indigo-200 bg-indigo-50',
+        slate: 'border-slate-200 bg-slate-50 text-slate-600',
+        blue: 'border-blue-200 bg-blue-50 text-blue-600',
+        indigo: 'border-indigo-200 bg-indigo-50 text-indigo-600',
     };
 
     const textColors = {
-        sky: 'text-sky-600',
+        slate: 'text-slate-600',
         blue: 'text-blue-600',
         indigo: 'text-indigo-600',
     };
@@ -359,7 +364,7 @@ function RateCard({
 function LoadingSkeleton({ mode, className }: { mode: 'compact' | 'full'; className: string }) {
     if (mode === 'compact') {
         return (
-            <Card className={`${className} border-sky-200`}>
+            <Card className={`${className} border-slate-200 shadow-sm`}>
                 <CardHeader className="pb-2">
                     <Skeleton className="h-4 w-32" />
                 </CardHeader>
@@ -375,7 +380,7 @@ function LoadingSkeleton({ mode, className }: { mode: 'compact' | 'full'; classN
     }
 
     return (
-        <Card className={`${className} border-sky-200`}>
+        <Card className={`${className} border-slate-200 shadow-sm`}>
             <CardHeader>
                 <Skeleton className="h-6 w-48" />
                 <Skeleton className="h-4 w-32 mt-2" />

@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -7,7 +9,9 @@ import {
     Clock,
     Navigation,
     Search,
-    Mail
+    Mail,
+    Building2,
+    ArrowRight
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -109,81 +113,102 @@ function BranchCard({ branch }: { branch: Branch }) {
     const assets = branchAssets[branch.id] || [];
 
     return (
-        <Card className="group flex flex-col overflow-hidden border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:border-blue-100 rounded-2xl">
-            <div className="relative h-52 overflow-hidden">
+        <Card className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900">
+            <div className="relative h-52 overflow-hidden bg-slate-100">
                 <img
                     src={branch.image}
                     alt={branch.name}
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
 
-                <div className="absolute top-3 right-3">
-                    <Badge className={`${branch.status === "open" ? "bg-green-500/90 text-white" : "bg-slate-500/90 text-white"} backdrop-blur-md border-none px-2.5 py-0.5 font-medium`}>
-                        {branch.status === "open" ? "Open" : "Closed"}
+                <div className="absolute top-3 right-3 z-10">
+                    <Badge className={`${branch.status === "open" ? "bg-emerald-500 text-white shadow-emerald-500/20" : "bg-slate-500 text-white"} shadow-lg backdrop-blur-md border-0 px-2.5 py-1 font-medium`}>
+                        {branch.status === "open" ? "เปิดทำการ" : "ปิดทำการ"}
                     </Badge>
                 </div>
 
                 <div className="absolute bottom-4 left-4 right-4 text-white">
-                    <h3 className="text-lg font-bold shadow-black/20 drop-shadow-md leading-tight mb-1">{branch.name}</h3>
-                    <div className="flex items-center gap-2 text-white/90 text-xs font-medium">
+                    <h3 className="text-xl font-bold leading-tight mb-2 drop-shadow-md">{branch.name}</h3>
+                    <div className="flex items-center gap-2 text-slate-200 text-xs font-medium">
                         <Clock className="h-3.5 w-3.5" />
                         <span>{branch.hours}</span>
                     </div>
                 </div>
             </div>
 
-            <CardContent className="flex flex-col flex-1 p-5 gap-5">
-                <div className="space-y-3">
+            <CardContent className="flex flex-col flex-1 p-5">
+                <div className="space-y-4 mb-6">
                     <div className="flex items-start gap-3">
-                        <MapPin className="h-4 w-4 mt-0.5 text-blue-500 shrink-0" />
-                        <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed">{branch.address}</p>
+                        <div className="mt-1 h-6 w-6 rounded-full bg-blue-50 flex items-center justify-center shrink-0 dark:bg-blue-900/20">
+                             <MapPin className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed dark:text-slate-400">{branch.address}</p>
                     </div>
                     <div className="flex items-center gap-3">
-                        <Phone className="h-4 w-4 text-blue-500" />
-                        <span className="text-sm font-medium text-slate-700">{branch.phone}</span>
+                        <div className="h-6 w-6 rounded-full bg-blue-50 flex items-center justify-center shrink-0 dark:bg-blue-900/20">
+                            <Phone className="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" />
+                        </div>
+                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{branch.phone}</span>
                     </div>
                 </div>
 
-                <div className="mt-auto pt-3 border-t border-slate-50">
+                <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
                     {assets.length > 0 ? (
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                             <div className="flex items-center justify-between">
-                                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                                     ทรัพย์หลุดจำนำ ({assets.length})
                                 </span>
+                                <Button variant="link" className="h-auto p-0 text-xs text-amber-600 hover:text-amber-700 dark:text-amber-500">
+                                    ดูทั้งหมด
+                                </Button>
                             </div>
-                            <div className="flex gap-2">
+                            <div className="flex -space-x-3 overflow-hidden py-1">
                                 {assets.slice(0, 3).map((asset, i) => (
-                                    <div key={i} className="h-10 w-10 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden">
+                                    <div key={i} className="relative h-10 w-10 rounded-full ring-2 ring-white dark:ring-slate-900 shadow-sm overflow-hidden bg-slate-100">
                                         <img src={asset.image} alt="" className="h-full w-full object-cover" />
                                     </div>
                                 ))}
                                 {assets.length > 3 && (
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-50 border border-slate-100 text-xs font-medium text-slate-500">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 ring-2 ring-white text-xs font-bold text-slate-500 dark:bg-slate-800 dark:text-slate-400 dark:ring-slate-900">
                                         +{assets.length - 3}
                                     </div>
                                 )}
                             </div>
                             <Dialog>
                                 <DialogTrigger asChild>
-                                    <Button className="w-full bg-slate-900 text-white hover:bg-slate-800 rounded-xl" size="sm">
-                                        ดูทรัพย์สิน
+                                    <Button className="w-full rounded-xl bg-slate-900 text-white hover:bg-slate-800 shadow-sm dark:bg-slate-800 dark:hover:bg-slate-700" size="sm">
+                                        ดูรายการทรัพย์สิน
                                     </Button>
                                 </DialogTrigger>
-                                <DialogContent className="sm:max-w-[600px]">
+                                <DialogContent className="sm:max-w-[600px] rounded-2xl">
                                     <DialogHeader>
                                         <DialogTitle>ทรัพย์สินหลุดจำนำ - {branch.name}</DialogTitle>
                                     </DialogHeader>
                                     {/* Content remains same, verifying it exists in code */}
+                                    <div className="grid grid-cols-2 gap-4 py-4">
+                                        {assets.map((asset) => (
+                                            <div key={asset.id} className="flex gap-3 p-2 rounded-lg border border-slate-100">
+                                                <img src={asset.image} className="h-16 w-16 rounded-md object-cover bg-slate-100" />
+                                                <div className="flex flex-col justify-center">
+                                                    <p className="font-semibold text-sm line-clamp-1">{asset.name}</p>
+                                                    <p className="text-amber-600 font-bold text-sm">{asset.price}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </DialogContent>
                             </Dialog>
                         </div>
                     ) : (
-                        <Button variant="ghost" className="w-full text-blue-600 hover:bg-blue-50 hover:text-blue-700" size="sm">
-                            <Navigation className="mr-2 h-4 w-4" />
-                            นำทางไปยังสาขา
-                        </Button>
+                        <div className="space-y-4">
+                            <div className="h-6"></div> {/* Spacer to match height */}
+                            <Button variant="outline" className="w-full rounded-xl border-slate-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 dark:border-slate-700 dark:text-blue-400 dark:hover:bg-blue-900/20" size="sm">
+                                <Navigation className="mr-2 h-4 w-4" />
+                                นำทางไปยังสาขา
+                            </Button>
+                        </div>
                     )}
                 </div>
             </CardContent>
@@ -193,102 +218,116 @@ function BranchCard({ branch }: { branch: Branch }) {
 
 export default function BranchesPage() {
     return (
-        <div className="min-h-screen bg-blue-50 pb-10 dark:bg-slate-950">
+        <div className="min-h-screen bg-slate-50/50 pb-20 dark:bg-slate-950">
             {/* Hero Section */}
-            <div className="relative overflow-hidden bg-slate-900 py-20 text-white">
-                <div className="absolute inset-0 bg-[url('https://www.pawn.co.th/assets/images/banner/banner-02.jpg')] bg-cover bg-center opacity-40"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/80 to-slate-900/40"></div>
+            <div className="relative overflow-hidden bg-slate-900 py-24 text-white">
+                <div className="absolute inset-0 bg-[url('https://www.pawn.co.th/assets/images/banner/banner-02.jpg')] bg-cover bg-center opacity-30 mix-blend-overlay"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/90 to-slate-900/50"></div>
+                
+                {/* Decorative */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-blue-500/10 blur-[100px] rounded-full"></div>
+
                 <div className="container relative mx-auto px-4 text-center">
-                    <Badge className="mb-4 inline-flex bg-yellow-400 text-yellow-950 hover:bg-yellow-300 px-4 py-1.5 text-sm font-medium rounded-full shadow-lg shadow-yellow-400/20 border-none">
-                        🏢 เครือข่ายของเรา
-                    </Badge>
-                    <h1 className="text-4xl font-extrabold tracking-tight text-white md:text-6xl drop-shadow-lg">
-                        ค้นหาสาขา <span className="text-yellow-400">สธค.</span>
+                    <div className="inline-flex items-center gap-2 rounded-full bg-amber-500/10 border border-amber-500/20 px-4 py-1.5 text-sm font-medium text-amber-400 mb-6 backdrop-blur-sm shadow-lg shadow-amber-500/5">
+                        <Building2 className="h-4 w-4" />
+                        <span>เครือข่ายสถานธนานุเคราะห์</span>
+                    </div>
+                    
+                    <h1 className="text-4xl font-extrabold tracking-tight text-white md:text-6xl drop-shadow-2xl mb-6">
+                        ค้นหาสาขา <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-200">สธค.</span>
                     </h1>
-                    <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-200 leading-relaxed drop-shadow-md">
+                    
+                    <p className="mx-auto max-w-2xl text-lg text-slate-300 leading-relaxed font-light">
                         ให้บริการครอบคลุมทั่วกรุงเทพฯ และปริมณฑล ด้วยมาตรฐานเดียวกันทั้ง 47 สาขา
-                        <br className="hidden md:inline" /> ความอุ่นใจที่ใกล้บ้านคุณ
+                        <br className="hidden md:inline" /> มั่นใจ ปลอดภัย ดอกเบี้ยต่ำ
                     </p>
 
-                    <div className="mx-auto mt-10 max-w-xl relative">
-                        <div className="relative flex items-center bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 overflow-hidden ring-1 ring-white/10">
-                            <Search className="ml-5 h-6 w-6 text-slate-300" />
+                    <div className="mx-auto mt-12 max-w-2xl relative z-10">
+                        <div className="relative flex items-center bg-white/5 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/10 p-2 ring-1 ring-white/10 transition-all focus-within:ring-amber-500/50 focus-within:bg-white/10">
+                            <Search className="ml-4 h-6 w-6 text-slate-400" />
                             <Input
                                 placeholder="ค้นหาสาขา, เขต, หรือจังหวัด..."
-                                className="w-full border-0 bg-transparent py-7 pl-4 text-lg text-white placeholder:text-slate-400 focus-visible:ring-0"
+                                className="h-14 border-0 bg-transparent px-4 text-lg text-white placeholder:text-slate-500 focus-visible:ring-0"
                             />
-                            <Button className="m-2 h-12 px-6 rounded-xl bg-yellow-400 text-yellow-950 hover:bg-yellow-300 shadow-lg transition-all hover:shadow-xl font-bold">
+                            <Button className="h-12 px-8 rounded-xl bg-amber-500 text-slate-900 hover:bg-amber-400 font-bold shadow-lg shadow-amber-500/20 transition-all hover:scale-105">
                                 ค้นหา
                             </Button>
                         </div>
-                        <div className="mt-4 flex justify-center gap-2 text-sm text-slate-300">
-                            <span>ค้นหายอดนิยม:</span>
-                            <button className="text-yellow-300 hover:text-yellow-200 hover:underline">ปทุมวัน</button>,
-                            <button className="text-yellow-300 hover:text-yellow-200 hover:underline">นนทบุรี</button>,
-                            <button className="text-yellow-300 hover:text-yellow-200 hover:underline">ลำลูกกา</button>
+                        <div className="mt-4 flex flex-wrap justify-center gap-2 text-sm text-slate-400">
+                            <span>คำค้นยอดนิยม:</span>
+                            <button className="text-amber-400 hover:text-amber-300 hover:underline transition-colors">ปทุมวัน</button>,
+                            <button className="text-amber-400 hover:text-amber-300 hover:underline transition-colors">นนทบุรี</button>,
+                            <button className="text-amber-400 hover:text-amber-300 hover:underline transition-colors">ลำลูกกา</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="container mx-auto px-4 pb-16">
-                {/* Head Office - Premium Light Design */}
-                <div className="mb-12">
+            <div className="container mx-auto px-4 -mt-10 relative z-10 pb-16">
+                {/* Head Office - Premium Feature Card */}
+                <div className="mb-16">
                     {pawnShops.filter(b => b.isHeadOffice).map(branch => (
-                        <Card key={branch.id} className="group overflow-hidden border border-blue-100 bg-white shadow-2xl shadow-blue-900/5 rounded-3xl relative">
-                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500"></div>
+                        <Card key={branch.id} className="group overflow-hidden border border-amber-200/50 bg-white shadow-2xl shadow-slate-200/50 rounded-[2rem] relative dark:bg-slate-900 dark:border-amber-900/30 dark:shadow-black/50">
+                            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-amber-300 via-amber-500 to-amber-300"></div>
                             <div className="flex flex-col lg:flex-row">
-                                <div className="lg:w-1/2 relative h-64 lg:h-auto overflow-hidden">
-                                    <div className="absolute top-4 left-4 z-10">
-                                        <Badge className="bg-white/90 text-slate-900 backdrop-blur-md shadow-lg border border-white/20 px-3 py-1 text-sm font-semibold">
-                                            🏆 สำนักงานใหญ่
+                                <div className="lg:w-7/12 relative min-h-[400px] overflow-hidden">
+                                     <div className="absolute inset-0 bg-slate-900/10 z-10 group-hover:bg-slate-900/0 transition-colors duration-500"></div>
+                                    <div className="absolute top-6 left-6 z-20">
+                                        <Badge className="bg-white/95 text-slate-900 backdrop-blur-xl shadow-lg border-0 px-4 py-1.5 text-sm font-bold tracking-wide">
+                                            ⭐️ สำนักงานใหญ่
                                         </Badge>
                                     </div>
                                     <img
                                         src={branch.image}
                                         alt={branch.name}
-                                        className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
                                     />
                                 </div>
-                                <div className="lg:w-1/2 p-8 lg:p-12 flex flex-col justify-center">
+                                <div className="lg:w-5/12 p-8 lg:p-12 flex flex-col justify-center bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-900">
                                     <div className="flex items-center gap-3 mb-6">
-                                        <Badge variant="outline" className="border-green-200 bg-green-50 text-green-700 px-3 py-1">
-                                            <div className="mr-1.5 h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
+                                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-sm font-medium dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-900/30">
+                                            <span className="relative flex h-2.5 w-2.5">
+                                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                                            </span>
                                             เปิดทำการ {branch.hours}
-                                        </Badge>
+                                        </div>
                                     </div>
 
-                                    <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-6">
-                                        สถานธนานุเคราะห์ (สำนักงานใหญ่)
+                                    <h2 className="text-3xl lg:text-4xl font-extrabold text-slate-900 mb-6 leading-tight dark:text-white">
+                                        สถานธนานุเคราะห์ <br/> 
+                                        <span className="text-slate-500 text-2xl font-semibold dark:text-slate-400">(สำนักงานใหญ่)</span>
                                     </h2>
 
-                                    <div className="space-y-6 mb-8">
-                                        <div className="flex items-start gap-4">
-                                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
-                                                <MapPin className="h-5 w-5" />
+                                    <div className="space-y-8 mb-10">
+                                        <div className="flex items-start gap-5">
+                                            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 shadow-sm dark:bg-blue-900/20 dark:text-blue-400">
+                                                <MapPin className="h-6 w-6" />
                                             </div>
-                                            <div className="pt-2">
-                                                <p className="text-slate-600 leading-relaxed text-lg">{branch.address}</p>
+                                            <div>
+                                                <p className="font-semibold text-slate-900 mb-1 dark:text-white">ที่อยู่</p>
+                                                <p className="text-slate-600 leading-relaxed dark:text-slate-400">{branch.address}</p>
                                             </div>
                                         </div>
-                                        <div className="flex flex-wrap gap-x-12 gap-y-6">
-                                            <div className="flex items-center gap-4">
-                                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                                        
+                                        <div className="grid grid-cols-2 gap-6">
+                                            <div className="flex items-start gap-4">
+                                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400">
                                                     <Phone className="h-5 w-5" />
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm text-slate-500">เบอร์โทรศัพท์</p>
-                                                    <p className="text-lg font-semibold text-slate-900">{branch.phone}</p>
+                                                    <p className="text-xs font-bold uppercase text-slate-400 mb-0.5">เบอร์โทรศัพท์</p>
+                                                    <p className="text-sm font-semibold text-slate-900 dark:text-white">{branch.phone}</p>
                                                 </div>
                                             </div>
                                             {branch.email && (
-                                                <div className="flex items-center gap-4">
-                                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600">
+                                                <div className="flex items-start gap-4">
+                                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400">
                                                         <Mail className="h-5 w-5" />
                                                     </div>
                                                     <div>
-                                                        <p className="text-sm text-slate-500">อีเมล</p>
-                                                        <p className="text-lg font-semibold text-slate-900">{branch.email}</p>
+                                                        <p className="text-xs font-bold uppercase text-slate-400 mb-0.5">อีเมล</p>
+                                                        <p className="text-sm font-semibold text-slate-900 dark:text-white">{branch.email}</p>
                                                     </div>
                                                 </div>
                                             )}
@@ -296,11 +335,11 @@ export default function BranchesPage() {
                                     </div>
 
                                     <div className="flex gap-4">
-                                        <Button size="lg" className="bg-slate-900 text-white hover:bg-slate-800 px-8 h-12 text-base shadow-lg shadow-slate-900/20">
+                                        <Button size="lg" className="flex-1 bg-slate-900 text-white hover:bg-slate-800 h-14 rounded-xl text-base font-semibold shadow-lg shadow-slate-900/10 dark:bg-amber-500 dark:text-slate-900 dark:hover:bg-amber-400">
                                             <Navigation className="mr-2 h-5 w-5" />
                                             ขอเส้นทาง
                                         </Button>
-                                        <Button size="lg" variant="outline" className="border-slate-200 text-slate-700 hover:bg-slate-50 px-8 h-12 text-base">
+                                        <Button size="lg" variant="outline" className="flex-1 border-slate-200 text-slate-700 hover:bg-slate-50 h-14 rounded-xl text-base font-semibold dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">
                                             <Phone className="mr-2 h-5 w-5" />
                                             โทรออก
                                         </Button>
@@ -312,9 +351,20 @@ export default function BranchesPage() {
                 </div>
 
                 {/* Other Branches Grid */}
-                <div className="flex items-center justify-between mb-8">
-                    <h3 className="text-2xl font-bold text-slate-900">สาขาทั้งหมด</h3>
-                    <div className="text-sm text-slate-500">แสดงทั้งหมด {pawnShops.length - 1} สาขา</div>
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 px-2">
+                    <div>
+                         <h3 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <span className="h-8 w-1.5 rounded-full bg-amber-500 block"></span>
+                            สาขาทั้งหมด
+                        </h3>
+                        <p className="text-slate-500 mt-1 dark:text-slate-400">ค้นพบเครือข่ายให้บริการใกล้บ้านคุณ</p>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                         <Badge variant="outline" className="bg-white border-slate-200 text-slate-600 py-1.5 px-3 rounded-lg dark:bg-slate-900 dark:border-slate-800 dark:text-slate-400">
+                            ทั้งหมด {pawnShops.length - 1} สาขา
+                        </Badge>
+                    </div>
                 </div>
 
                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
