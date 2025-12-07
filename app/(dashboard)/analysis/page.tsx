@@ -19,7 +19,6 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import {
-    Line,
     XAxis,
     YAxis,
     CartesianGrid,
@@ -34,11 +33,9 @@ import {
     Bar,
     AreaChart,
     Area,
-    RadialBarChart,
-    RadialBar
+    Line,
 } from "recharts";
 import {
-    RefreshCw,
     TrendingUp,
     TrendingDown,
     AlertCircle,
@@ -47,21 +44,16 @@ import {
     CheckCircle2,
     XCircle,
     Calendar,
-    Filter,
     Download,
     BarChart3,
-    PieChartIcon,
+    PieChart as PieChartIcon,
     Activity,
     Banknote,
-    Users,
     AlertTriangle,
     ArrowUpRight,
     ArrowDownRight,
     Target,
     Gem,
-    Watch,
-    Smartphone,
-    Percent
 } from "lucide-react";
 
 // =============================================
@@ -148,7 +140,6 @@ const ASSET_VALUE_TREND = [
 // =============================================
 export default function DataAnalysisOnlyPage() {
     const [timeRange, setTimeRange] = useState("6months");
-    const [assetFilter, setAssetFilter] = useState("all");
 
     // Calculate summary stats
     const totalAssets = ASSET_DISTRIBUTION_DATA.reduce((sum, item) => sum + item.count, 0);
@@ -157,29 +148,29 @@ export default function DataAnalysisOnlyPage() {
     const avgRedemptionRate = MONTHLY_DEFAULT_TREND.reduce((sum, item) => sum + item.redeemed, 0) / MONTHLY_DEFAULT_TREND.length;
 
     return (
-        <div className="flex flex-col gap-8 p-6 min-h-screen bg-slate-50/30">
+        <div className="flex flex-col gap-6 p-4 md:p-6">
             {/* =============================================
-                HEADER SECTION 
+                PAGE HEADER 
             ============================================= */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-6 bg-white p-6 rounded-xl shadow-sm border-slate-100">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <div className="flex items-center gap-2 mb-2">
-                        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                            <BarChart3 className="mr-1 h-3 w-3" />
-                            Data Analysis
+                    <div className="flex items-center gap-2 mb-1">
+                        <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 font-medium">
+                            <BarChart3 className="mr-1.5 h-3 w-3" />
+                            Analytics
                         </Badge>
                     </div>
                     <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-                     การวิเคราะห์ข้อมูล (Data Analysis)
+                        การวิเคราะห์ข้อมูล
                     </h1>
-                    <p className="text-sm text-slate-500 mt-1 max-w-2xl">
-                        วิเคราะห์ทรัพย์สินที่อยู่ในครอบครอง และแนวโน้มการหลุดจำนำในช่วงเวลาต่างๆ
+                    <p className="text-sm text-slate-500 mt-0.5">
+                        วิเคราะห์ทรัพย์สินและแนวโน้มการหลุดจำนำ
                     </p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                     <Select value={timeRange} onValueChange={setTimeRange}>
-                        <SelectTrigger className="w-[140px]">
-                            <Calendar className="mr-2 h-4 w-4" />
+                        <SelectTrigger className="w-[130px] h-9">
+                            <Calendar className="mr-2 h-3.5 w-3.5 text-slate-500" />
                             <SelectValue placeholder="ช่วงเวลา" />
                         </SelectTrigger>
                         <SelectContent>
@@ -189,8 +180,8 @@ export default function DataAnalysisOnlyPage() {
                             <SelectItem value="all">ทั้งหมด</SelectItem>
                         </SelectContent>
                     </Select>
-                    <Button variant="outline" size="sm">
-                        <Download className="mr-2 h-4 w-4" />
+                    <Button variant="outline" size="sm" className="h-9">
+                        <Download className="mr-1.5 h-3.5 w-3.5" />
                         Export
                     </Button>
                 </div>
@@ -199,68 +190,68 @@ export default function DataAnalysisOnlyPage() {
             {/* =============================================
                 SUMMARY STATS
             ============================================= */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Card className="border-amber-200 bg-linear-to-br from-amber-50 to-white">
-                    <CardContent className="p-6">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <Card className="border-slate-200 shadow-sm">
+                    <CardContent className="p-4">
                         <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-amber-600 font-medium">ทรัพย์สินทั้งหมด</p>
-                                <p className="text-3xl font-bold text-amber-900 mt-1">{totalAssets.toLocaleString()}</p>
-                                <p className="text-xs text-amber-600 mt-1">รายการ</p>
+                            <div className="space-y-1">
+                                <p className="text-xs text-slate-500 font-medium">ทรัพย์สินทั้งหมด</p>
+                                <p className="text-2xl font-bold text-slate-900">{totalAssets.toLocaleString()}</p>
+                                <p className="text-xs text-slate-400">รายการ</p>
                             </div>
-                            <div className="p-3 bg-amber-100 rounded-xl">
-                                <Package className="h-6 w-6 text-amber-600" />
+                            <div className="p-2.5 bg-amber-50 rounded-lg">
+                                <Package className="h-5 w-5 text-amber-600" />
                             </div>
                         </div>
                     </CardContent>
                 </Card>
 
-                <Card className="border-blue-200 bg-linear-to-br from-blue-50 to-white">
-                    <CardContent className="p-6">
+                <Card className="border-slate-200 shadow-sm">
+                    <CardContent className="p-4">
                         <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-blue-600 font-medium">มูลค่ารวม</p>
-                                <p className="text-3xl font-bold text-blue-900 mt-1">{totalValue.toLocaleString()}</p>
-                                <p className="text-xs text-blue-600 mt-1">ล้านบาท</p>
+                            <div className="space-y-1">
+                                <p className="text-xs text-slate-500 font-medium">มูลค่ารวม</p>
+                                <p className="text-2xl font-bold text-slate-900">{totalValue.toLocaleString()}</p>
+                                <p className="text-xs text-slate-400">ล้านบาท</p>
                             </div>
-                            <div className="p-3 bg-blue-100 rounded-xl">
-                                <Banknote className="h-6 w-6 text-blue-600" />
+                            <div className="p-2.5 bg-blue-50 rounded-lg">
+                                <Banknote className="h-5 w-5 text-blue-600" />
                             </div>
                         </div>
                     </CardContent>
                 </Card>
 
-                <Card className="border-green-200 bg-linear-to-br from-green-50 to-white">
-                    <CardContent className="p-6">
+                <Card className="border-slate-200 shadow-sm">
+                    <CardContent className="p-4">
                         <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-green-600 font-medium">อัตราไถ่ถอน</p>
-                                <p className="text-3xl font-bold text-green-700 mt-1">{avgRedemptionRate.toFixed(1)}%</p>
-                                <div className="flex items-center gap-1 mt-1">
-                                    <ArrowUpRight className="h-3 w-3 text-green-500" />
-                                    <span className="text-xs text-green-600">+2.1% จากเดือนก่อน</span>
+                            <div className="space-y-1">
+                                <p className="text-xs text-slate-500 font-medium">อัตราไถ่ถอน</p>
+                                <p className="text-2xl font-bold text-emerald-600">{avgRedemptionRate.toFixed(1)}%</p>
+                                <div className="flex items-center gap-1">
+                                    <ArrowUpRight className="h-3 w-3 text-emerald-500" />
+                                    <span className="text-xs text-emerald-600">+2.1%</span>
                                 </div>
                             </div>
-                            <div className="p-3 bg-green-100 rounded-xl">
-                                <CheckCircle2 className="h-6 w-6 text-green-600" />
+                            <div className="p-2.5 bg-emerald-50 rounded-lg">
+                                <CheckCircle2 className="h-5 w-5 text-emerald-600" />
                             </div>
                         </div>
                     </CardContent>
                 </Card>
 
-                <Card className="border-red-200 bg-linear-to-br from-red-50 to-white">
-                    <CardContent className="p-6">
+                <Card className="border-slate-200 shadow-sm">
+                    <CardContent className="p-4">
                         <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-red-600 font-medium">อัตราหลุดจำนำ</p>
-                                <p className="text-3xl font-bold text-red-600 mt-1">{avgDefaultRate.toFixed(1)}%</p>
-                                <div className="flex items-center gap-1 mt-1">
-                                    <ArrowDownRight className="h-3 w-3 text-green-500" />
-                                    <span className="text-xs text-green-600">-1.5% จากเดือนก่อน</span>
+                            <div className="space-y-1">
+                                <p className="text-xs text-slate-500 font-medium">อัตราหลุดจำนำ</p>
+                                <p className="text-2xl font-bold text-red-600">{avgDefaultRate.toFixed(1)}%</p>
+                                <div className="flex items-center gap-1">
+                                    <ArrowDownRight className="h-3 w-3 text-emerald-500" />
+                                    <span className="text-xs text-emerald-600">-1.5%</span>
                                 </div>
                             </div>
-                            <div className="p-3 bg-red-100 rounded-xl">
-                                <XCircle className="h-6 w-6 text-red-600" />
+                            <div className="p-2.5 bg-red-50 rounded-lg">
+                                <XCircle className="h-5 w-5 text-red-600" />
                             </div>
                         </div>
                     </CardContent>
@@ -270,38 +261,38 @@ export default function DataAnalysisOnlyPage() {
             {/* =============================================
                 SECTION 1: วิเคราะห์ทรัพย์สินที่อยู่ในครอบครอง
             ============================================= */}
-            <section className="space-y-6">
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-amber-100 text-amber-600">
-                        <Package className="h-5 w-5" />
+            <section className="space-y-4">
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-amber-100 text-amber-600">
+                        <Package className="h-4 w-4" />
                     </div>
                     <div>
-                        <h2 className="text-lg font-semibold text-slate-800">
-                            วิเคราะห์ทรัพย์สินที่อยู่ในครอบครองของ สธค.
+                        <h2 className="text-base font-semibold text-slate-800">
+                            วิเคราะห์ทรัพย์สินในครอบครอง
                         </h2>
-                        <p className="text-sm text-slate-500">Portfolio Analysis & Risk Assessment</p>
+                        <p className="text-xs text-slate-500">Portfolio Analysis</p>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                     {/* สัดส่วนทรัพย์สิน */}
-                    <Card className="border-slate-200 lg:col-span-1">
-                        <CardHeader>
-                            <CardTitle className="text-base text-slate-700 flex items-center gap-2">
-                                <PieChartIcon className="h-5 w-5 text-amber-500" />
-                                สัดส่วนทรัพย์สินตามประเภท
+                    <Card className="border-slate-200 shadow-sm">
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
+                                <PieChartIcon className="h-4 w-4 text-amber-500" />
+                                สัดส่วนทรัพย์สิน
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="h-[220px] w-full">
+                            <div className="h-[180px] w-full">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <PieChart>
                                         <Pie
                                             data={ASSET_DISTRIBUTION_DATA}
                                             cx="50%"
                                             cy="50%"
-                                            innerRadius={55}
-                                            outerRadius={80}
+                                            innerRadius={45}
+                                            outerRadius={70}
                                             paddingAngle={3}
                                             dataKey="value"
                                         >
@@ -311,22 +302,19 @@ export default function DataAnalysisOnlyPage() {
                                         </Pie>
                                         <Tooltip
                                             formatter={(value: number, name: string) => [`${value}%`, name]}
-                                            contentStyle={{ borderRadius: '8px', fontSize: '12px' }}
+                                            contentStyle={{ borderRadius: '8px', fontSize: '11px' }}
                                         />
                                     </PieChart>
                                 </ResponsiveContainer>
                             </div>
-                            <div className="space-y-2 mt-4">
+                            <div className="space-y-1.5 mt-3">
                                 {ASSET_DISTRIBUTION_DATA.map((item) => (
-                                    <div key={item.name} className="flex items-center justify-between text-sm">
+                                    <div key={item.name} className="flex items-center justify-between text-xs">
                                         <div className="flex items-center gap-2">
-                                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
+                                            <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }}></div>
                                             <span className="text-slate-600">{item.name}</span>
                                         </div>
-                                        <div className="flex items-center gap-3">
-                                            <span className="text-slate-400 text-xs">{item.count.toLocaleString()} รายการ</span>
-                                            <span className="font-bold text-slate-800">{item.value}%</span>
-                                        </div>
+                                        <span className="font-semibold text-slate-800">{item.value}%</span>
                                     </div>
                                 ))}
                             </div>
@@ -334,24 +322,24 @@ export default function DataAnalysisOnlyPage() {
                     </Card>
 
                     {/* รายละเอียดทองคำ */}
-                    <Card className="border-slate-200 lg:col-span-1">
-                        <CardHeader>
-                            <CardTitle className="text-base text-slate-700 flex items-center gap-2">
-                                <Gem className="h-5 w-5 text-yellow-500" />
+                    <Card className="border-slate-200 shadow-sm">
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
+                                <Gem className="h-4 w-4 text-yellow-500" />
                                 ทองคำแยกตามประเภท
                             </CardTitle>
-                            <CardDescription>75% ของทรัพย์สินทั้งหมด</CardDescription>
+                            <CardDescription className="text-xs">75% ของทรัพย์สินทั้งหมด</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <div className="h-[220px] w-full">
+                            <div className="h-[180px] w-full">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <PieChart>
                                         <Pie
                                             data={GOLD_BREAKDOWN_DATA}
                                             cx="50%"
                                             cy="50%"
-                                            innerRadius={55}
-                                            outerRadius={80}
+                                            innerRadius={45}
+                                            outerRadius={70}
                                             paddingAngle={3}
                                             dataKey="value"
                                         >
@@ -361,19 +349,19 @@ export default function DataAnalysisOnlyPage() {
                                         </Pie>
                                         <Tooltip
                                             formatter={(value: number, name: string) => [`${value}%`, name]}
-                                            contentStyle={{ borderRadius: '8px', fontSize: '12px' }}
+                                            contentStyle={{ borderRadius: '8px', fontSize: '11px' }}
                                         />
                                     </PieChart>
                                 </ResponsiveContainer>
                             </div>
-                            <div className="space-y-2 mt-4">
+                            <div className="space-y-1.5 mt-3">
                                 {GOLD_BREAKDOWN_DATA.map((item) => (
-                                    <div key={item.name} className="flex items-center justify-between text-sm">
+                                    <div key={item.name} className="flex items-center justify-between text-xs">
                                         <div className="flex items-center gap-2">
-                                            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
+                                            <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }}></div>
                                             <span className="text-slate-600">{item.name}</span>
                                         </div>
-                                        <span className="font-bold text-slate-800">{item.value}%</span>
+                                        <span className="font-semibold text-slate-800">{item.value}%</span>
                                     </div>
                                 ))}
                             </div>
@@ -381,43 +369,43 @@ export default function DataAnalysisOnlyPage() {
                     </Card>
 
                     {/* ความเสี่ยงกระจุกตัว */}
-                    <Card className="border-slate-200 lg:col-span-1">
-                        <CardHeader>
-                            <CardTitle className="text-base text-slate-700 flex items-center gap-2">
-                                <AlertTriangle className="h-5 w-5 text-orange-500" />
+                    <Card className="border-slate-200 shadow-sm">
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
+                                <AlertTriangle className="h-4 w-4 text-orange-500" />
                                 ประเมินความเสี่ยง
                             </CardTitle>
-                            <CardDescription>Risk Concentration Analysis</CardDescription>
+                            <CardDescription className="text-xs">Risk Concentration</CardDescription>
                         </CardHeader>
-                        <CardContent className="space-y-4">
-                            <div className="p-4 bg-orange-50 border border-orange-200 rounded-xl">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <AlertCircle className="h-5 w-5 text-orange-500" />
-                                    <span className="font-semibold text-orange-800">ความเสี่ยงสูง</span>
+                        <CardContent className="space-y-3">
+                            <div className="p-3 bg-orange-50 border border-orange-100 rounded-lg">
+                                <div className="flex items-center gap-2 mb-1.5">
+                                    <AlertCircle className="h-4 w-4 text-orange-500" />
+                                    <span className="font-medium text-xs text-orange-800">ความเสี่ยงสูง</span>
                                 </div>
-                                <p className="text-sm text-orange-700">
-                                    ทรัพย์สิน 75% กระจุกตัวที่ทองคำ หากราคาทองตกจะกระทบต่อมูลค่าหลักประกันอย่างมาก
+                                <p className="text-xs text-orange-700 leading-relaxed">
+                                    ทรัพย์สิน 75% กระจุกตัวที่ทองคำ หากราคาทองตกจะกระทบมูลค่าหลักประกัน
                                 </p>
                             </div>
 
-                            <div className="space-y-3">
-                                <div className="flex items-center justify-between text-sm">
-                                    <span className="text-slate-600">HHI Index</span>
-                                    <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">5,850</Badge>
+                            <div className="space-y-2">
+                                <div className="flex items-center justify-between text-xs">
+                                    <span className="text-slate-500">HHI Index</span>
+                                    <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 text-xs">5,850</Badge>
                                 </div>
-                                <div className="flex items-center justify-between text-sm">
-                                    <span className="text-slate-600">Concentration Risk</span>
-                                    <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">High</Badge>
+                                <div className="flex items-center justify-between text-xs">
+                                    <span className="text-slate-500">Concentration Risk</span>
+                                    <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200 text-xs">High</Badge>
                                 </div>
-                                <div className="flex items-center justify-between text-sm">
-                                    <span className="text-slate-600">Correlation to Gold</span>
-                                    <span className="font-bold text-slate-800">0.92</span>
+                                <div className="flex items-center justify-between text-xs">
+                                    <span className="text-slate-500">Correlation to Gold</span>
+                                    <span className="font-semibold text-slate-800">0.92</span>
                                 </div>
                             </div>
 
-                            <div className="pt-3 border-t">
+                            <div className="pt-2 border-t">
                                 <p className="text-xs text-slate-500">
-                                    <strong>คำแนะนำ:</strong> ควรมีระบบ Early Warning สำหรับการเปลี่ยนแปลงราคาทองคำที่รุนแรง
+                                    <strong>แนะนำ:</strong> ควรมีระบบ Early Warning สำหรับการเปลี่ยนแปลงราคาทอง
                                 </p>
                             </div>
                         </CardContent>
@@ -425,22 +413,22 @@ export default function DataAnalysisOnlyPage() {
                 </div>
 
                 {/* มูลค่าทรัพย์สินรายเดือน */}
-                <Card className="border-slate-200">
-                    <CardHeader>
-                        <CardTitle className="text-base text-slate-700 flex items-center gap-2">
-                            <Activity className="h-5 w-5 text-blue-500" />
+                <Card className="border-slate-200 shadow-sm">
+                    <CardHeader className="pb-2">
+                        <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
+                            <Activity className="h-4 w-4 text-blue-500" />
                             แนวโน้มมูลค่าทรัพย์สินรายเดือน (ล้านบาท)
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="h-[300px] w-full">
+                        <div className="h-[250px] w-full">
                             <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={ASSET_VALUE_TREND} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                                <AreaChart data={ASSET_VALUE_TREND} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                                     <CartesianGrid strokeDasharray="3 3" className="stroke-slate-100" />
-                                    <XAxis dataKey="month" fontSize={11} tickLine={false} axisLine={false} />
-                                    <YAxis fontSize={11} tickLine={false} axisLine={false} />
-                                    <Tooltip contentStyle={{ borderRadius: '8px', fontSize: '12px' }} />
-                                    <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+                                    <XAxis dataKey="month" fontSize={10} tickLine={false} axisLine={false} />
+                                    <YAxis fontSize={10} tickLine={false} axisLine={false} />
+                                    <Tooltip contentStyle={{ borderRadius: '8px', fontSize: '11px' }} />
+                                    <Legend wrapperStyle={{ fontSize: '10px', paddingTop: '8px' }} />
                                     <Area type="monotone" dataKey="gold" name="ทองคำ" stackId="1" stroke="#eab308" fill="#fef3c7" />
                                     <Area type="monotone" dataKey="jewelry" name="เพชร/อัญมณี" stackId="1" stroke="#0ea5e9" fill="#e0f2fe" />
                                     <Area type="monotone" dataKey="watch" name="นาฬิกา" stackId="1" stroke="#64748b" fill="#f1f5f9" />
@@ -455,46 +443,46 @@ export default function DataAnalysisOnlyPage() {
             {/* =============================================
                 SECTION 2: วิเคราะห์แนวโน้มการหลุดจำนำ
             ============================================= */}
-            <section className="space-y-6">
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-red-100 text-red-600">
-                        <TrendingDown className="h-5 w-5" />
+            <section className="space-y-4">
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-red-100 text-red-600">
+                        <TrendingDown className="h-4 w-4" />
                     </div>
                     <div>
-                        <h2 className="text-lg font-semibold text-slate-800">
-                            วิเคราะห์แนวโน้มการหลุดจำนำในช่วงเวลาต่างๆ
+                        <h2 className="text-base font-semibold text-slate-800">
+                            วิเคราะห์แนวโน้มการหลุดจำนำ
                         </h2>
-                        <p className="text-sm text-slate-500">Default Rate Analysis & Trend Prediction</p>
+                        <p className="text-xs text-slate-500">Default Rate Analysis</p>
                     </div>
                 </div>
 
                 <Tabs defaultValue="monthly" className="w-full">
-                    <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
-                        <TabsTrigger value="monthly">รายเดือน</TabsTrigger>
-                        <TabsTrigger value="quarterly">รายไตรมาส</TabsTrigger>
-                        <TabsTrigger value="breakdown">แยกตามปัจจัย</TabsTrigger>
+                    <TabsList className="grid w-full grid-cols-3 lg:w-[320px] h-9">
+                        <TabsTrigger value="monthly" className="text-xs">รายเดือน</TabsTrigger>
+                        <TabsTrigger value="quarterly" className="text-xs">รายไตรมาส</TabsTrigger>
+                        <TabsTrigger value="breakdown" className="text-xs">แยกตามปัจจัย</TabsTrigger>
                     </TabsList>
 
                     {/* Monthly Tab */}
-                    <TabsContent value="monthly" className="mt-6 space-y-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <TabsContent value="monthly" className="mt-4 space-y-4">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                             {/* แนวโน้มรายเดือน */}
-                            <Card className="border-slate-200 lg:col-span-2">
-                                <CardHeader>
-                                    <CardTitle className="text-base text-slate-700 flex items-center gap-2">
-                                        <BarChart3 className="h-5 w-5 text-blue-500" />
+                            <Card className="border-slate-200 shadow-sm lg:col-span-2">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
+                                        <BarChart3 className="h-4 w-4 text-blue-500" />
                                         อัตราไถ่ถอน vs หลุดจำนำ รายเดือน
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="h-[300px] w-full">
+                                    <div className="h-[250px] w-full">
                                         <ResponsiveContainer width="100%" height="100%">
-                                            <BarChart data={MONTHLY_DEFAULT_TREND} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                                            <BarChart data={MONTHLY_DEFAULT_TREND} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                                                 <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-slate-100" />
-                                                <XAxis dataKey="month" fontSize={11} tickLine={false} axisLine={false} />
-                                                <YAxis fontSize={11} tickLine={false} axisLine={false} />
-                                                <Tooltip cursor={{ fill: '#f1f5f9' }} contentStyle={{ borderRadius: '8px', fontSize: '12px' }} />
-                                                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+                                                <XAxis dataKey="month" fontSize={10} tickLine={false} axisLine={false} />
+                                                <YAxis fontSize={10} tickLine={false} axisLine={false} />
+                                                <Tooltip cursor={{ fill: '#f1f5f9' }} contentStyle={{ borderRadius: '8px', fontSize: '11px' }} />
+                                                <Legend wrapperStyle={{ fontSize: '10px', paddingTop: '8px' }} />
                                                 <Bar dataKey="redeemed" name="ไถ่ถอนคืน (%)" stackId="a" fill="#22c55e" radius={[0, 0, 4, 4]} />
                                                 <Bar dataKey="default" name="หลุดจำนำ (%)" stackId="a" fill="#ef4444" radius={[4, 4, 0, 0]} />
                                             </BarChart>
@@ -504,45 +492,43 @@ export default function DataAnalysisOnlyPage() {
                             </Card>
 
                             {/* สรุปรายเดือน */}
-                            <Card className="border-slate-200">
-                                <CardHeader>
-                                    <CardTitle className="text-base text-slate-700 flex items-center gap-2">
-                                        <Target className="h-5 w-5 text-green-500" />
+                            <Card className="border-slate-200 shadow-sm">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
+                                        <Target className="h-4 w-4 text-emerald-500" />
                                         สรุปผลการดำเนินงาน
                                     </CardTitle>
                                 </CardHeader>
-                                <CardContent className="space-y-4">
-                                    <div className="space-y-3">
-                                        <div className="p-3 bg-green-50 rounded-lg border border-green-100">
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-sm text-green-700">อัตราไถ่ถอนเฉลี่ย</span>
-                                                <span className="text-xl font-bold text-green-700">{avgRedemptionRate.toFixed(1)}%</span>
-                                            </div>
-                                            <div className="mt-2 h-2 bg-green-100 rounded-full overflow-hidden">
-                                                <div className="h-full bg-green-500 rounded-full" style={{ width: `${avgRedemptionRate}%` }}></div>
-                                            </div>
+                                <CardContent className="space-y-3">
+                                    <div className="p-2.5 bg-emerald-50 rounded-lg border border-emerald-100">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs text-emerald-700">อัตราไถ่ถอนเฉลี่ย</span>
+                                            <span className="text-lg font-bold text-emerald-700">{avgRedemptionRate.toFixed(1)}%</span>
                                         </div>
-
-                                        <div className="p-3 bg-red-50 rounded-lg border border-red-100">
-                                            <div className="flex justify-between items-center">
-                                                <span className="text-sm text-red-700">อัตราหลุดจำนำเฉลี่ย</span>
-                                                <span className="text-xl font-bold text-red-600">{avgDefaultRate.toFixed(1)}%</span>
-                                            </div>
-                                            <div className="mt-2 h-2 bg-red-100 rounded-full overflow-hidden">
-                                                <div className="h-full bg-red-500 rounded-full" style={{ width: `${avgDefaultRate * 5}%` }}></div>
-                                            </div>
+                                        <div className="mt-1.5 h-1.5 bg-emerald-100 rounded-full overflow-hidden">
+                                            <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${avgRedemptionRate}%` }}></div>
                                         </div>
                                     </div>
 
-                                    <div className="pt-3 border-t space-y-2">
-                                        <h4 className="text-sm font-medium text-slate-700">เดือนที่น่าสนใจ</h4>
+                                    <div className="p-2.5 bg-red-50 rounded-lg border border-red-100">
+                                        <div className="flex justify-between items-center">
+                                            <span className="text-xs text-red-700">อัตราหลุดจำนำเฉลี่ย</span>
+                                            <span className="text-lg font-bold text-red-600">{avgDefaultRate.toFixed(1)}%</span>
+                                        </div>
+                                        <div className="mt-1.5 h-1.5 bg-red-100 rounded-full overflow-hidden">
+                                            <div className="h-full bg-red-500 rounded-full" style={{ width: `${avgDefaultRate * 5}%` }}></div>
+                                        </div>
+                                    </div>
+
+                                    <div className="pt-2 border-t space-y-1.5">
+                                        <h4 className="text-xs font-medium text-slate-700">เดือนที่น่าสนใจ</h4>
                                         <div className="flex items-center justify-between text-xs">
                                             <span className="text-slate-500">หลุดจำนำสูงสุด</span>
-                                            <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">ก.ย. (18%)</Badge>
+                                            <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200 text-xs">ก.ย. (18%)</Badge>
                                         </div>
                                         <div className="flex items-center justify-between text-xs">
                                             <span className="text-slate-500">หลุดจำนำต่ำสุด</span>
-                                            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">ต.ค. (10%)</Badge>
+                                            <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 text-xs">ต.ค. (10%)</Badge>
                                         </div>
                                     </div>
                                 </CardContent>
@@ -550,25 +536,25 @@ export default function DataAnalysisOnlyPage() {
                         </div>
 
                         {/* จำนวนรายการหลุดจำนำ */}
-                        <Card className="border-slate-200">
-                            <CardHeader>
-                                <CardTitle className="text-base text-slate-700 flex items-center gap-2">
-                                    <Banknote className="h-5 w-5 text-red-500" />
+                        <Card className="border-slate-200 shadow-sm">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
+                                    <Banknote className="h-4 w-4 text-red-500" />
                                     มูลค่าทรัพย์สินหลุดจำนำรายเดือน (ล้านบาท)
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="h-[250px] w-full">
+                                <div className="h-[220px] w-full">
                                     <ResponsiveContainer width="100%" height="100%">
-                                        <ComposedChart data={MONTHLY_DEFAULT_TREND} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                                        <ComposedChart data={MONTHLY_DEFAULT_TREND} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                                             <CartesianGrid strokeDasharray="3 3" className="stroke-slate-100" />
-                                            <XAxis dataKey="month" fontSize={11} tickLine={false} axisLine={false} />
-                                            <YAxis yAxisId="left" fontSize={11} tickLine={false} axisLine={false} />
-                                            <YAxis yAxisId="right" orientation="right" fontSize={11} tickLine={false} axisLine={false} />
-                                            <Tooltip contentStyle={{ borderRadius: '8px', fontSize: '12px' }} />
-                                            <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+                                            <XAxis dataKey="month" fontSize={10} tickLine={false} axisLine={false} />
+                                            <YAxis yAxisId="left" fontSize={10} tickLine={false} axisLine={false} />
+                                            <YAxis yAxisId="right" orientation="right" fontSize={10} tickLine={false} axisLine={false} />
+                                            <Tooltip contentStyle={{ borderRadius: '8px', fontSize: '11px' }} />
+                                            <Legend wrapperStyle={{ fontSize: '10px', paddingTop: '8px' }} />
                                             <Bar yAxisId="left" dataKey="total" name="จำนวนตั๋วทั้งหมด" fill="#94a3b8" radius={[4, 4, 0, 0]} />
-                                            <Line yAxisId="right" type="monotone" dataKey="defaultAmount" name="มูลค่าหลุดจำนำ (ลบ.)" stroke="#ef4444" strokeWidth={2} dot={{ r: 4, fill: '#ef4444' }} />
+                                            <Line yAxisId="right" type="monotone" dataKey="defaultAmount" name="มูลค่าหลุดจำนำ (ลบ.)" stroke="#ef4444" strokeWidth={2} dot={{ r: 3, fill: '#ef4444' }} />
                                         </ComposedChart>
                                     </ResponsiveContainer>
                                 </div>
@@ -577,24 +563,24 @@ export default function DataAnalysisOnlyPage() {
                     </TabsContent>
 
                     {/* Quarterly Tab */}
-                    <TabsContent value="quarterly" className="mt-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                            <Card className="border-slate-200">
-                                <CardHeader>
-                                    <CardTitle className="text-base text-slate-700 flex items-center gap-2">
-                                        <BarChart3 className="h-5 w-5 text-purple-500" />
+                    <TabsContent value="quarterly" className="mt-4">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            <Card className="border-slate-200 shadow-sm">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
+                                        <BarChart3 className="h-4 w-4 text-purple-500" />
                                         อัตราไถ่ถอน vs หลุดจำนำ รายไตรมาส
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="h-[300px] w-full">
+                                    <div className="h-[250px] w-full">
                                         <ResponsiveContainer width="100%" height="100%">
-                                            <BarChart data={QUARTERLY_DEFAULT_TREND} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                                            <BarChart data={QUARTERLY_DEFAULT_TREND} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                                                 <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-slate-100" />
-                                                <XAxis dataKey="quarter" fontSize={11} tickLine={false} axisLine={false} />
-                                                <YAxis fontSize={11} tickLine={false} axisLine={false} />
-                                                <Tooltip cursor={{ fill: '#f1f5f9' }} contentStyle={{ borderRadius: '8px', fontSize: '12px' }} />
-                                                <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+                                                <XAxis dataKey="quarter" fontSize={10} tickLine={false} axisLine={false} />
+                                                <YAxis fontSize={10} tickLine={false} axisLine={false} />
+                                                <Tooltip cursor={{ fill: '#f1f5f9' }} contentStyle={{ borderRadius: '8px', fontSize: '11px' }} />
+                                                <Legend wrapperStyle={{ fontSize: '10px', paddingTop: '8px' }} />
                                                 <Bar dataKey="redeemed" name="ไถ่ถอนคืน (%)" fill="#22c55e" radius={[4, 4, 0, 0]} />
                                                 <Bar dataKey="default" name="หลุดจำนำ (%)" fill="#ef4444" radius={[4, 4, 0, 0]} />
                                             </BarChart>
@@ -603,24 +589,24 @@ export default function DataAnalysisOnlyPage() {
                                 </CardContent>
                             </Card>
 
-                            <Card className="border-slate-200">
-                                <CardHeader>
-                                    <CardTitle className="text-base text-slate-700 flex items-center gap-2">
-                                        <TrendingUp className="h-5 w-5 text-blue-500" />
+                            <Card className="border-slate-200 shadow-sm">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
+                                        <TrendingUp className="h-4 w-4 text-blue-500" />
                                         สรุปรายไตรมาส
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="space-y-4">
-                                        {QUARTERLY_DEFAULT_TREND.map((item, index) => (
-                                            <div key={item.quarter} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                                                <div className="flex items-center justify-between mb-2">
-                                                    <span className="font-semibold text-slate-800">{item.quarter}</span>
-                                                    <Badge variant={item.default <= 12 ? "outline" : "destructive"} className={item.default <= 12 ? "bg-green-50 text-green-700 border-green-200" : ""}>
+                                    <div className="space-y-3">
+                                        {QUARTERLY_DEFAULT_TREND.map((item) => (
+                                            <div key={item.quarter} className="p-3 bg-slate-50 rounded-lg border border-slate-100">
+                                                <div className="flex items-center justify-between mb-1.5">
+                                                    <span className="font-medium text-sm text-slate-800">{item.quarter}</span>
+                                                    <Badge variant={item.default <= 12 ? "outline" : "destructive"} className={item.default <= 12 ? "bg-emerald-50 text-emerald-700 border-emerald-200 text-xs" : "text-xs"}>
                                                         {item.default}% หลุดจำนำ
                                                     </Badge>
                                                 </div>
-                                                <div className="grid grid-cols-2 gap-4 text-sm">
+                                                <div className="grid grid-cols-2 gap-3 text-xs">
                                                     <div>
                                                         <span className="text-slate-500">จำนวนตั๋ว</span>
                                                         <p className="font-medium text-slate-800">{item.total.toLocaleString()} รายการ</p>
@@ -639,62 +625,62 @@ export default function DataAnalysisOnlyPage() {
                     </TabsContent>
 
                     {/* Breakdown Tab */}
-                    <TabsContent value="breakdown" className="mt-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <TabsContent value="breakdown" className="mt-4">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                             {/* ตามประเภททรัพย์สิน */}
-                            <Card className="border-slate-200">
-                                <CardHeader>
-                                    <CardTitle className="text-base text-slate-700 flex items-center gap-2">
-                                        <Package className="h-5 w-5 text-amber-500" />
-                                        อัตราหลุดจำนำตามประเภท
+                            <Card className="border-slate-200 shadow-sm">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
+                                        <Package className="h-4 w-4 text-amber-500" />
+                                        ตามประเภท
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="space-y-4">
+                                    <div className="space-y-3">
                                         {DEFAULT_BY_ASSET_TYPE.map((item) => (
-                                            <div key={item.name} className="space-y-2">
-                                                <div className="flex items-center justify-between text-sm">
+                                            <div key={item.name} className="space-y-1.5">
+                                                <div className="flex items-center justify-between text-xs">
                                                     <div className="flex items-center gap-2">
-                                                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.fill }}></div>
+                                                        <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.fill }}></div>
                                                         <span className="text-slate-600">{item.name}</span>
                                                     </div>
-                                                    <span className="font-bold text-slate-800">{item.rate}%</span>
+                                                    <span className="font-semibold text-slate-800">{item.rate}%</span>
                                                 </div>
-                                                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                                <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
                                                     <div className="h-full rounded-full" style={{ width: `${item.rate * 3}%`, backgroundColor: item.fill }}></div>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
-                                    <div className="mt-4 p-3 bg-green-50 border border-green-100 rounded-lg">
-                                        <p className="text-xs text-green-700">
-                                            <strong>พบว่า:</strong> ทองคำมีอัตราหลุดจำนำต่ำที่สุด (8%) เนื่องจากมูลค่าคงที่และลูกค้าให้ความสำคัญในการไถ่ถอน
+                                    <div className="mt-3 p-2 bg-emerald-50 border border-emerald-100 rounded-lg">
+                                        <p className="text-xs text-emerald-700">
+                                            <strong>พบว่า:</strong> ทองคำมีอัตราหลุดจำนำต่ำที่สุด (8%)
                                         </p>
                                     </div>
                                 </CardContent>
                             </Card>
 
                             {/* ตามช่วงวงเงิน */}
-                            <Card className="border-slate-200">
-                                <CardHeader>
-                                    <CardTitle className="text-base text-slate-700 flex items-center gap-2">
-                                        <Banknote className="h-5 w-5 text-blue-500" />
-                                        อัตราหลุดจำนำตามวงเงิน
+                            <Card className="border-slate-200 shadow-sm">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
+                                        <Banknote className="h-4 w-4 text-blue-500" />
+                                        ตามวงเงิน
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="h-[250px] w-full">
+                                    <div className="h-[200px] w-full">
                                         <ResponsiveContainer width="100%" height="100%">
-                                            <BarChart data={DEFAULT_BY_LOAN_AMOUNT} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                                            <BarChart data={DEFAULT_BY_LOAN_AMOUNT} layout="vertical" margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
                                                 <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} className="stroke-slate-100" />
-                                                <XAxis type="number" fontSize={11} tickLine={false} axisLine={false} domain={[0, 30]} />
-                                                <YAxis type="category" dataKey="range" fontSize={10} tickLine={false} axisLine={false} width={80} />
-                                                <Tooltip contentStyle={{ borderRadius: '8px', fontSize: '12px' }} formatter={(value: number) => [`${value}%`, 'อัตราหลุดจำนำ']} />
+                                                <XAxis type="number" fontSize={10} tickLine={false} axisLine={false} domain={[0, 30]} />
+                                                <YAxis type="category" dataKey="range" fontSize={9} tickLine={false} axisLine={false} width={70} />
+                                                <Tooltip contentStyle={{ borderRadius: '8px', fontSize: '11px' }} formatter={(value: number) => [`${value}%`, 'อัตราหลุดจำนำ']} />
                                                 <Bar dataKey="rate" fill="#3b82f6" radius={[0, 4, 4, 0]} />
                                             </BarChart>
                                         </ResponsiveContainer>
                                     </div>
-                                    <div className="mt-4 p-3 bg-blue-50 border border-blue-100 rounded-lg">
+                                    <div className="mt-2 p-2 bg-blue-50 border border-blue-100 rounded-lg">
                                         <p className="text-xs text-blue-700">
                                             <strong>พบว่า:</strong> วงเงินต่ำกว่า 5,000 บาท มีอัตราหลุดจำนำสูงสุด (22%)
                                         </p>
@@ -703,28 +689,28 @@ export default function DataAnalysisOnlyPage() {
                             </Card>
 
                             {/* ตามอายุตั๋ว */}
-                            <Card className="border-slate-200">
-                                <CardHeader>
-                                    <CardTitle className="text-base text-slate-700 flex items-center gap-2">
-                                        <Clock className="h-5 w-5 text-purple-500" />
-                                        อัตราหลุดจำนำตามอายุตั๋ว
+                            <Card className="border-slate-200 shadow-sm">
+                                <CardHeader className="pb-2">
+                                    <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
+                                        <Clock className="h-4 w-4 text-purple-500" />
+                                        ตามอายุตั๋ว
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <div className="h-[250px] w-full">
+                                    <div className="h-[200px] w-full">
                                         <ResponsiveContainer width="100%" height="100%">
-                                            <BarChart data={DEFAULT_BY_TICKET_AGE} layout="vertical" margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                                            <BarChart data={DEFAULT_BY_TICKET_AGE} layout="vertical" margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
                                                 <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} className="stroke-slate-100" />
-                                                <XAxis type="number" fontSize={11} tickLine={false} axisLine={false} domain={[0, 35]} />
-                                                <YAxis type="category" dataKey="age" fontSize={10} tickLine={false} axisLine={false} width={80} />
-                                                <Tooltip contentStyle={{ borderRadius: '8px', fontSize: '12px' }} formatter={(value: number) => [`${value}%`, 'อัตราหลุดจำนำ']} />
+                                                <XAxis type="number" fontSize={10} tickLine={false} axisLine={false} domain={[0, 35]} />
+                                                <YAxis type="category" dataKey="age" fontSize={9} tickLine={false} axisLine={false} width={70} />
+                                                <Tooltip contentStyle={{ borderRadius: '8px', fontSize: '11px' }} formatter={(value: number) => [`${value}%`, 'อัตราหลุดจำนำ']} />
                                                 <Bar dataKey="rate" fill="#8b5cf6" radius={[0, 4, 4, 0]} />
                                             </BarChart>
                                         </ResponsiveContainer>
                                     </div>
-                                    <div className="mt-4 p-3 bg-purple-50 border border-purple-100 rounded-lg">
+                                    <div className="mt-2 p-2 bg-purple-50 border border-purple-100 rounded-lg">
                                         <p className="text-xs text-purple-700">
-                                            <strong>พบว่า:</strong> ตั๋วอายุ 9-12 เดือน มีความเสี่ยงหลุดจำนำสูงสุด (28%)
+                                            <strong>พบว่า:</strong> ตั๋วอายุ 9-12 เดือน มีความเสี่ยงสูงสุด (28%)
                                         </p>
                                     </div>
                                 </CardContent>
@@ -732,40 +718,40 @@ export default function DataAnalysisOnlyPage() {
                         </div>
 
                         {/* Insights */}
-                        <Card className="border-slate-200 mt-6">
-                            <CardHeader>
-                                <CardTitle className="text-base text-slate-700 flex items-center gap-2">
-                                    <AlertCircle className="h-5 w-5 text-indigo-500" />
+                        <Card className="border-slate-200 shadow-sm mt-4">
+                            <CardHeader className="pb-2">
+                                <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
+                                    <AlertCircle className="h-4 w-4 text-indigo-500" />
                                     สรุปข้อมูลเชิงลึก (Key Insights)
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                    <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <Gem className="h-5 w-5 text-amber-600" />
-                                            <span className="font-semibold text-amber-800">ทรัพย์สินที่ปลอดภัย</span>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                    <div className="p-3 bg-amber-50 border border-amber-100 rounded-lg">
+                                        <div className="flex items-center gap-2 mb-1.5">
+                                            <Gem className="h-4 w-4 text-amber-600" />
+                                            <span className="font-medium text-xs text-amber-800">ทรัพย์สินที่ปลอดภัย</span>
                                         </div>
-                                        <p className="text-sm text-amber-700">
-                                            ทองคำมีอัตราหลุดจำนำต่ำที่สุด (8%) และมีมูลค่าคงที่ แนะนำให้เน้นรับจำนำทองเป็นหลัก
+                                        <p className="text-xs text-amber-700 leading-relaxed">
+                                            ทองคำมีอัตราหลุดจำนำต่ำที่สุด (8%) แนะนำให้เน้นรับจำนำทองเป็นหลัก
                                         </p>
                                     </div>
-                                    <div className="p-4 bg-red-50 border border-red-200 rounded-xl">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <AlertTriangle className="h-5 w-5 text-red-600" />
-                                            <span className="font-semibold text-red-800">กลุ่มเสี่ยงสูง</span>
+                                    <div className="p-3 bg-red-50 border border-red-100 rounded-lg">
+                                        <div className="flex items-center gap-2 mb-1.5">
+                                            <AlertTriangle className="h-4 w-4 text-red-600" />
+                                            <span className="font-medium text-xs text-red-800">กลุ่มเสี่ยงสูง</span>
                                         </div>
-                                        <p className="text-sm text-red-700">
-                                            วงเงินต่ำ + ตั๋วอายุนาน + เครื่องใช้ไฟฟ้า = ความเสี่ยงหลุดจำนำสูงถึง 40%+
+                                        <p className="text-xs text-red-700 leading-relaxed">
+                                            วงเงินต่ำ + ตั๋วอายุนาน + เครื่องใช้ไฟฟ้า = ความเสี่ยง 40%+
                                         </p>
                                     </div>
-                                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                                        <div className="flex items-center gap-2 mb-2">
-                                            <Target className="h-5 w-5 text-blue-600" />
-                                            <span className="font-semibold text-blue-800">โอกาสในการปรับปรุง</span>
+                                    <div className="p-3 bg-blue-50 border border-blue-100 rounded-lg">
+                                        <div className="flex items-center gap-2 mb-1.5">
+                                            <Target className="h-4 w-4 text-blue-600" />
+                                            <span className="font-medium text-xs text-blue-800">โอกาสปรับปรุง</span>
                                         </div>
-                                        <p className="text-sm text-blue-700">
-                                            ควรมีระบบแจ้งเตือนลูกค้าก่อนตั๋วใกล้ครบ 6 เดือน เพื่อลดอัตราหลุดจำนำ
+                                        <p className="text-xs text-blue-700 leading-relaxed">
+                                            ควรมีระบบแจ้งเตือนลูกค้าก่อนตั๋วใกล้ครบ 6 เดือน
                                         </p>
                                     </div>
                                 </div>

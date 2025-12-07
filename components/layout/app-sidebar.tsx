@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import {
     TrendingUp,
-    Sparkles,
     MessageSquare,
     FileText,
     Cpu,
@@ -14,9 +13,6 @@ import {
     Bell,
     User,
     ChevronRight,
-    Package,
-    Building,
-    Calculator,
     Target,
     BarChart3,
     Database,
@@ -79,41 +75,6 @@ const navItems = [
                 title: "เอกสารประกอบ",
                 href: "/docs",
                 icon: FileText,
-            },
-        ],
-    },
-    {
-        title: "บริการ",
-        items: [
-            {
-                title: "คำนวณดอกเบี้ย",
-                href: "/services/interest-calculator",
-                icon: Calculator,
-            },
-            {
-                title: "ประเมินทรัพย์สินออนไลน์",
-                href: "/services/appraisal",
-                icon: Sparkles, 
-            },
-            {
-                title: "แจ้งตั๋วจำนำหาย",
-                href: "/services/lost-ticket",
-                icon: FileText, 
-            },
-        ],
-    },
-    {
-        title: "การจัดการ",
-        items: [
-            {
-                title: "สาขา",
-                href: "/branches",
-                icon: Building,
-            },
-            {
-                title: "ทรัพย์สิน",
-                href: "/assets",
-                icon: Package,
             },
         ],
     },

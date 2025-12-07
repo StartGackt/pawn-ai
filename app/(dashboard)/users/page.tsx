@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, MoreHorizontal, UserCog, Trash2, Search } from "lucide-react";
+import { Plus, MoreHorizontal, UserCog, Trash2, Search, Users } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -31,64 +31,86 @@ export default function UserManagementPage() {
     ];
 
     return (
-        <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex flex-col gap-6 p-4 md:p-6">
+            {/* Page Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold tracking-tight text-slate-900">จัดการผู้ใช้งาน (User Management)</h1>
-                    <p className="text-slate-500">สถานะล่าสุด ณ วันที่: {lastUpdated}</p>
+                    <div className="flex items-center gap-2 mb-1">
+                        <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-200 font-medium">
+                            <Users className="mr-1.5 h-3 w-3" />
+                            Management
+                        </Badge>
+                    </div>
+                    <h1 className="text-2xl font-bold tracking-tight text-slate-900">จัดการผู้ใช้งาน</h1>
+                    <p className="text-sm text-slate-500 mt-0.5">สถานะล่าสุด: {lastUpdated}</p>
                 </div>
-                <Button className="bg-sky-600 hover:bg-sky-700 text-white">
-                    <Plus className="mr-2 h-4 w-4" />
-                    เพิ่มผู้ใช้งานใหม่
+                <Button className="bg-indigo-600 hover:bg-indigo-700 text-white h-9">
+                    <Plus className="mr-1.5 h-4 w-4" />
+                    เพิ่มผู้ใช้งาน
                 </Button>
             </div>
 
+            {/* Search */}
             <div className="flex items-center gap-2 max-w-sm">
-                <Input placeholder="ค้นหาผู้ใช้งาน..." />
-                <Button variant="outline" size="icon">
-                    <Search className="h-4 w-4" />
-                </Button>
+                <div className="relative flex-1">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-400" />
+                    <Input placeholder="ค้นหาผู้ใช้งาน..." className="pl-9 h-9" />
+                </div>
             </div>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>รายชื่อเจ้าหน้าที่และระบบบริการ</CardTitle>
-                    <CardDescription>จัดการผู้ใช้งานที่เกี่ยวข้องกับการให้บริการ (Service Staff & Agents)</CardDescription>
+            {/* Users Table */}
+            <Card className="border-slate-200 shadow-sm">
+                <CardHeader className="pb-3">
+                    <CardTitle className="text-sm font-medium text-slate-700">รายชื่อเจ้าหน้าที่และระบบบริการ</CardTitle>
+                    <CardDescription className="text-xs">จัดการผู้ใช้งานที่เกี่ยวข้องกับการให้บริการ</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Table>
                         <TableHeader>
-                            <TableRow>
-                                <TableHead>ชื่อ-นามสกุล</TableHead>
-                                <TableHead>แผนก/หน้าที่</TableHead>
-                                <TableHead>ระดับสิทธิ์</TableHead>
-                                <TableHead>สถานะ</TableHead>
-                                <TableHead>เข้าสู่ระบบล่าสุด</TableHead>
-                                <TableHead className="text-right">จัดการ</TableHead>
+                            <TableRow className="hover:bg-transparent">
+                                <TableHead className="text-xs">ชื่อ-นามสกุล</TableHead>
+                                <TableHead className="text-xs">แผนก/หน้าที่</TableHead>
+                                <TableHead className="text-xs">ระดับสิทธิ์</TableHead>
+                                <TableHead className="text-xs">สถานะ</TableHead>
+                                <TableHead className="text-xs">เข้าสู่ระบบล่าสุด</TableHead>
+                                <TableHead className="text-xs text-right">จัดการ</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {usersData.map((user) => (
                                 <TableRow key={user.id}>
-                                    <TableCell className="font-medium">
+                                    <TableCell>
                                         <div className="flex flex-col">
-                                            <span>{user.name}</span>
+                                            <span className="font-medium text-sm text-slate-900">{user.name}</span>
                                             <span className="text-xs text-slate-400">{user.email}</span>
                                         </div>
                                     </TableCell>
-                                    <TableCell>{user.department}</TableCell>
+                                    <TableCell className="text-sm text-slate-600">{user.department}</TableCell>
                                     <TableCell>
-                                        <div className="flex items-center gap-1">
-                                            {user.role === "ผู้ดูแลระบบสูงสุด" && <UserCog className="h-3 w-3 text-amber-500" />}
-                                            {user.role}
+                                        <div className="flex items-center gap-1 text-sm">
+                                            {user.role === "ผู้ดูแลระบบสูงสุด" && <UserCog className="h-3.5 w-3.5 text-amber-500" />}
+                                            <span className="text-slate-600">{user.role}</span>
                                         </div>
                                     </TableCell>
                                     <TableCell>
-                                        <Badge variant={user.status === "ใช้งานปกติ" || user.status === "ออนไลน์" ? "default" : "destructive"} className={user.status === "ออนไลน์" ? "bg-green-500" : ""}>
+                                        <Badge
+                                            variant="outline"
+                                            className={
+                                                user.status === "ออนไลน์"
+                                                    ? "bg-emerald-50 text-emerald-700 border-emerald-200 text-xs"
+                                                    : "bg-slate-50 text-slate-600 border-slate-200 text-xs"
+                                            }
+                                        >
+                                            {user.status === "ออนไลน์" && (
+                                                <span className="relative flex h-1.5 w-1.5 mr-1.5">
+                                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                                                </span>
+                                            )}
                                             {user.status}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell className="text-slate-500 text-sm">{user.lastLogin}</TableCell>
+                                    <TableCell className="text-xs text-slate-500">{user.lastLogin}</TableCell>
                                     <TableCell className="text-right">
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
@@ -98,12 +120,12 @@ export default function UserManagementPage() {
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
-                                                <DropdownMenuLabel>การกระทำ</DropdownMenuLabel>
-                                                <DropdownMenuItem>ดูประวัติการให้บริการ</DropdownMenuItem>
-                                                <DropdownMenuItem>แก้ไขข้อมูล</DropdownMenuItem>
+                                                <DropdownMenuLabel className="text-xs">การกระทำ</DropdownMenuLabel>
+                                                <DropdownMenuItem className="text-xs">ดูประวัติการให้บริการ</DropdownMenuItem>
+                                                <DropdownMenuItem className="text-xs">แก้ไขข้อมูล</DropdownMenuItem>
                                                 <DropdownMenuSeparator />
-                                                <DropdownMenuItem className="text-red-600">
-                                                    <Trash2 className="mr-2 h-4 w-4" />
+                                                <DropdownMenuItem className="text-xs text-red-600">
+                                                    <Trash2 className="mr-2 h-3.5 w-3.5" />
                                                     ลบบัญชี
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>
