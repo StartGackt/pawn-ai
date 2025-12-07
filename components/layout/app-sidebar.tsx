@@ -19,6 +19,10 @@ import {
     Calculator,
     Target,
     BarChart3,
+    Database,
+    PieChart,
+    Users,
+    History,
 } from "lucide-react";
 import {
     Sidebar,
@@ -44,42 +48,42 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const navItems = [
     {
-        title: "AI & ML",
+        title: "AI & การเรียนรู้ของเครื่อง",
         items: [
             {
-                title: "AI Chatbot",
+                title: "แชทบอท AI",
                 href: "/chat",
                 icon: MessageSquare,
             },
             {
-                title: "Data Collection",
+                title: "รวบรวมข้อมูล",
                 href: "/data-analysis",
                 icon: TrendingUp,
             },
             {
-                title: "Data Analysis",
+                title: "วิเคราะห์ข้อมูล",
                 href: "/analysis",
                 icon: BarChart3,
             },
             {
-                title: "Blind Forecast",
+                title: "การพยากรณ์",
                 href: "/blind-forecast",
                 icon: Target,
             },
             {
-                title: "System Architecture",
+                title: "สถาปัตยกรรมระบบ",
                 href: "/architecture",
                 icon: Cpu,
             },
             {
-                title: "Documentation",
+                title: "เอกสารประกอบ",
                 href: "/docs",
                 icon: FileText,
             },
         ],
     },
     {
-        title: "Services",
+        title: "บริการ",
         items: [
             {
                 title: "คำนวณดอกเบี้ย",
@@ -89,27 +93,62 @@ const navItems = [
             {
                 title: "ประเมินทรัพย์สินออนไลน์",
                 href: "/services/appraisal",
-                icon: Sparkles, // Using Sparkles as a placeholder, consider adding a specific icon if available
+                icon: Sparkles, 
             },
             {
                 title: "แจ้งตั๋วจำนำหาย",
                 href: "/services/lost-ticket",
-                icon: FileText, // Using FileText as a placeholder
+                icon: FileText, 
             },
         ],
     },
     {
-        title: "Management",
+        title: "การจัดการ",
         items: [
             {
-                title: "Branches",
+                title: "สาขา",
                 href: "/branches",
                 icon: Building,
             },
             {
-                title: "Assets",
+                title: "ทรัพย์สิน",
                 href: "/assets",
                 icon: Package,
+            },
+        ],
+    },
+    {
+        title: "รายงาน",
+        items: [
+            {
+                title: "ข้อมูลรับจำนำ",
+                href: "/pawn-data",
+                icon: Database,
+            },
+            {
+                title: "สรุปยอดประจำวัน",
+                href: "/daily-summary",
+                icon: PieChart,
+            },
+        ],
+    },
+    {
+        title: "ผู้ดูแลระบบ",
+        items: [
+            {
+                title: "จัดการผู้ใช้งาน",
+                href: "/users",
+                icon: Users,
+            },
+            {
+                title: "บันทึกการใช้งาน",
+                href: "/logs",
+                icon: History,
+            },
+            {
+                title: "ตั้งค่าการเชื่อมต่อ",
+                href: "/api-config",
+                icon: Settings,
             },
         ],
     },
