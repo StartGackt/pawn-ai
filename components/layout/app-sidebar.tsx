@@ -50,6 +50,11 @@ const navItems = [
                 icon: MessageSquare,
             },
             {
+                title: "Data Collection & Analysis",
+                href: "/data-analysis",
+                icon: TrendingUp,
+            },
+            {
                 title: "System Architecture",
                 href: "/architecture",
                 icon: Cpu,
@@ -58,11 +63,6 @@ const navItems = [
                 title: "Documentation",
                 href: "/docs",
                 icon: FileText,
-            },
-            {
-                title: "Gold Price (Blind)",
-                href: "/predictions/gold",
-                icon: TrendingUp,
             },
         ],
     },
