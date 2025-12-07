@@ -53,6 +53,18 @@ import {
     ArrowDownRight,
     Target,
     Gem,
+    Database,
+    Globe,
+    TrendingUp,
+    DollarSign,
+    Sun,
+    Users,
+    Building2,
+    FileText,
+    ExternalLink,
+    RefreshCw,
+    Landmark,
+    Percent,
 } from "lucide-react";
 
 // =============================================
@@ -135,10 +147,169 @@ const ASSET_VALUE_TREND = [
 ];
 
 // =============================================
+// DATA SOURCES - แหล่งข้อมูลสำหรับคาดการณ์ราคาทอง
+// =============================================
+
+// ข้อมูลภายในประเทศ (Domestic Data)
+const DOMESTIC_DATA_SOURCES = [
+    {
+        name: 'ราคาทองคำจากสมาคมค้าทองคำแห่งประเทศไทย',
+        source: 'goldtraders.or.th',
+        updateFrequency: 'Real-time',
+        lastUpdate: '07 ธ.ค. 2567',
+        status: 'active',
+        description: 'ราคาทองคำแท่งและทองรูปพรรณ 96.5% รายวัน',
+        icon: Gem,
+        color: 'amber',
+    },
+    {
+        name: 'อัตราแลกเปลี่ยน USD/THB',
+        source: 'ธนาคารแห่งประเทศไทย (BOT)',
+        updateFrequency: 'รายวัน',
+        lastUpdate: '07 ธ.ค. 2567',
+        status: 'active',
+        description: 'อัตราแลกเปลี่ยนเงินตราต่างประเทศ',
+        icon: DollarSign,
+        color: 'green',
+    },
+    {
+        name: 'อัตราดอกเบี้ยนโยบาย',
+        source: 'ธนาคารแห่งประเทศไทย (BOT)',
+        updateFrequency: 'ตามประกาศ MPC',
+        lastUpdate: '27 พ.ย. 2567',
+        status: 'active',
+        description: 'อัตราดอกเบี้ยนโยบายและอัตราดอกเบี้ย MLR, MRR',
+        icon: Percent,
+        color: 'blue',
+    },
+    {
+        name: 'อัตราเงินเฟ้อ (CPI)',
+        source: 'กระทรวงพาณิชย์',
+        updateFrequency: 'รายเดือน',
+        lastUpdate: 'พ.ย. 2567',
+        status: 'active',
+        description: 'ดัชนีราคาผู้บริโภคและอัตราเงินเฟ้อทั่วไป',
+        icon: TrendingUp,
+        color: 'purple',
+    },
+];
+
+// ข้อมูลตลาดโลก (Global Market Data)
+const GLOBAL_MARKET_DATA = [
+    {
+        name: 'ราคาทองคำโลก (XAU/USD)',
+        source: 'COMEX / LBMA',
+        updateFrequency: 'Real-time',
+        lastUpdate: '07 ธ.ค. 2567',
+        status: 'active',
+        description: 'ราคาทองคำตลาดโลก $/oz',
+        icon: Globe,
+        color: 'amber',
+    },
+    {
+        name: 'Gold Futures',
+        source: 'CME Group',
+        updateFrequency: 'Real-time',
+        lastUpdate: '07 ธ.ค. 2567',
+        status: 'active',
+        description: 'สัญญาซื้อขายทองคำล่วงหน้า',
+        icon: TrendingUp,
+        color: 'yellow',
+    },
+    {
+        name: 'Gold Price Forecast',
+        source: 'World Bank / IMF',
+        updateFrequency: 'รายไตรมาส',
+        lastUpdate: 'Q4/2567',
+        status: 'active',
+        description: 'การคาดการณ์ราคาทองคำจากสถาบันการเงินโลก',
+        icon: Target,
+        color: 'emerald',
+    },
+];
+
+// ข้อมูลเศรษฐกิจโลก (Global Economic Data)
+const GLOBAL_ECONOMIC_DATA = [
+    {
+        name: 'US Dollar Index (DXY)',
+        source: 'Federal Reserve',
+        updateFrequency: 'Real-time',
+        lastUpdate: '07 ธ.ค. 2567',
+        status: 'active',
+        description: 'ดัชนีค่าเงินดอลลาร์เทียบกับสกุลเงินหลัก',
+        icon: DollarSign,
+        color: 'green',
+    },
+    {
+        name: 'US Interest Rate (Fed Funds)',
+        source: 'Federal Reserve',
+        updateFrequency: 'ตามประกาศ FOMC',
+        lastUpdate: '07 พ.ย. 2567',
+        status: 'active',
+        description: 'อัตราดอกเบี้ยนโยบายสหรัฐฯ',
+        icon: Landmark,
+        color: 'blue',
+    },
+    {
+        name: 'Geopolitical Risk Index',
+        source: 'Various Sources',
+        updateFrequency: 'รายเดือน',
+        lastUpdate: 'พ.ย. 2567',
+        status: 'active',
+        description: 'ดัชนีความเสี่ยงด้านภูมิรัฐศาสตร์โลก',
+        icon: AlertTriangle,
+        color: 'red',
+    },
+    {
+        name: 'Global Inflation Data',
+        source: 'IMF / World Bank',
+        updateFrequency: 'รายเดือน',
+        lastUpdate: 'พ.ย. 2567',
+        status: 'active',
+        description: 'อัตราเงินเฟ้อของประเทศเศรษฐกิจหลัก',
+        icon: TrendingUp,
+        color: 'orange',
+    },
+];
+
+// ข้อมูลฤดูกาลและพฤติกรรม (Seasonal & Behavioral Data)
+const SEASONAL_DATA = [
+    {
+        name: 'เทศกาลสำคัญ',
+        events: ['ตรุษจีน', 'วันวาเลนไทน์', 'สงกรานต์', 'วันแม่', 'ปีใหม่'],
+        impact: 'สูง',
+        description: 'ช่วงเทศกาลมักมีความต้องการทองคำสูงขึ้น',
+        color: 'pink',
+    },
+    {
+        name: 'ฤดูแต่งงาน',
+        events: ['ต.ค. - ก.พ.'],
+        impact: 'ปานกลาง',
+        description: 'ช่วงฤดูแต่งงานมีความต้องการทองรูปพรรณเพิ่มขึ้น',
+        color: 'rose',
+    },
+    {
+        name: 'ช่วงจ่ายโบนัส',
+        events: ['ธ.ค. - ม.ค.'],
+        impact: 'สูง',
+        description: 'พนักงานมักนำโบนัสมาซื้อทองเก็บออม',
+        color: 'amber',
+    },
+    {
+        name: 'ช่วงเปิดเทอม',
+        events: ['พ.ค. - มิ.ย.'],
+        impact: 'ต่ำ',
+        description: 'ค่าใช้จ่ายการศึกษาทำให้การซื้อทองลดลง',
+        color: 'blue',
+    },
+];
+
+// =============================================
 // MAIN COMPONENT
 // =============================================
 export default function DataAnalysisPage() {
     const [timeRange, setTimeRange] = useState("6months");
+    const [mainTab, setMainTab] = useState("data-collection");
 
     // Calculate summary stats
     const totalAssets = ASSET_DISTRIBUTION_DATA.reduce((sum, item) => sum + item.count, 0);
@@ -158,7 +329,7 @@ export default function DataAnalysisPage() {
                         </Badge>
                     </div>
                     <h1 className="text-2xl font-bold tracking-tight text-slate-900">การวิเคราะห์ข้อมูล</h1>
-                    <p className="text-sm text-slate-500 mt-0.5">วิเคราะห์ทรัพย์สินและแนวโน้มการหลุดจำนำ</p>
+                    <p className="text-sm text-slate-500 mt-0.5">รวบรวมข้อมูลและแหล่งข้อมูลสำหรับการคาดการณ์</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <Select value={timeRange} onValueChange={setTimeRange}>
@@ -180,6 +351,54 @@ export default function DataAnalysisPage() {
                 </div>
             </div>
 
+            {/* MAIN TABS */}
+            <Tabs value={mainTab} onValueChange={setMainTab} className="w-full">
+                <TabsList className="grid w-full grid-cols-2 lg:w-[500px] h-10">
+                    <TabsTrigger value="data-collection" className="text-xs sm:text-sm gap-2">
+                        <Database className="h-4 w-4" />
+                        รวบรวมและจัดเตรียมข้อมูล
+                    </TabsTrigger>
+                    <TabsTrigger value="data-sources" className="text-xs sm:text-sm gap-2">
+                        <Globe className="h-4 w-4" />
+                        แหล่งข้อมูลคาดการณ์ราคาทอง
+                    </TabsTrigger>
+                </TabsList>
+
+                {/* TAB 1: รวบรวมและจัดเตรียมข้อมูล */}
+                <TabsContent value="data-collection" className="mt-6 space-y-6">
+                    <DataCollectionTab
+                        totalAssets={totalAssets}
+                        totalValue={totalValue}
+                        avgRedemptionRate={avgRedemptionRate}
+                        avgDefaultRate={avgDefaultRate}
+                    />
+                </TabsContent>
+
+                {/* TAB 2: แหล่งข้อมูลสำหรับคาดการณ์ราคาทอง */}
+                <TabsContent value="data-sources" className="mt-6 space-y-6">
+                    <DataSourcesTab />
+                </TabsContent>
+            </Tabs>
+        </div>
+    );
+}
+
+// =============================================
+// TAB 1: Data Collection Component
+// =============================================
+function DataCollectionTab({
+    totalAssets,
+    totalValue,
+    avgRedemptionRate,
+    avgDefaultRate,
+}: {
+    totalAssets: number;
+    totalValue: number;
+    avgRedemptionRate: number;
+    avgDefaultRate: number;
+}) {
+    return (
+        <>
             {/* SUMMARY STATS */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                 <Card className="border-slate-200 shadow-sm">
@@ -704,6 +923,230 @@ export default function DataAnalysisPage() {
                     </TabsContent>
                 </Tabs>
             </section>
+        </>
+    );
+}
+
+// =============================================
+// TAB 2: Data Sources Component  
+// =============================================
+function DataSourcesTab() {
+    return (
+        <div className="space-y-6">
+            {/* Section Header */}
+            <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-100 text-blue-600">
+                    <Database className="h-4 w-4" />
+                </div>
+                <div>
+                    <h2 className="text-base font-semibold text-slate-800">แหล่งข้อมูลสำหรับคาดการณ์ราคาทองคำ</h2>
+                    <p className="text-xs text-slate-500">Data Sources for Gold Price Prediction</p>
+                </div>
+            </div>
+
+            {/* Section 1: ข้อมูลภายในประเทศ */}
+            <section className="space-y-4">
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-emerald-100 text-emerald-600">
+                        <Building2 className="h-4 w-4" />
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-semibold text-slate-800">ข้อมูลภายในประเทศ (Domestic Data)</h3>
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {DOMESTIC_DATA_SOURCES.map((source, index) => (
+                        <DataSourceCard key={index} source={source} />
+                    ))}
+                </div>
+            </section>
+
+            {/* Section 2: ข้อมูลตลาดโลก */}
+            <section className="space-y-4">
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-amber-100 text-amber-600">
+                        <Globe className="h-4 w-4" />
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-semibold text-slate-800">ข้อมูลตลาดโลก (Global Market Data)</h3>
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {GLOBAL_MARKET_DATA.map((source, index) => (
+                        <DataSourceCard key={index} source={source} />
+                    ))}
+                </div>
+            </section>
+
+            {/* Section 3: ข้อมูลสถานการณ์และเศรษฐกิจโลก */}
+            <section className="space-y-4">
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-purple-100 text-purple-600">
+                        <TrendingUp className="h-4 w-4" />
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-semibold text-slate-800">ข้อมูลสถานการณ์และเศรษฐกิจโลก (Global Economic & Situational Data)</h3>
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {GLOBAL_ECONOMIC_DATA.map((source, index) => (
+                        <DataSourceCard key={index} source={source} />
+                    ))}
+                </div>
+            </section>
+
+            {/* Section 4: ข้อมูลฤดูกาลและพฤติกรรม */}
+            <section className="space-y-4">
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-pink-100 text-pink-600">
+                        <Sun className="h-4 w-4" />
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-semibold text-slate-800">ข้อมูลฤดูกาลและพฤติกรรม (Seasonal & Behavioral Data)</h3>
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {SEASONAL_DATA.map((item, index) => (
+                        <SeasonalCard key={index} data={item} />
+                    ))}
+                </div>
+            </section>
+
+            {/* Summary Card */}
+            <Card className="border-slate-200 shadow-sm bg-gradient-to-r from-blue-50 to-indigo-50">
+                <CardContent className="p-4">
+                    <div className="flex items-start gap-3">
+                        <div className="p-2 bg-blue-100 rounded-lg">
+                            <FileText className="h-5 w-5 text-blue-600" />
+                        </div>
+                        <div className="flex-1">
+                            <h4 className="font-semibold text-slate-800 mb-1">สรุปแหล่งข้อมูลสำหรับโมเดลคาดการณ์</h4>
+                            <p className="text-xs text-slate-600 leading-relaxed mb-3">
+                                ข้อมูลทั้งหมดถูกนำมาประมวลผลร่วมกันเพื่อสร้างโมเดลคาดการณ์ราคาทองคำที่แม่นยำ
+                                โดยพิจารณาทั้งปัจจัยภายในประเทศ ตลาดโลก สถานการณ์เศรษฐกิจ และพฤติกรรมตามฤดูกาล
+                            </p>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                <div className="text-center p-2 bg-white/60 rounded-lg">
+                                    <p className="text-lg font-bold text-blue-700">4</p>
+                                    <p className="text-xs text-slate-500">แหล่งข้อมูลในประเทศ</p>
+                                </div>
+                                <div className="text-center p-2 bg-white/60 rounded-lg">
+                                    <p className="text-lg font-bold text-amber-700">3</p>
+                                    <p className="text-xs text-slate-500">แหล่งข้อมูลตลาดโลก</p>
+                                </div>
+                                <div className="text-center p-2 bg-white/60 rounded-lg">
+                                    <p className="text-lg font-bold text-purple-700">4</p>
+                                    <p className="text-xs text-slate-500">ข้อมูลเศรษฐกิจ</p>
+                                </div>
+                                <div className="text-center p-2 bg-white/60 rounded-lg">
+                                    <p className="text-lg font-bold text-pink-700">4</p>
+                                    <p className="text-xs text-slate-500">ปัจจัยฤดูกาล</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
         </div>
+    );
+}
+
+// =============================================
+// Helper Components
+// =============================================
+
+interface DataSource {
+    name: string;
+    source: string;
+    updateFrequency: string;
+    lastUpdate: string;
+    status: string;
+    description: string;
+    icon: React.ComponentType<{ className?: string }>;
+    color: string;
+}
+
+function DataSourceCard({ source }: { source: DataSource }) {
+    const Icon = source.icon;
+    const colorMap: Record<string, string> = {
+        amber: 'bg-amber-50 text-amber-600 border-amber-200',
+        green: 'bg-green-50 text-green-600 border-green-200',
+        blue: 'bg-blue-50 text-blue-600 border-blue-200',
+        purple: 'bg-purple-50 text-purple-600 border-purple-200',
+        yellow: 'bg-yellow-50 text-yellow-600 border-yellow-200',
+        emerald: 'bg-emerald-50 text-emerald-600 border-emerald-200',
+        red: 'bg-red-50 text-red-600 border-red-200',
+        orange: 'bg-orange-50 text-orange-600 border-orange-200',
+    };
+
+    return (
+        <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+            <CardContent className="p-4">
+                <div className="flex items-start gap-3">
+                    <div className={`p-2 rounded-lg ${colorMap[source.color]?.split(' ').slice(0, 2).join(' ') || 'bg-slate-50'}`}>
+                        <Icon className={`h-4 w-4 ${colorMap[source.color]?.split(' ').slice(1, 2).join(' ') || 'text-slate-600'}`} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-sm text-slate-800 truncate">{source.name}</h4>
+                        <p className="text-xs text-slate-500 mt-0.5">{source.source}</p>
+                    </div>
+                    <Badge variant="outline" className={`text-xs ${source.status === 'active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-50 text-slate-600'}`}>
+                        {source.status === 'active' ? 'Active' : 'Inactive'}
+                    </Badge>
+                </div>
+                <p className="text-xs text-slate-600 mt-3 leading-relaxed">{source.description}</p>
+                <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
+                    <div className="flex items-center gap-1 text-xs text-slate-500">
+                        <RefreshCw className="h-3 w-3" />
+                        <span>{source.updateFrequency}</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-xs text-slate-500">
+                        <Clock className="h-3 w-3" />
+                        <span>{source.lastUpdate}</span>
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+    );
+}
+
+interface SeasonalItem {
+    name: string;
+    events: string[];
+    impact: string;
+    description: string;
+    color: string;
+}
+
+function SeasonalCard({ data }: { data: SeasonalItem }) {
+    const colorMap: Record<string, { bg: string; text: string; badge: string }> = {
+        pink: { bg: 'bg-pink-50', text: 'text-pink-700', badge: 'bg-pink-100 text-pink-700 border-pink-200' },
+        rose: { bg: 'bg-rose-50', text: 'text-rose-700', badge: 'bg-rose-100 text-rose-700 border-rose-200' },
+        amber: { bg: 'bg-amber-50', text: 'text-amber-700', badge: 'bg-amber-100 text-amber-700 border-amber-200' },
+        blue: { bg: 'bg-blue-50', text: 'text-blue-700', badge: 'bg-blue-100 text-blue-700 border-blue-200' },
+    };
+    const colors = colorMap[data.color] || colorMap.blue;
+
+    return (
+        <Card className="border-slate-200 shadow-sm">
+            <CardContent className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                    <h4 className="font-medium text-sm text-slate-800">{data.name}</h4>
+                    <Badge variant="outline" className={`text-xs ${colors.badge}`}>
+                        ผลกระทบ: {data.impact}
+                    </Badge>
+                </div>
+                <p className="text-xs text-slate-600 mb-3">{data.description}</p>
+                <div className={`p-2 rounded-lg ${colors.bg}`}>
+                    <div className="flex flex-wrap gap-1.5">
+                        {data.events.map((event, idx) => (
+                            <span key={idx} className={`text-xs px-2 py-0.5 rounded-full bg-white/80 ${colors.text}`}>
+                                {event}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
     );
 }
