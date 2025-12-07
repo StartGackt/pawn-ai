@@ -66,16 +66,6 @@ const navItems = [
                 href: "/blind-forecast",
                 icon: Target,
             },
-            {
-                title: "สถาปัตยกรรมระบบ",
-                href: "/architecture",
-                icon: Cpu,
-            },
-            {
-                title: "เอกสารประกอบ",
-                href: "/docs",
-                icon: FileText,
-            },
         ],
     },
     {
@@ -96,6 +86,16 @@ const navItems = [
     {
         title: "ผู้ดูแลระบบ",
         items: [
+            {
+                title: "สถาปัตยกรรมระบบ",
+                href: "/architecture",
+                icon: Cpu,
+            },
+            {
+                title: "เอกสารประกอบ",
+                href: "/docs",
+                icon: FileText,
+            },
             {
                 title: "จัดการผู้ใช้งาน",
                 href: "/users",
