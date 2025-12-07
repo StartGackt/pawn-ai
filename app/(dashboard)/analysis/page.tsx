@@ -34,6 +34,7 @@ import {
     AreaChart,
     Area,
     Line,
+    ReferenceLine,
 } from "recharts";
 import {
     TrendingUp,
@@ -54,6 +55,7 @@ import {
     ArrowDownRight,
     Target,
     Gem,
+    Lightbulb,
 } from "lucide-react";
 
 // =============================================
@@ -76,20 +78,25 @@ const GOLD_BREAKDOWN_DATA = [
     { name: 'ทองอื่นๆ', value: 5, color: '#92400e' },
 ];
 
-// แนวโน้มการหลุดจำนำรายเดือน
+// แนวโน้มการหลุดจำนำรายเดือน (12 เดือนย้อนหลัง + 3 เดือนคาดการณ์)
 const MONTHLY_DEFAULT_TREND = [
-    { month: 'ม.ค.', redeemed: 86, default: 14, total: 12500, defaultAmount: 175 },
-    { month: 'ก.พ.', redeemed: 87, default: 13, total: 11800, defaultAmount: 153 },
-    { month: 'มี.ค.', redeemed: 85, default: 15, total: 13200, defaultAmount: 198 },
-    { month: 'เม.ย.', redeemed: 88, default: 12, total: 12900, defaultAmount: 155 },
-    { month: 'พ.ค.', redeemed: 84, default: 16, total: 14100, defaultAmount: 226 },
-    { month: 'มิ.ย.', redeemed: 89, default: 11, total: 13500, defaultAmount: 149 },
-    { month: 'ก.ค.', redeemed: 85, default: 15, total: 14200, defaultAmount: 213 },
-    { month: 'ส.ค.', redeemed: 88, default: 12, total: 13800, defaultAmount: 166 },
-    { month: 'ก.ย.', redeemed: 82, default: 18, total: 12400, defaultAmount: 223 },
-    { month: 'ต.ค.', redeemed: 90, default: 10, total: 14500, defaultAmount: 145 },
-    { month: 'พ.ย.', redeemed: 87, default: 13, total: 14100, defaultAmount: 183 },
-    { month: 'ธ.ค.', redeemed: 89, default: 11, total: 14800, defaultAmount: 163 },
+    // Historical Data
+    { month: 'ม.ค.', redeemed: 86, default: 14, total: 12500, defaultAmount: 175, isForecast: false },
+    { month: 'ก.พ.', redeemed: 87, default: 13, total: 11800, defaultAmount: 153, isForecast: false },
+    { month: 'มี.ค.', redeemed: 85, default: 15, total: 13200, defaultAmount: 198, isForecast: false },
+    { month: 'เม.ย.', redeemed: 88, default: 12, total: 12900, defaultAmount: 155, isForecast: false },
+    { month: 'พ.ค.', redeemed: 84, default: 16, total: 14100, defaultAmount: 226, isForecast: false },
+    { month: 'มิ.ย.', redeemed: 89, default: 11, total: 13500, defaultAmount: 149, isForecast: false },
+    { month: 'ก.ค.', redeemed: 85, default: 15, total: 14200, defaultAmount: 213, isForecast: false },
+    { month: 'ส.ค.', redeemed: 88, default: 12, total: 13800, defaultAmount: 166, isForecast: false },
+    { month: 'ก.ย.', redeemed: 82, default: 18, total: 12400, defaultAmount: 223, isForecast: false },
+    { month: 'ต.ค.', redeemed: 90, default: 10, total: 14500, defaultAmount: 145, isForecast: false },
+    { month: 'พ.ย.', redeemed: 87, default: 13, total: 14100, defaultAmount: 183, isForecast: false },
+    { month: 'ธ.ค.', redeemed: 89, default: 11, total: 14800, defaultAmount: 163, isForecast: false },
+    // Forecast Data (ปีหน้า)
+    { month: 'ม.ค. (คาดการณ์)', redeemed: 91, default: 9, total: 15200, defaultAmount: 135, isForecast: true },
+    { month: 'ก.พ. (คาดการณ์)', redeemed: 92, default: 8, total: 14500, defaultAmount: 120, isForecast: true },
+    { month: 'มี.ค. (คาดการณ์)', redeemed: 88, default: 12, total: 16000, defaultAmount: 190, isForecast: true },
 ];
 
 // แนวโน้มการหลุดจำนำรายไตรมาส
@@ -141,11 +148,19 @@ const ASSET_VALUE_TREND = [
 export default function DataAnalysisOnlyPage() {
     const [timeRange, setTimeRange] = useState("6months");
 
-    // Calculate summary stats
+    // Calculate summary stats using only past data (first 12 items)
+    const pastData = MONTHLY_DEFAULT_TREND.filter(item => !item.isForecast);
     const totalAssets = ASSET_DISTRIBUTION_DATA.reduce((sum, item) => sum + item.count, 0);
     const totalValue = ASSET_DISTRIBUTION_DATA.reduce((sum, item) => sum + item.amount, 0);
-    const avgDefaultRate = MONTHLY_DEFAULT_TREND.reduce((sum, item) => sum + item.default, 0) / MONTHLY_DEFAULT_TREND.length;
-    const avgRedemptionRate = MONTHLY_DEFAULT_TREND.reduce((sum, item) => sum + item.redeemed, 0) / MONTHLY_DEFAULT_TREND.length;
+    const avgDefaultRate = pastData.reduce((sum, item) => sum + item.default, 0) / pastData.length;
+    const avgRedemptionRate = pastData.reduce((sum, item) => sum + item.redeemed, 0) / pastData.length;
+
+    // Pattern for forecast chart bars
+    const renderPattern = () => (
+        <pattern id="stripe-pattern" patternUnits="userSpaceOnUse" width="4" height="4" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="4" stroke="#ffffff" strokeWidth="2" strokeOpacity="0.3" />
+        </pattern>
+    );
 
     return (
         <div className="flex flex-col gap-6 p-4 md:p-6">
@@ -164,7 +179,7 @@ export default function DataAnalysisOnlyPage() {
                         การวิเคราะห์ข้อมูล
                     </h1>
                     <p className="text-sm text-slate-500 mt-0.5">
-                        วิเคราะห์ทรัพย์สินและแนวโน้มการหลุดจำนำ
+                        วิเคราะห์ทรัพย์สินและคาดการณ์แนวโน้มการหลุดจำนำ
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -452,7 +467,7 @@ export default function DataAnalysisOnlyPage() {
                         <h2 className="text-base font-semibold text-slate-800">
                             วิเคราะห์แนวโน้มการหลุดจำนำ
                         </h2>
-                        <p className="text-xs text-slate-500">Default Rate Analysis</p>
+                        <p className="text-xs text-slate-500">Default Rate Forecast</p>
                     </div>
                 </div>
 
@@ -465,28 +480,92 @@ export default function DataAnalysisOnlyPage() {
 
                     {/* Monthly Tab */}
                     <TabsContent value="monthly" className="mt-4 space-y-4">
+                        {/* Forecast Summary Card */}
+                        <Card className="border-indigo-100 shadow-sm bg-gradient-to-r from-indigo-50 to-purple-50">
+                            <CardContent className="p-4">
+                                <div className="flex items-start gap-4">
+                                    <div className="p-3 bg-white rounded-full shadow-sm">
+                                        <Lightbulb className="h-6 w-6 text-indigo-600" />
+                                    </div>
+                                    <div className="space-y-1.5 flex-1">
+                                        <div className="flex items-center gap-2">
+                                            <h3 className="text-base font-bold text-indigo-900">คาดการณ์ 3 เดือนข้างหน้า (ม.ค. - มี.ค.)</h3>
+                                            <Badge className="bg-indigo-600 hover:bg-indigo-700 text-white text-[10px]">AI Forecast</Badge>
+                                        </div>
+                                        <p className="text-sm text-indigo-700">
+                                            แนวโน้มการหลุดจำนำจะ <span className="font-semibold text-emerald-600">ลดลง 5-10%</span> ในช่วง Q1 ปีหน้า เนื่องจากราคาทองคำมีแนวโน้มปรับตัวสูงขึ้น ทำให้ลูกค้ามาไถ่ถอนมากขึ้น
+                                        </p>
+                                        <div className="flex gap-4 mt-2">
+                                            <div className="text-xs">
+                                                <span className="text-indigo-500">คาดการณ์ไถ่ถอนเฉลี่ย:</span>
+                                                <span className="ml-1 font-bold text-indigo-900">90.3%</span>
+                                            </div>
+                                            <div className="text-xs">
+                                                <span className="text-indigo-500">คาดการณ์หลุดจำนำเฉลี่ย:</span>
+                                                <span className="ml-1 font-bold text-indigo-900">9.7%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                             {/* แนวโน้มรายเดือน */}
                             <Card className="border-slate-200 shadow-sm lg:col-span-2">
                                 <CardHeader className="pb-2">
                                     <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
                                         <BarChart3 className="h-4 w-4 text-blue-500" />
-                                        อัตราไถ่ถอน vs หลุดจำนำ รายเดือน
+                                        อัตราไถ่ถอน vs หลุดจำนำ รายเดือน (พร้อมคาดการณ์)
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="h-[250px] w-full">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <BarChart data={MONTHLY_DEFAULT_TREND} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                                <defs>
+                                                    {renderPattern()}
+                                                </defs>
                                                 <CartesianGrid strokeDasharray="3 3" vertical={false} className="stroke-slate-100" />
-                                                <XAxis dataKey="month" fontSize={10} tickLine={false} axisLine={false} />
+                                                <XAxis dataKey="month" fontSize={10} tickLine={false} axisLine={false} interval={0} 
+                                                    tickFormatter={(val) => val.includes('คาดการณ์') ? val.split(' ')[0] + '*' : val}
+                                                />
                                                 <YAxis fontSize={10} tickLine={false} axisLine={false} />
-                                                <Tooltip cursor={{ fill: '#f1f5f9' }} contentStyle={{ borderRadius: '8px', fontSize: '11px' }} />
+                                                <Tooltip 
+                                                    cursor={{ fill: '#f1f5f9' }} 
+                                                    contentStyle={{ borderRadius: '8px', fontSize: '11px' }}
+                                                    labelFormatter={(label) => label.includes('คาดการณ์') ? `${label} (Forecast)` : label}
+                                                />
                                                 <Legend wrapperStyle={{ fontSize: '10px', paddingTop: '8px' }} />
-                                                <Bar dataKey="redeemed" name="ไถ่ถอนคืน (%)" stackId="a" fill="#22c55e" radius={[0, 0, 4, 4]} />
-                                                <Bar dataKey="default" name="หลุดจำนำ (%)" stackId="a" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                                                
+                                                <Bar dataKey="redeemed" name="ไถ่ถอนคืน (%)" stackId="a" fill="#22c55e" radius={[0, 0, 4, 4]}>
+                                                    {MONTHLY_DEFAULT_TREND.map((entry, index) => (
+                                                        <Cell key={`cell-${index}`} fill={entry.isForecast ? "url(#stripe-pattern)" : "#22c55e"} stroke={entry.isForecast ? "#22c55e" : "none"} />
+                                                    ))}
+                                                </Bar>
+                                                <Bar dataKey="default" name="หลุดจำนำ (%)" stackId="a" fill="#ef4444" radius={[4, 4, 0, 0]}>
+                                                    {MONTHLY_DEFAULT_TREND.map((entry, index) => (
+                                                        <Cell key={`cell-${index}`} fill={entry.isForecast ? "url(#stripe-pattern)" : "#ef4444"} stroke={entry.isForecast ? "#ef4444" : "none"} />
+                                                    ))}
+                                                </Bar>
+                                                
+                                                <ReferenceLine x="ธ.ค." stroke="#94a3b8" strokeDasharray="3 3" label={{ position: 'top', value: 'Today', fontSize: 10, fill: '#64748b' }} />
                                             </BarChart>
                                         </ResponsiveContainer>
+                                    </div>
+                                    <div className="flex justify-center mt-2 gap-4">
+                                        <div className="flex items-center gap-1.5">
+                                            <div className="w-3 h-3 bg-emerald-500 rounded-sm"></div>
+                                            <span className="text-[10px] text-slate-500">ข้อมูลจริง (ไถ่ถอน)</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <div className="w-3 h-3 bg-red-500 rounded-sm"></div>
+                                            <span className="text-[10px] text-slate-500">ข้อมูลจริง (หลุด)</span>
+                                        </div>
+                                        <div className="flex items-center gap-1.5">
+                                            <div className="w-3 h-3 border border-emerald-500 bg-[url(#stripe-pattern)] rounded-sm opacity-50"></div>
+                                            <span className="text-[10px] text-slate-500">คาดการณ์ (มีลาย)</span>
+                                        </div>
                                     </div>
                                 </CardContent>
                             </Card>
@@ -540,7 +619,7 @@ export default function DataAnalysisOnlyPage() {
                             <CardHeader className="pb-2">
                                 <CardTitle className="text-sm text-slate-700 flex items-center gap-2">
                                     <Banknote className="h-4 w-4 text-red-500" />
-                                    มูลค่าทรัพย์สินหลุดจำนำรายเดือน (ล้านบาท)
+                                    มูลค่าทรัพย์สินหลุดจำนำรายเดือน (ล้านบาท) - รวมคาดการณ์
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
@@ -548,13 +627,42 @@ export default function DataAnalysisOnlyPage() {
                                     <ResponsiveContainer width="100%" height="100%">
                                         <ComposedChart data={MONTHLY_DEFAULT_TREND} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                                             <CartesianGrid strokeDasharray="3 3" className="stroke-slate-100" />
-                                            <XAxis dataKey="month" fontSize={10} tickLine={false} axisLine={false} />
+                                            <XAxis 
+                                                dataKey="month" 
+                                                fontSize={10} 
+                                                tickLine={false} 
+                                                axisLine={false}
+                                                tickFormatter={(val) => val.includes('คาดการณ์') ? val.split(' ')[0] + '*' : val}
+                                            />
                                             <YAxis yAxisId="left" fontSize={10} tickLine={false} axisLine={false} />
                                             <YAxis yAxisId="right" orientation="right" fontSize={10} tickLine={false} axisLine={false} />
                                             <Tooltip contentStyle={{ borderRadius: '8px', fontSize: '11px' }} />
                                             <Legend wrapperStyle={{ fontSize: '10px', paddingTop: '8px' }} />
-                                            <Bar yAxisId="left" dataKey="total" name="จำนวนตั๋วทั้งหมด" fill="#94a3b8" radius={[4, 4, 0, 0]} />
-                                            <Line yAxisId="right" type="monotone" dataKey="defaultAmount" name="มูลค่าหลุดจำนำ (ลบ.)" stroke="#ef4444" strokeWidth={2} dot={{ r: 3, fill: '#ef4444' }} />
+                                            
+                                            <Bar yAxisId="left" dataKey="total" name="จำนวนตั๋วทั้งหมด" fill="#94a3b8" radius={[4, 4, 0, 0]} opacity={0.6}>
+                                                 {MONTHLY_DEFAULT_TREND.map((entry, index) => (
+                                                        <Cell key={`cell-${index}`} fillOpacity={entry.isForecast ? 0.3 : 1} />
+                                                    ))}
+                                            </Bar>
+                                            
+                                            <Line 
+                                                yAxisId="right" 
+                                                type="monotone" 
+                                                dataKey="defaultAmount" 
+                                                name="มูลค่าหลุดจำนำ (ลบ.)" 
+                                                stroke="#ef4444" 
+                                                strokeWidth={2} 
+                                                dot={(props) => {
+                                                    const { cx, cy, payload, key } = props;
+                                                    if (payload.isForecast) {
+                                                        return <circle key={key} cx={cx} cy={cy} r={3} stroke="#ef4444" fill="white" strokeWidth={2} />;
+                                                    }
+                                                    return <circle key={key} cx={cx} cy={cy} r={3} fill="#ef4444" />;
+                                                }}
+ 
+                                            />
+                                            
+                                            <ReferenceLine yAxisId="left" x="ธ.ค." stroke="#94a3b8" strokeDasharray="3 3" />
                                         </ComposedChart>
                                     </ResponsiveContainer>
                                 </div>
