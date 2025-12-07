@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
     Card,
     CardContent,
@@ -65,7 +65,68 @@ import {
     RefreshCw,
     Landmark,
     Percent,
+    Loader2,
 } from "lucide-react";
+
+// =============================================
+// API Types
+// =============================================
+interface GoldPriceData {
+    date: string;
+    updateTime: string;
+    data: {
+        name: string;
+        buy: string;
+        sell: string;
+    }[];
+}
+
+interface ExchangeRateData {
+    source: string;
+    period: string;
+    lastUpdated: string;
+    currencies: {
+        currencyId: string;
+        currencyNameTh: string;
+        currencyNameEng: string;
+        buyingSight: string;
+        buyingTransfer: string;
+        selling: string;
+        midRate: string;
+    }[];
+}
+
+interface LoanRateData {
+    source: string;
+    period: string;
+    data: {
+        name_th: string;
+        name_eng: string;
+        mor: string;
+        mlr: string;
+        mrr: string;
+    }[];
+}
+
+interface WorldGoldPrice {
+    price: number;
+    change: number;
+    changePercent: number;
+    high24h: number;
+    low24h: number;
+    timestamp: string;
+    currency: string;
+}
+
+interface LiveDataState {
+    goldPrice: GoldPriceData | null;
+    exchangeRate: ExchangeRateData | null;
+    loanRate: LoanRateData | null;
+    worldGold: WorldGoldPrice | null;
+    loading: boolean;
+    error: string | null;
+    lastFetch: Date | null;
+}
 
 // =============================================
 // SAMPLE DATA
@@ -931,18 +992,203 @@ function DataCollectionTab({
 // TAB 2: Data Sources Component  
 // =============================================
 function DataSourcesTab() {
+    const [liveData, setLiveData] = useState<LiveDataState>({
+        goldPrice: null,
+        exchangeRate: null,
+        loanRate: null,
+        worldGold: null,
+        loading: true,
+        error: null,
+        lastFetch: null,
+    });
+
+    const fetchAllData = useCallback(async () => {
+        setLiveData(prev => ({ ...prev, loading: true, error: null }));
+
+        try {
+            const [goldRes, exchangeRes, loanRes, worldGoldRes] = await Promise.allSettled([
+                fetch('/api/gold-price'),
+                fetch('/api/exchange-rate'),
+                fetch('/api/loan-rate'),
+                fetch('/api/gold-world'),
+            ]);
+
+            const goldPrice = goldRes.status === 'fulfilled' && goldRes.value.ok
+                ? await goldRes.value.json()
+                : null;
+            const exchangeRate = exchangeRes.status === 'fulfilled' && exchangeRes.value.ok
+                ? await exchangeRes.value.json()
+                : null;
+            const loanRate = loanRes.status === 'fulfilled' && loanRes.value.ok
+                ? await loanRes.value.json()
+                : null;
+            const worldGold = worldGoldRes.status === 'fulfilled' && worldGoldRes.value.ok
+                ? await worldGoldRes.value.json()
+                : null;
+
+            setLiveData({
+                goldPrice,
+                exchangeRate,
+                loanRate,
+                worldGold,
+                loading: false,
+                error: null,
+                lastFetch: new Date(),
+            });
+        } catch (error) {
+            setLiveData(prev => ({
+                ...prev,
+                loading: false,
+                error: 'ไม่สามารถดึงข้อมูลได้',
+            }));
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchAllData();
+    }, [fetchAllData]);
+
+    // Build dynamic data sources with live data
+    const getDomesticDataSources = () => {
+        const goldData = liveData.goldPrice;
+        const exchangeData = liveData.exchangeRate;
+        const loanData = liveData.loanRate;
+
+        return [
+            {
+                name: 'ราคาทองคำจากสมาคมค้าทองคำแห่งประเทศไทย',
+                source: 'goldtraders.or.th',
+                updateFrequency: 'Real-time',
+                lastUpdate: goldData ? `${goldData.date} ${goldData.updateTime}` : 'กำลังโหลด...',
+                status: goldData ? 'active' : 'loading',
+                description: goldData
+                    ? `ทองแท่ง: ซื้อ ${goldData.data[0]?.buy || '-'} / ขาย ${goldData.data[0]?.sell || '-'} บาท`
+                    : 'ราคาทองคำแท่งและทองรูปพรรณ 96.5% รายวัน',
+                icon: Gem,
+                color: 'amber',
+                liveValue: goldData?.data[0]?.sell,
+            },
+            {
+                name: 'อัตราแลกเปลี่ยน USD/THB',
+                source: 'ธนาคารแห่งประเทศไทย (BOT)',
+                updateFrequency: 'รายวัน',
+                lastUpdate: exchangeData?.lastUpdated || 'กำลังโหลด...',
+                status: exchangeData ? 'active' : 'loading',
+                description: exchangeData?.currencies?.find(c => c.currencyId === 'USD')
+                    ? `1 USD = ${exchangeData.currencies.find(c => c.currencyId === 'USD')?.midRate || '-'} THB`
+                    : 'อัตราแลกเปลี่ยนเงินตราต่างประเทศ',
+                icon: DollarSign,
+                color: 'green',
+                liveValue: exchangeData?.currencies?.find(c => c.currencyId === 'USD')?.midRate,
+            },
+            {
+                name: 'อัตราดอกเบี้ยนโยบาย',
+                source: 'ธนาคารแห่งประเทศไทย (BOT)',
+                updateFrequency: 'ตามประกาศ MPC',
+                lastUpdate: loanData?.period || 'กำลังโหลด...',
+                status: loanData ? 'active' : 'loading',
+                description: loanData?.data?.[0]
+                    ? `MLR: ${loanData.data[0].mlr}% | MRR: ${loanData.data[0].mrr}%`
+                    : 'อัตราดอกเบี้ยนโยบายและอัตราดอกเบี้ย MLR, MRR',
+                icon: Percent,
+                color: 'blue',
+                liveValue: loanData?.data?.[0]?.mlr,
+            },
+            {
+                name: 'อัตราเงินเฟ้อ (CPI)',
+                source: 'กระทรวงพาณิชย์',
+                updateFrequency: 'รายเดือน',
+                lastUpdate: 'พ.ย. 2567',
+                status: 'active',
+                description: 'ดัชนีราคาผู้บริโภคและอัตราเงินเฟ้อทั่วไป',
+                icon: TrendingUp,
+                color: 'purple',
+            },
+        ];
+    };
+
+    const getGlobalMarketData = () => {
+        const worldGoldData = liveData.worldGold;
+
+        return [
+            {
+                name: 'ราคาทองคำโลก (XAU/USD)',
+                source: 'COMEX / LBMA',
+                updateFrequency: 'Real-time',
+                lastUpdate: worldGoldData ? new Date(worldGoldData.timestamp).toLocaleString('th-TH') : 'กำลังโหลด...',
+                status: worldGoldData ? 'active' : 'loading',
+                description: worldGoldData
+                    ? `$${worldGoldData.price.toLocaleString()} /oz (${worldGoldData.change >= 0 ? '+' : ''}${worldGoldData.change.toFixed(2)} | ${worldGoldData.changePercent.toFixed(2)}%)`
+                    : 'ราคาทองคำตลาดโลก $/oz',
+                icon: Globe,
+                color: 'amber',
+                liveValue: worldGoldData?.price?.toLocaleString(),
+                change: worldGoldData?.change,
+                changePercent: worldGoldData?.changePercent,
+            },
+            {
+                name: 'Gold Futures',
+                source: 'CME Group',
+                updateFrequency: 'Real-time',
+                lastUpdate: worldGoldData ? new Date(worldGoldData.timestamp).toLocaleString('th-TH') : 'กำลังโหลด...',
+                status: worldGoldData ? 'active' : 'loading',
+                description: worldGoldData
+                    ? `High: $${worldGoldData.high24h.toLocaleString()} | Low: $${worldGoldData.low24h.toLocaleString()}`
+                    : 'สัญญาซื้อขายทองคำล่วงหน้า',
+                icon: TrendingUp,
+                color: 'yellow',
+            },
+            {
+                name: 'Gold Price Forecast',
+                source: 'World Bank / IMF',
+                updateFrequency: 'รายไตรมาส',
+                lastUpdate: 'Q4/2567',
+                status: 'active',
+                description: 'การคาดการณ์ราคาทองคำจากสถาบันการเงินโลก',
+                icon: Target,
+                color: 'emerald',
+            },
+        ];
+    };
+
+    const domesticSources = getDomesticDataSources();
+    const globalMarketSources = getGlobalMarketData();
+
     return (
         <div className="space-y-6">
-            {/* Section Header */}
-            <div className="flex items-center gap-2 mb-4">
-                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-100 text-blue-600">
-                    <Database className="h-4 w-4" />
+            {/* Section Header with Refresh */}
+            <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-100 text-blue-600">
+                        <Database className="h-4 w-4" />
+                    </div>
+                    <div>
+                        <h2 className="text-base font-semibold text-slate-800">แหล่งข้อมูลสำหรับคาดการณ์ราคาทองคำ</h2>
+                        <p className="text-xs text-slate-500">Data Sources for Gold Price Prediction</p>
+                    </div>
                 </div>
-                <div>
-                    <h2 className="text-base font-semibold text-slate-800">แหล่งข้อมูลสำหรับคาดการณ์ราคาทองคำ</h2>
-                    <p className="text-xs text-slate-500">Data Sources for Gold Price Prediction</p>
-                </div>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={fetchAllData}
+                    disabled={liveData.loading}
+                    className="h-8"
+                >
+                    {liveData.loading ? (
+                        <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
+                    ) : (
+                        <RefreshCw className="h-3.5 w-3.5 mr-1.5" />
+                    )}
+                    {liveData.loading ? 'กำลังโหลด...' : 'รีเฟรช'}
+                </Button>
             </div>
+
+            {/* Last Update Info */}
+            {liveData.lastFetch && (
+                <div className="text-xs text-slate-500 -mt-4 mb-2">
+                    อัพเดตล่าสุด: {liveData.lastFetch.toLocaleString('th-TH')}
+                </div>
+            )}
 
             {/* Section 1: ข้อมูลภายในประเทศ */}
             <section className="space-y-4">
@@ -955,8 +1201,8 @@ function DataSourcesTab() {
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {DOMESTIC_DATA_SOURCES.map((source, index) => (
-                        <DataSourceCard key={index} source={source} />
+                    {domesticSources.map((source, index) => (
+                        <DataSourceCard key={index} source={source} isLoading={liveData.loading && !source.liveValue} />
                     ))}
                 </div>
             </section>
@@ -972,8 +1218,8 @@ function DataSourcesTab() {
                     </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    {GLOBAL_MARKET_DATA.map((source, index) => (
-                        <DataSourceCard key={index} source={source} />
+                    {globalMarketSources.map((source, index) => (
+                        <DataSourceCard key={index} source={source} isLoading={liveData.loading && !source.liveValue} />
                     ))}
                 </div>
             </section>
@@ -1064,9 +1310,12 @@ interface DataSource {
     description: string;
     icon: React.ComponentType<{ className?: string }>;
     color: string;
+    liveValue?: string;
+    change?: number;
+    changePercent?: number;
 }
 
-function DataSourceCard({ source }: { source: DataSource }) {
+function DataSourceCard({ source, isLoading }: { source: DataSource; isLoading?: boolean }) {
     const Icon = source.icon;
     const colorMap: Record<string, string> = {
         amber: 'bg-amber-50 text-amber-600 border-amber-200',
@@ -1077,6 +1326,22 @@ function DataSourceCard({ source }: { source: DataSource }) {
         emerald: 'bg-emerald-50 text-emerald-600 border-emerald-200',
         red: 'bg-red-50 text-red-600 border-red-200',
         orange: 'bg-orange-50 text-orange-600 border-orange-200',
+    };
+
+    const getStatusBadge = () => {
+        if (isLoading || source.status === 'loading') {
+            return (
+                <Badge variant="outline" className="text-xs bg-slate-50 text-slate-600 border-slate-200">
+                    <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                    Loading
+                </Badge>
+            );
+        }
+        return (
+            <Badge variant="outline" className={`text-xs ${source.status === 'active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-50 text-slate-600'}`}>
+                {source.status === 'active' ? 'Active' : 'Inactive'}
+            </Badge>
+        );
     };
 
     return (
@@ -1090,10 +1355,27 @@ function DataSourceCard({ source }: { source: DataSource }) {
                         <h4 className="font-medium text-sm text-slate-800 truncate">{source.name}</h4>
                         <p className="text-xs text-slate-500 mt-0.5">{source.source}</p>
                     </div>
-                    <Badge variant="outline" className={`text-xs ${source.status === 'active' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-50 text-slate-600'}`}>
-                        {source.status === 'active' ? 'Active' : 'Inactive'}
-                    </Badge>
+                    {getStatusBadge()}
                 </div>
+
+                {/* Live Value Display */}
+                {source.liveValue && (
+                    <div className="mt-3 p-2 bg-slate-50 rounded-lg border border-slate-100">
+                        <div className="flex items-center justify-between">
+                            <span className="text-xs text-slate-500">ค่าปัจจุบัน</span>
+                            <div className="flex items-center gap-2">
+                                <span className="font-semibold text-sm text-slate-800">{source.liveValue}</span>
+                                {source.change !== undefined && (
+                                    <span className={`text-xs ${source.change >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                                        {source.change >= 0 ? '+' : ''}{source.change.toFixed(2)}
+                                        {source.changePercent !== undefined && ` (${source.changePercent.toFixed(2)}%)`}
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
+
                 <p className="text-xs text-slate-600 mt-3 leading-relaxed">{source.description}</p>
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
                     <div className="flex items-center gap-1 text-xs text-slate-500">
