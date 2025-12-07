@@ -32,6 +32,8 @@ import {
     FileSpreadsheet,
     Calendar,
     Filter,
+    Server,
+    ArrowRight,
 } from "lucide-react";
 
 // =============================================
@@ -181,7 +183,7 @@ import { getGoldDataFromExcel, GoldDataRow } from "@/app/actions/readGoldData";
 // =============================================
 export default function DataAnalysisPage() {
     return (
-        <div className="flex flex-col gap-6 p-4 md:p-6">
+        <div className="flex flex-col gap-6 p-4 md:p-6 min-w-0">
             {/* PAGE HEADER */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
@@ -218,6 +220,9 @@ export default function DataAnalysisPage() {
 // =============================================
 // Data Collection and Preparation Tab
 // =============================================
+// =============================================
+// Data Collection and Preparation Tab
+// =============================================
 function DataCollectionTab() {
     const [excelData, setExcelData] = useState<GoldDataRow[]>([]);
     const [loadingExcel, setLoadingExcel] = useState(true);
@@ -242,219 +247,157 @@ function DataCollectionTab() {
             icon: Gem,
             color: "amber",
             files: [
-                { name: "gold_bar_prices_2024.csv", status: "ready", rows: 365, lastUpdated: "07 ธ.ค. 2567" },
-                { name: "gold_ornament_prices_2024.csv", status: "ready", rows: 365, lastUpdated: "07 ธ.ค. 2567" },
+                { name: "ราคาทองประจำปี68.xlsx", status: "ready", rows: excelData.length, lastUpdated: "07 ธ.ค. 2568" },
             ],
-            description: "ข้อมูลราคาทองแท่งและทองรูปพรรณรายวัน",
-        },
-        {
-            category: "ราคาทองคำโลก",
-            icon: Globe,
-            color: "yellow",
-            files: [
-                { name: "xau_usd_2024.csv", status: "ready", rows: 365, lastUpdated: "07 ธ.ค. 2567" },
-                { name: "gold_futures_2024.csv", status: "ready", rows: 252, lastUpdated: "07 ธ.ค. 2567" },
-            ],
-            description: "ข้อมูลราคาทองคำตลาดโลกและสัญญาล่วงหน้า",
-        },
-        {
-            category: "อัตราแลกเปลี่ยน",
-            icon: DollarSign,
-            color: "green",
-            files: [
-                { name: "usd_thb_2024.csv", status: "ready", rows: 365, lastUpdated: "07 ธ.ค. 2567" },
-                { name: "currency_basket_2024.csv", status: "ready", rows: 365, lastUpdated: "07 ธ.ค. 2567" },
-            ],
-            description: "ข้อมูลอัตราแลกเปลี่ยนจาก BOT",
-        },
-        {
-            category: "อัตราดอกเบี้ย",
-            icon: Percent,
-            color: "blue",
-            files: [
-                { name: "bot_policy_rate_2024.csv", status: "ready", rows: 12, lastUpdated: "07 ธ.ค. 2567" },
-                { name: "bank_interest_rates_2024.csv", status: "ready", rows: 52, lastUpdated: "07 ธ.ค. 2567" },
-            ],
-            description: "ข้อมูลอัตราดอกเบี้ยนโยบายและอัตราดอกเบี้ยธนาคาร",
-        },
-        {
-            category: "รายงานอัตราเงินเฟ้อ",
-            icon: TrendingUp,
-            color: "purple",
-            files: [
-                { name: "cpi_thailand_2024.csv", status: "ready", rows: 12, lastUpdated: "พ.ย. 2567" },
-                { name: "ppi_thailand_2024.csv", status: "ready", rows: 12, lastUpdated: "พ.ย. 2567" },
-            ],
-            description: "ดัชนีราคาผู้บริโภคและดัชนีราคาผู้ผลิต",
-        },
-        {
-            category: "วันหยุดและเทศกาล",
-            icon: Calendar,
-            color: "pink",
-            files: [
-                { name: "thai_holidays_2024.csv", status: "ready", rows: 25, lastUpdated: "01 ม.ค. 2567" },
-                { name: "festivals_calendar_2024.csv", status: "ready", rows: 15, lastUpdated: "01 ม.ค. 2567" },
-            ],
-            description: "ปฏิทินวันหยุดและเทศกาลสำคัญ",
+            description: "ข้อมูลราคาทองแท่งและทองรูปพรรณรายวัน จากสมาคมค้าทองคำ",
         },
     ];
 
     const preparationSteps = [
-        { step: "Data Cleaning", status: "completed", description: "ทำความสะอาดข้อมูล ลบค่า null และข้อมูลผิดปกติ" },
-        { step: "Missing Value Handling", status: "completed", description: "จัดการค่าที่หายไปด้วย Forward Fill / Interpolation" },
-        { step: "Feature Engineering", status: "completed", description: "สร้าง Features ใหม่ เช่น Moving Average, RSI, MACD" },
-        { step: "Data Normalization", status: "completed", description: "ปรับสเกลข้อมูลให้อยู่ในช่วง 0-1" },
-        { step: "Train/Test Split", status: "completed", description: "แบ่งข้อมูล 80% Training, 20% Testing" },
+        { step: "Data Import", status: "completed", description: `นำเข้าข้อมูลจาก Excel ${excelData.length} แถว`, date: "07 ธ.ค. 2568" },
+        { step: "Data Cleaning", status: "completed", description: "ลบค่า null และข้อมูลผิดปกติ", date: "07 ธ.ค. 2568" },
+        { step: "Data Validation", status: "completed", description: "ตรวจสอบความถูกต้องของข้อมูล", date: "07 ธ.ค. 2568" },
     ];
 
     return (
-        <div className="space-y-6">
-            {/* Section Header */}
+        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
 
             {/* Excel Data Section */}
             <section className="space-y-4">
-                <div className="flex items-center gap-2">
-                    <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-amber-100 text-amber-600">
-                        <FileSpreadsheet className="h-4 w-4" />
+                <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-slate-900 text-amber-500 shadow-lg shadow-slate-200/50">
+                            <FileSpreadsheet className="h-5 w-5" />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-bold text-slate-900">ข้อมูลราคาทองคำปี 2568</h3>
+                            <p className="text-xs text-slate-500">Gold Price Data Year 2025 (Imported from Excel)</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 className="text-sm font-semibold text-slate-800">ข้อมูลราคาทองประจำปี 68 (จากไฟล์ Excel)</h3>
-                    </div>
+                    <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200 px-3 py-1">
+                        <RefreshCw className="w-3 h-3 mr-1" />
+                        Live Update
+                    </Badge>
                 </div>
 
-                <Card className="border-slate-200 shadow-sm overflow-hidden">
-                    <div className="rounded-md border border-slate-200 max-h-[500px] overflow-y-auto">
-                        <ScrollArea className="w-full" type="always">
-                            <div className="min-w-max">
-                                {loadingExcel ? (
-                                    <div className="p-8 text-center text-slate-500">
-                                        <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2" />
-                                        กำลังโหลดข้อมูล...
-                                    </div>
-                                ) : excelData && excelData.length > 0 ? (
-                                    <table className="w-full text-sm text-left border-collapse">
-                                        <thead className="text-xs text-slate-500 uppercase bg-slate-50 sticky top-0 z-10">
-                                            <tr>
-                                                {Object.keys(excelData[0]).map((header) => (
-                                                    <th key={header} className="px-4 py-3 font-medium whitespace-nowrap border-b border-slate-200 bg-slate-50">
-                                                        {header}
-                                                    </th>
+                <Card className="border-0 shadow-xl shadow-slate-200/40 ring-1 ring-slate-100 bg-white overflow-hidden rounded-2xl">
+                    {loadingExcel ? (
+                        <div className="p-12 text-center">
+                            <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-amber-500" />
+                            <p className="text-slate-500 font-medium">กำลังโหลดข้อมูลราคาทองคำ...</p>
+                        </div>
+                    ) : excelData && excelData.length > 0 ? (
+                        <CardContent className="p-0">
+                            <div className="block overflow-auto max-h-[500px]">
+                                <table className="text-sm text-left border-collapse">
+                                    <thead className="text-xs font-semibold uppercase bg-slate-900 text-slate-100 sticky top-0 z-20 shadow-md">
+                                        <tr>
+                                            {Object.keys(excelData[0]).map((header, i) => (
+                                                <th key={header} className="px-4 py-4 tracking-wider whitespace-nowrap bg-slate-900">
+                                                    <div className="flex items-center gap-2">
+                                                        {header.includes('date') || header.includes('วันที่') ? <Calendar className="w-3.5 h-3.5 text-amber-500 shrink-0" /> : null}
+                                                        {header.includes('price') || header.includes('ราคา') ? <DollarSign className="w-3.5 h-3.5 text-amber-500 shrink-0" /> : null}
+                                                        <span>{header}</span>
+                                                    </div>
+                                                </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-100 bg-white">
+                                        {excelData.map((row, rowIndex) => (
+                                            <tr key={rowIndex} className="group hover:bg-amber-50/30 transition-colors duration-150">
+                                                {Object.values(row).map((val, cellIndex) => (
+                                                    <td
+                                                        key={cellIndex}
+                                                        className={`px-4 py-3.5 whitespace-nowrap text-slate-600 font-medium
+                                                            ${cellIndex === 0 ? 'text-slate-800 font-semibold' : ''}
+                                                            ${typeof val === 'number' || (typeof val === 'string' && val.match(/^\d/)) ? 'font-mono tracking-tight' : ''}
+                                                        `}
+                                                    >
+                                                        {val?.toString() || '-'}
+                                                    </td>
                                                 ))}
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            {excelData.map((row, rowIndex) => (
-                                                <tr key={rowIndex} className="border-b border-slate-100 hover:bg-slate-50 last:border-0">
-                                                    {Object.values(row).map((val, cellIndex) => (
-                                                        <td key={cellIndex} className="px-4 py-3 whitespace-nowrap text-slate-700">
-                                                            {val?.toString() || '-'}
-                                                        </td>
-                                                    ))}
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                ) : (
-                                    <div className="p-8 text-center text-slate-500">
-                                        ไม่พบข้อมูล หรือไม่สามารถอ่านไฟล์ได้
-                                    </div>
-                                )}
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
-                            <ScrollBar orientation="horizontal" />
-                        </ScrollArea>
-                    </div>
+                        </CardContent>
+                    ) : (
+                        <div className="p-12 text-center text-slate-500 bg-slate-50/50">
+                            <Database className="h-10 w-10 mx-auto mb-3 text-slate-300" />
+                            <p>ไม่พบข้อมูล หรือไม่สามารถอ่านไฟล์ได้</p>
+                        </div>
+                    )}
                 </Card>
             </section>
 
-            {/* Data Collection Section */}
-            <section className="space-y-4">
-                <div className="flex items-center gap-2">
-                    <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-emerald-100 text-emerald-600">
-                        <Upload className="h-4 w-4" />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Data Collection Section (Left - 2 Cols) */}
+                <section className="lg:col-span-2 space-y-5">
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-white text-emerald-600 shadow-md shadow-slate-100 border border-slate-100">
+                            <Database className="h-5 w-5" />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-bold text-slate-900">คลังข้อมูล (Data Warehouse)</h3>
+                            <p className="text-xs text-slate-500">Managed Datasets & Sources</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 className="text-sm font-semibold text-slate-800">ข้อมูลที่รวบรวม (Collected Data)</h3>
-                    </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {dataCollectionItems.map((item, index) => (
-                        <DataCollectionCard key={index} data={item} />
-                    ))}
-                </div>
-            </section>
 
-            {/* Data Preparation Section */}
-            <section className="space-y-4">
-                <div className="flex items-center gap-2">
-                    <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-blue-100 text-blue-600">
-                        <Filter className="h-4 w-4" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {dataCollectionItems.map((item, index) => (
+                            <DataCollectionCard key={index} data={item} />
+                        ))}
                     </div>
-                    <div>
-                        <h3 className="text-sm font-semibold text-slate-800">ขั้นตอนการเตรียมข้อมูล (Data Preparation)</h3>
-                    </div>
-                </div>
-                <Card className="border-slate-200 shadow-sm">
-                    <CardContent className="p-4">
-                        <div className="space-y-3">
-                            {preparationSteps.map((step, index) => (
-                                <div key={index} className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
-                                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100">
-                                        {step.status === "completed" ? (
-                                            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                                        ) : (
-                                            <XCircle className="h-5 w-5 text-slate-400" />
-                                        )}
-                                    </div>
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-2">
-                                            <span className="font-medium text-sm text-slate-800">{step.step}</span>
-                                            <Badge variant="outline" className="text-xs bg-emerald-50 text-emerald-700 border-emerald-200">
-                                                เสร็จสิ้น
-                                            </Badge>
+                </section>
+
+                {/* Right Column: Process & Summary */}
+                <div className="space-y-8">
+                    {/* Process Steps */}
+                    <section className="space-y-5">
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-white text-blue-600 shadow-md shadow-slate-100 border border-slate-100">
+                                <Filter className="h-5 w-5" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-bold text-slate-900">สถานะการเตรียมข้อมูล</h3>
+                                <p className="text-xs text-slate-500">Pipeline Status</p>
+                            </div>
+                        </div>
+
+                        <Card className="border-0 shadow-xl shadow-slate-200/40 ring-1 ring-slate-100 bg-white">
+                            <CardContent className="p-5">
+                                <div className="space-y-0 relative">
+                                    {/* Vertical Line */}
+                                    <div className="absolute left-3.5 top-2 bottom-6 w-0.5 bg-slate-100"></div>
+
+                                    {preparationSteps.map((step, index) => (
+                                        <div key={index} className="flex gap-4 pb-6 last:pb-0 relative z-10 group">
+                                            <div className="flex-none">
+                                                <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center bg-white
+                                                    ${step.status === 'completed' ? 'border-emerald-500 text-emerald-500' : 'border-slate-300 text-slate-300'}
+                                                `}>
+                                                    {step.status === 'completed' ? <CheckCircle2 className="w-4 h-4" /> : <Loader2 className="w-4 h-4 animate-spin" />}
+                                                </div>
+                                            </div>
+                                            <div className="flex-1 pt-0.5">
+                                                <div className="flex items-center justify-between mb-1">
+                                                    <span className={`text-sm font-bold ${step.status === 'completed' ? 'text-slate-800' : 'text-slate-500'}`}>
+                                                        {step.step}
+                                                    </span>
+                                                    <span className="text-[10px] text-slate-400 font-mono bg-slate-50 px-1.5 py-0.5 rounded">{step.date}</span>
+                                                </div>
+                                                <p className="text-xs text-slate-500 leading-snug">{step.description}</p>
+                                            </div>
                                         </div>
-                                        <p className="text-xs text-slate-500 mt-0.5">{step.description}</p>
-                                    </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
-            </section>
-
-            {/* Summary Card */}
-            <Card className="border-slate-200 shadow-sm bg-linear-to-r from-indigo-50 to-purple-50">
-                <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                        <div className="p-2 bg-indigo-100 rounded-lg">
-                            <FileSpreadsheet className="h-5 w-5 text-indigo-600" />
-                        </div>
-                        <div className="flex-1">
-                            <h4 className="font-semibold text-slate-800 mb-1">สรุปข้อมูลที่รวบรวม</h4>
-                            <p className="text-xs text-slate-600 leading-relaxed mb-3">
-                                ข้อมูลทั้งหมดผ่านกระบวนการ ETL (Extract, Transform, Load) และพร้อมสำหรับการนำไปใช้ในโมเดลคาดการณ์
-                            </p>
-                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                                <div className="text-center p-2 bg-white/60 rounded-lg">
-                                    <p className="text-lg font-bold text-indigo-700">6</p>
-                                    <p className="text-xs text-slate-500">หมวดข้อมูล</p>
-                                </div>
-                                <div className="text-center p-2 bg-white/60 rounded-lg">
-                                    <p className="text-lg font-bold text-emerald-700">12</p>
-                                    <p className="text-xs text-slate-500">ไฟล์ข้อมูล</p>
-                                </div>
-                                <div className="text-center p-2 bg-white/60 rounded-lg">
-                                    <p className="text-lg font-bold text-purple-700">5</p>
-                                    <p className="text-xs text-slate-500">ขั้นตอนเตรียมข้อมูล</p>
-                                </div>
-                                <div className="text-center p-2 bg-white/60 rounded-lg">
-                                    <p className="text-lg font-bold text-amber-700">100%</p>
-                                    <p className="text-xs text-slate-500">ความพร้อม</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </CardContent>
-            </Card>
+                            </CardContent>
+                        </Card>
+                    </section>
+                </div>
+            </div>
         </div>
     );
 }
@@ -473,37 +416,39 @@ interface DataCollectionItem {
 function DataCollectionCard({ data }: { data: DataCollectionItem }) {
     const Icon = data.icon;
     const colorMap: Record<string, string> = {
-        amber: 'bg-amber-50 text-amber-600',
-        green: 'bg-green-50 text-green-600',
-        blue: 'bg-blue-50 text-blue-600',
-        purple: 'bg-purple-50 text-purple-600',
-        yellow: 'bg-yellow-50 text-yellow-600',
-        pink: 'bg-pink-50 text-pink-600',
+        amber: 'bg-amber-100/50 text-amber-600',
+        emerald: 'bg-emerald-100/50 text-emerald-600',
+        blue: 'bg-blue-100/50 text-blue-600',
+        indigo: 'bg-indigo-100/50 text-indigo-600',
+        rose: 'bg-rose-100/50 text-rose-600',
+        purple: 'bg-purple-100/50 text-purple-600',
+        teal: 'bg-teal-100/50 text-teal-600',
     };
 
     return (
-        <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-            <CardContent className="p-4">
-                <div className="flex items-start gap-3 mb-3">
-                    <div className={`p-2 rounded-lg ${colorMap[data.color]?.split(' ')[0] || 'bg-slate-50'}`}>
-                        <Icon className={`h-4 w-4 ${colorMap[data.color]?.split(' ')[1] || 'text-slate-600'}`} />
+        <Card className="group hover:shadow-xl hover:shadow-slate-200/50 transition-all duration-300 border-0 shadow-sm shadow-slate-200 ring-1 ring-slate-100 bg-white overflow-hidden">
+            <div className="h-1.5 w-full bg-linear-to-r from-transparent via-current to-transparent opacity-50" style={{ color: data.color === 'amber' ? '#f59e0b' : data.color === 'emerald' ? '#10b981' : '#6366f1' }}></div>
+            <CardContent className="p-5">
+                <div className="flex items-start gap-4 mb-4">
+                    <div className={`p-2.5 rounded-xl ${colorMap[data.color] || 'bg-slate-100 text-slate-600'} group-hover:scale-110 transition-transform duration-300`}>
+                        <Icon className="h-5 w-5" />
                     </div>
                     <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-sm text-slate-800">{data.category}</h4>
-                        <p className="text-xs text-slate-500 mt-0.5">{data.description}</p>
+                        <h4 className="font-bold text-slate-900 leading-tight">{data.category}</h4>
+                        <p className="text-xs text-slate-500 mt-1 line-clamp-2">{data.description}</p>
                     </div>
                 </div>
+
                 <div className="space-y-2">
                     {data.files.map((file, idx) => (
-                        <div key={idx} className="flex items-center justify-between p-2 bg-slate-50 rounded-lg">
-                            <div className="flex items-center gap-2">
-                                <FileSpreadsheet className="h-3.5 w-3.5 text-slate-400" />
-                                <span className="text-xs text-slate-700 font-mono">{file.name}</span>
+                        <div key={idx} className="flex items-center justify-between p-2.5 bg-slate-50/80 rounded-lg group-hover:bg-slate-50 transition-colors border border-transparent group-hover:border-slate-100">
+                            <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                                <FileSpreadsheet className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                                <span className="text-xs text-slate-700 font-medium truncate">{file.name}</span>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <span className="text-xs text-slate-500">{file.rows} rows</span>
-                                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-                            </div>
+                            <Badge variant="secondary" className="bg-white ml-2 text-[10px] text-slate-500 border-slate-100 h-5 px-1.5 font-normal shadow-sm">
+                                {file.rows} rows
+                            </Badge>
                         </div>
                     ))}
                 </div>
