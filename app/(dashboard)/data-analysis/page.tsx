@@ -7,6 +7,8 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     TrendingUp,
     AlertTriangle,
@@ -23,6 +25,13 @@ import {
     Percent,
     Loader2,
     Clock,
+    FolderOpen,
+    Upload,
+    CheckCircle2,
+    XCircle,
+    FileSpreadsheet,
+    Calendar,
+    Filter,
 } from "lucide-react";
 
 // =============================================
@@ -165,6 +174,8 @@ const SEASONAL_DATA = [
     },
 ];
 
+import { getGoldDataFromExcel, GoldDataRow } from "@/app/actions/readGoldData";
+
 // =============================================
 // MAIN COMPONENT
 // =============================================
@@ -179,9 +190,325 @@ export default function DataAnalysisPage() {
                 </div>
             </div>
 
-            {/* MAIN CONTENT */}
-            <DataSourcesTab />
+            {/* TABS */}
+            <Tabs defaultValue="collection" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 max-w-md">
+                    <TabsTrigger value="collection" className="flex items-center gap-2">
+                        <FolderOpen className="h-4 w-4" />
+                        Data Collection
+                    </TabsTrigger>
+                    <TabsTrigger value="sources" className="flex items-center gap-2">
+                        <Database className="h-4 w-4" />
+                        Data Sources
+                    </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="collection" className="mt-6">
+                    <DataCollectionTab />
+                </TabsContent>
+
+                <TabsContent value="sources" className="mt-6">
+                    <DataSourcesTab />
+                </TabsContent>
+            </Tabs>
         </div>
+    );
+}
+
+// =============================================
+// Data Collection and Preparation Tab
+// =============================================
+function DataCollectionTab() {
+    const [excelData, setExcelData] = useState<GoldDataRow[]>([]);
+    const [loadingExcel, setLoadingExcel] = useState(true);
+
+    useEffect(() => {
+        async function loadData() {
+            try {
+                const data = await getGoldDataFromExcel();
+                setExcelData(data);
+            } catch (error) {
+                console.error("Failed to load excel data", error);
+            } finally {
+                setLoadingExcel(false);
+            }
+        }
+        loadData();
+    }, []);
+
+    const dataCollectionItems = [
+        {
+            category: "ราคาทองคำไทย",
+            icon: Gem,
+            color: "amber",
+            files: [
+                { name: "gold_bar_prices_2024.csv", status: "ready", rows: 365, lastUpdated: "07 ธ.ค. 2567" },
+                { name: "gold_ornament_prices_2024.csv", status: "ready", rows: 365, lastUpdated: "07 ธ.ค. 2567" },
+            ],
+            description: "ข้อมูลราคาทองแท่งและทองรูปพรรณรายวัน",
+        },
+        {
+            category: "ราคาทองคำโลก",
+            icon: Globe,
+            color: "yellow",
+            files: [
+                { name: "xau_usd_2024.csv", status: "ready", rows: 365, lastUpdated: "07 ธ.ค. 2567" },
+                { name: "gold_futures_2024.csv", status: "ready", rows: 252, lastUpdated: "07 ธ.ค. 2567" },
+            ],
+            description: "ข้อมูลราคาทองคำตลาดโลกและสัญญาล่วงหน้า",
+        },
+        {
+            category: "อัตราแลกเปลี่ยน",
+            icon: DollarSign,
+            color: "green",
+            files: [
+                { name: "usd_thb_2024.csv", status: "ready", rows: 365, lastUpdated: "07 ธ.ค. 2567" },
+                { name: "currency_basket_2024.csv", status: "ready", rows: 365, lastUpdated: "07 ธ.ค. 2567" },
+            ],
+            description: "ข้อมูลอัตราแลกเปลี่ยนจาก BOT",
+        },
+        {
+            category: "อัตราดอกเบี้ย",
+            icon: Percent,
+            color: "blue",
+            files: [
+                { name: "bot_policy_rate_2024.csv", status: "ready", rows: 12, lastUpdated: "07 ธ.ค. 2567" },
+                { name: "bank_interest_rates_2024.csv", status: "ready", rows: 52, lastUpdated: "07 ธ.ค. 2567" },
+            ],
+            description: "ข้อมูลอัตราดอกเบี้ยนโยบายและอัตราดอกเบี้ยธนาคาร",
+        },
+        {
+            category: "รายงานอัตราเงินเฟ้อ",
+            icon: TrendingUp,
+            color: "purple",
+            files: [
+                { name: "cpi_thailand_2024.csv", status: "ready", rows: 12, lastUpdated: "พ.ย. 2567" },
+                { name: "ppi_thailand_2024.csv", status: "ready", rows: 12, lastUpdated: "พ.ย. 2567" },
+            ],
+            description: "ดัชนีราคาผู้บริโภคและดัชนีราคาผู้ผลิต",
+        },
+        {
+            category: "วันหยุดและเทศกาล",
+            icon: Calendar,
+            color: "pink",
+            files: [
+                { name: "thai_holidays_2024.csv", status: "ready", rows: 25, lastUpdated: "01 ม.ค. 2567" },
+                { name: "festivals_calendar_2024.csv", status: "ready", rows: 15, lastUpdated: "01 ม.ค. 2567" },
+            ],
+            description: "ปฏิทินวันหยุดและเทศกาลสำคัญ",
+        },
+    ];
+
+    const preparationSteps = [
+        { step: "Data Cleaning", status: "completed", description: "ทำความสะอาดข้อมูล ลบค่า null และข้อมูลผิดปกติ" },
+        { step: "Missing Value Handling", status: "completed", description: "จัดการค่าที่หายไปด้วย Forward Fill / Interpolation" },
+        { step: "Feature Engineering", status: "completed", description: "สร้าง Features ใหม่ เช่น Moving Average, RSI, MACD" },
+        { step: "Data Normalization", status: "completed", description: "ปรับสเกลข้อมูลให้อยู่ในช่วง 0-1" },
+        { step: "Train/Test Split", status: "completed", description: "แบ่งข้อมูล 80% Training, 20% Testing" },
+    ];
+
+    return (
+        <div className="space-y-6">
+            {/* Section Header */}
+
+            {/* Excel Data Section */}
+            <section className="space-y-4">
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-amber-100 text-amber-600">
+                        <FileSpreadsheet className="h-4 w-4" />
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-semibold text-slate-800">ข้อมูลราคาทองประจำปี 68 (จากไฟล์ Excel)</h3>
+                    </div>
+                </div>
+
+                <Card className="border-slate-200 shadow-sm overflow-hidden">
+                    <div className="rounded-md border border-slate-200 max-h-[500px] overflow-y-auto">
+                        <ScrollArea className="w-full" type="always">
+                            <div className="min-w-max">
+                                {loadingExcel ? (
+                                    <div className="p-8 text-center text-slate-500">
+                                        <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2" />
+                                        กำลังโหลดข้อมูล...
+                                    </div>
+                                ) : excelData && excelData.length > 0 ? (
+                                    <table className="w-full text-sm text-left border-collapse">
+                                        <thead className="text-xs text-slate-500 uppercase bg-slate-50 sticky top-0 z-10">
+                                            <tr>
+                                                {Object.keys(excelData[0]).map((header) => (
+                                                    <th key={header} className="px-4 py-3 font-medium whitespace-nowrap border-b border-slate-200 bg-slate-50">
+                                                        {header}
+                                                    </th>
+                                                ))}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {excelData.map((row, rowIndex) => (
+                                                <tr key={rowIndex} className="border-b border-slate-100 hover:bg-slate-50 last:border-0">
+                                                    {Object.values(row).map((val, cellIndex) => (
+                                                        <td key={cellIndex} className="px-4 py-3 whitespace-nowrap text-slate-700">
+                                                            {val?.toString() || '-'}
+                                                        </td>
+                                                    ))}
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                ) : (
+                                    <div className="p-8 text-center text-slate-500">
+                                        ไม่พบข้อมูล หรือไม่สามารถอ่านไฟล์ได้
+                                    </div>
+                                )}
+                            </div>
+                            <ScrollBar orientation="horizontal" />
+                        </ScrollArea>
+                    </div>
+                </Card>
+            </section>
+
+            {/* Data Collection Section */}
+            <section className="space-y-4">
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-emerald-100 text-emerald-600">
+                        <Upload className="h-4 w-4" />
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-semibold text-slate-800">ข้อมูลที่รวบรวม (Collected Data)</h3>
+                    </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {dataCollectionItems.map((item, index) => (
+                        <DataCollectionCard key={index} data={item} />
+                    ))}
+                </div>
+            </section>
+
+            {/* Data Preparation Section */}
+            <section className="space-y-4">
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-blue-100 text-blue-600">
+                        <Filter className="h-4 w-4" />
+                    </div>
+                    <div>
+                        <h3 className="text-sm font-semibold text-slate-800">ขั้นตอนการเตรียมข้อมูล (Data Preparation)</h3>
+                    </div>
+                </div>
+                <Card className="border-slate-200 shadow-sm">
+                    <CardContent className="p-4">
+                        <div className="space-y-3">
+                            {preparationSteps.map((step, index) => (
+                                <div key={index} className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+                                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-100">
+                                        {step.status === "completed" ? (
+                                            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                                        ) : (
+                                            <XCircle className="h-5 w-5 text-slate-400" />
+                                        )}
+                                    </div>
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-2">
+                                            <span className="font-medium text-sm text-slate-800">{step.step}</span>
+                                            <Badge variant="outline" className="text-xs bg-emerald-50 text-emerald-700 border-emerald-200">
+                                                เสร็จสิ้น
+                                            </Badge>
+                                        </div>
+                                        <p className="text-xs text-slate-500 mt-0.5">{step.description}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+            </section>
+
+            {/* Summary Card */}
+            <Card className="border-slate-200 shadow-sm bg-linear-to-r from-indigo-50 to-purple-50">
+                <CardContent className="p-4">
+                    <div className="flex items-start gap-3">
+                        <div className="p-2 bg-indigo-100 rounded-lg">
+                            <FileSpreadsheet className="h-5 w-5 text-indigo-600" />
+                        </div>
+                        <div className="flex-1">
+                            <h4 className="font-semibold text-slate-800 mb-1">สรุปข้อมูลที่รวบรวม</h4>
+                            <p className="text-xs text-slate-600 leading-relaxed mb-3">
+                                ข้อมูลทั้งหมดผ่านกระบวนการ ETL (Extract, Transform, Load) และพร้อมสำหรับการนำไปใช้ในโมเดลคาดการณ์
+                            </p>
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                                <div className="text-center p-2 bg-white/60 rounded-lg">
+                                    <p className="text-lg font-bold text-indigo-700">6</p>
+                                    <p className="text-xs text-slate-500">หมวดข้อมูล</p>
+                                </div>
+                                <div className="text-center p-2 bg-white/60 rounded-lg">
+                                    <p className="text-lg font-bold text-emerald-700">12</p>
+                                    <p className="text-xs text-slate-500">ไฟล์ข้อมูล</p>
+                                </div>
+                                <div className="text-center p-2 bg-white/60 rounded-lg">
+                                    <p className="text-lg font-bold text-purple-700">5</p>
+                                    <p className="text-xs text-slate-500">ขั้นตอนเตรียมข้อมูล</p>
+                                </div>
+                                <div className="text-center p-2 bg-white/60 rounded-lg">
+                                    <p className="text-lg font-bold text-amber-700">100%</p>
+                                    <p className="text-xs text-slate-500">ความพร้อม</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
+    );
+}
+
+// =============================================
+// Data Collection Card Component
+// =============================================
+interface DataCollectionItem {
+    category: string;
+    icon: React.ComponentType<{ className?: string }>;
+    color: string;
+    files: { name: string; status: string; rows: number; lastUpdated: string }[];
+    description: string;
+}
+
+function DataCollectionCard({ data }: { data: DataCollectionItem }) {
+    const Icon = data.icon;
+    const colorMap: Record<string, string> = {
+        amber: 'bg-amber-50 text-amber-600',
+        green: 'bg-green-50 text-green-600',
+        blue: 'bg-blue-50 text-blue-600',
+        purple: 'bg-purple-50 text-purple-600',
+        yellow: 'bg-yellow-50 text-yellow-600',
+        pink: 'bg-pink-50 text-pink-600',
+    };
+
+    return (
+        <Card className="border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+            <CardContent className="p-4">
+                <div className="flex items-start gap-3 mb-3">
+                    <div className={`p-2 rounded-lg ${colorMap[data.color]?.split(' ')[0] || 'bg-slate-50'}`}>
+                        <Icon className={`h-4 w-4 ${colorMap[data.color]?.split(' ')[1] || 'text-slate-600'}`} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-sm text-slate-800">{data.category}</h4>
+                        <p className="text-xs text-slate-500 mt-0.5">{data.description}</p>
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    {data.files.map((file, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-2 bg-slate-50 rounded-lg">
+                            <div className="flex items-center gap-2">
+                                <FileSpreadsheet className="h-3.5 w-3.5 text-slate-400" />
+                                <span className="text-xs text-slate-700 font-mono">{file.name}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-xs text-slate-500">{file.rows} rows</span>
+                                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </CardContent>
+        </Card>
     );
 }
 
@@ -456,7 +783,7 @@ function DataSourcesTab() {
             </section>
 
             {/* Summary Card */}
-            <Card className="border-slate-200 shadow-sm bg-gradient-to-r from-blue-50 to-indigo-50">
+            <Card className="border-slate-200 shadow-sm bg-linear-to-r from-blue-50 to-indigo-50">
                 <CardContent className="p-4">
                     <div className="flex items-start gap-3">
                         <div className="p-2 bg-blue-100 rounded-lg">
