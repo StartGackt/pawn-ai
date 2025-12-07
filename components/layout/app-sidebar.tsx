@@ -17,6 +17,8 @@ import {
     Package,
     Building,
     Calculator,
+    Target,
+    BarChart3,
 } from "lucide-react";
 import {
     Sidebar,
@@ -50,9 +52,19 @@ const navItems = [
                 icon: MessageSquare,
             },
             {
-                title: "Data Collection & Analysis",
+                title: "Data Collection",
                 href: "/data-analysis",
                 icon: TrendingUp,
+            },
+            {
+                title: "Data Analysis",
+                href: "/analysis",
+                icon: BarChart3,
+            },
+            {
+                title: "Blind Forecast",
+                href: "/blind-forecast",
+                icon: Target,
             },
             {
                 title: "System Architecture",
