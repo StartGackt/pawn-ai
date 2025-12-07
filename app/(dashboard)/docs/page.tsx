@@ -55,7 +55,7 @@ export default function DocumentationPage() {
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                         <Code className="h-6 w-6" />
-                        API Documentation
+                        API Documentation - Internal APIs
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -113,6 +113,52 @@ export default function DocumentationPage() {
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
                             <Badge>GET</Badge>
+                            <code className="text-sm">/api/exchange-rate</code>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                            ดึงข้อมูลอัตราแลกเปลี่ยน THB/USD
+                        </p>
+                        <div className="rounded-lg bg-muted p-3">
+                            <pre className="text-xs">
+                                {`{
+  "rate": 34.85,
+  "change": 0.15,
+  "changePercent": 0.43,
+  "timestamp": "2025-12-06T10:00:00.000Z"
+}`}
+                            </pre>
+                        </div>
+                    </div>
+
+                    {/* API 4 */}
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Badge>GET</Badge>
+                            <code className="text-sm">/api/loan-rate</code>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                            ดึงข้อมูลอัตราดอกเบี้ยรับจำนำของ สธค.
+                        </p>
+                        <div className="rounded-lg bg-muted p-3">
+                            <pre className="text-xs">
+                                {`{
+  "rates": [
+    {
+      "type": "ทองคำ",
+      "rate": "0.125%",
+      "maxAmount": "100,000 บาท"
+    }
+  ],
+  "effectiveDate": "2025-01-01"
+}`}
+                            </pre>
+                        </div>
+                    </div>
+
+                    {/* API 5 */}
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Badge>GET</Badge>
                             <code className="text-sm">/api/gold-prediction?days=7</code>
                         </div>
                         <p className="text-sm text-muted-foreground">
@@ -137,7 +183,7 @@ export default function DocumentationPage() {
                         </div>
                     </div>
 
-                    {/* API 4 */}
+                    {/* API 6 */}
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
                             <Badge variant="secondary">POST</Badge>
@@ -166,7 +212,7 @@ export default function DocumentationPage() {
                         </div>
                     </div>
 
-                    {/* API 5 */}
+                    {/* API 7 */}
                     <div className="space-y-2">
                         <div className="flex items-center gap-2">
                             <Badge variant="secondary">POST</Badge>
@@ -189,6 +235,159 @@ export default function DocumentationPage() {
   "documentsUsed": ["อัตราดอกเบี้ยรับจำนำ"]
 }`}
                             </pre>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            {/* External APIs */}
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <Database className="h-6 w-6" />
+                        External APIs - แหล่งข้อมูลภายนอก
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    {/* Gold Price API */}
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Badge className="bg-yellow-500">External</Badge>
+                            <code className="text-sm">GoldAPI.io</code>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                            ดึงข้อมูลราคาทองโลก XAU/USD แบบ Real-time
+                        </p>
+                        <div className="rounded-lg bg-muted p-3">
+                            <pre className="text-xs">
+                                {`GET https://www.goldapi.io/api/XAU/USD
+Headers: x-access-token: {API_KEY}
+
+Response:
+{
+  "price": 2650.50,
+  "prev_close_price": 2638.20,
+  "open_price": 2640.00,
+  "high_price": 2665.00,
+  "low_price": 2635.00
+}`}
+                            </pre>
+                        </div>
+                    </div>
+
+                    {/* Thai Gold API */}
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Badge className="bg-yellow-500">External</Badge>
+                            <code className="text-sm">Thai Gold Traders Association</code>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                            ดึงข้อมูลราคาทองไทยจากสมาคมค้าทองคำ (Web Scraping)
+                        </p>
+                        <div className="rounded-lg bg-muted p-3">
+                            <pre className="text-xs">
+                                {`Source: https://www.goldtraders.or.th/
+
+Response:
+{
+  "date": "08 ธันวาคม 2568",
+  "gold_bar": { "buy": 43,900, "sell": 43,800 },
+  "gold_ornament": { "buy": 44,400, "sell": 43,400 }
+}`}
+                            </pre>
+                        </div>
+                    </div>
+
+                    {/* Exchange Rate API */}
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Badge className="bg-yellow-500">External</Badge>
+                            <code className="text-sm">ExchangeRate-API</code>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                            ดึงข้อมูลอัตราแลกเปลี่ยน USD/THB
+                        </p>
+                        <div className="rounded-lg bg-muted p-3">
+                            <pre className="text-xs">
+                                {`GET https://api.exchangerate-api.com/v4/latest/USD
+
+Response:
+{
+  "rates": {
+    "THB": 34.85
+  },
+  "time_last_updated": 1733616000
+}`}
+                            </pre>
+                        </div>
+                    </div>
+
+                    {/* LLM APIs */}
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                            <Badge className="bg-purple-500">AI</Badge>
+                            <code className="text-sm">LLM APIs (Multi-Provider)</code>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                            AI Language Models สำหรับ Chatbot
+                        </p>
+                        <div className="rounded-lg bg-muted p-3">
+                            <pre className="text-xs">
+                                {`Providers:
+• Claude (Anthropic) - api.anthropic.com
+• GPT-4o (OpenAI) - api.openai.com
+• Grok (xAI) - api.x.ai
+
+All using Chat Completions API format`}
+                            </pre>
+                        </div>
+                    </div>
+
+                    {/* API Summary Table */}
+                    <div className="rounded-lg border p-4">
+                        <h4 className="mb-3 font-semibold">สรุป External APIs ที่ใช้งาน</h4>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                                <thead>
+                                    <tr className="border-b">
+                                        <th className="py-2 text-left">API</th>
+                                        <th className="py-2 text-left">ประเภท</th>
+                                        <th className="py-2 text-left">ความถี่</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr className="border-b">
+                                        <td className="py-2">GoldAPI.io</td>
+                                        <td className="py-2">REST API</td>
+                                        <td className="py-2">Real-time</td>
+                                    </tr>
+                                    <tr className="border-b">
+                                        <td className="py-2">Thai Gold Association</td>
+                                        <td className="py-2">Web Scraping</td>
+                                        <td className="py-2">ทุก 5 นาที</td>
+                                    </tr>
+                                    <tr className="border-b">
+                                        <td className="py-2">ExchangeRate-API</td>
+                                        <td className="py-2">REST API</td>
+                                        <td className="py-2">รายวัน</td>
+                                    </tr>
+                                    <tr className="border-b">
+                                        <td className="py-2">Anthropic Claude</td>
+                                        <td className="py-2">REST API</td>
+                                        <td className="py-2">On-demand</td>
+                                    </tr>
+                                    <tr className="border-b">
+                                        <td className="py-2">OpenAI GPT-4o</td>
+                                        <td className="py-2">REST API</td>
+                                        <td className="py-2">On-demand</td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-2">xAI Grok</td>
+                                        <td className="py-2">REST API</td>
+                                        <td className="py-2">On-demand</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </CardContent>
