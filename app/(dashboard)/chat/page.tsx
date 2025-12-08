@@ -10,6 +10,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GoldPriceDisplay } from "@/components/gold-price-display";
 import { WorldGoldPriceDisplay } from "@/components/world-gold-price-display";
 import { GoldPredictionDisplay } from "@/components/gold-prediction-display";
+import ReactMarkdown from "react-markdown";
+
+import remarkGfm from "remark-gfm";
 
 interface Message {
     role: "user" | "assistant";
@@ -78,9 +81,21 @@ export default function ChatPage() {
     const [isLoading, setIsLoading] = React.useState(false);
     const [selectedModel, setSelectedModel] = React.useState<string>("claude");
     const [activeTab, setActiveTab] = React.useState("external");
-    
+    const [isMounted, setIsMounted] = React.useState(false);
+
     const messagesEndRef = React.useRef<HTMLDivElement>(null);
     const messagesInternalEndRef = React.useRef<HTMLDivElement>(null);
+
+    // Fix hydration mismatch
+    React.useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    // Helper function for time formatting (client-side only)
+    const formatTime = (date: Date) => {
+        if (!isMounted) return "";
+        return date.toLocaleTimeString("th-TH");
+    };
 
     // Fetch available models on mount
     React.useEffect(() => {
@@ -319,9 +334,9 @@ export default function ChatPage() {
                                         className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                                     >
                                         <div
-                                            className={`max-w-[85%] rounded-2xl px-4 py-3 shadow-sm ${message.role === "user"
-                                                ? "bg-blue-600 text-white rounded-tr-none"
-                                                : "bg-slate-100 text-slate-800 rounded-tl-none"
+                                            className={`rounded-2xl px-4 py-3 shadow-sm ${message.role === "user"
+                                                ? "bg-blue-600 text-white rounded-tr-none max-w-[85%]"
+                                                : "bg-slate-100 text-slate-800 rounded-tl-none w-full"
                                                 }`}
                                         >
                                             <div className="flex items-start gap-2">
@@ -330,14 +345,32 @@ export default function ChatPage() {
                                                         {MODEL_ICONS[message.model || "claude"] || <Sparkles className="h-5 w-5" />}
                                                     </span>
                                                 )}
-                                                <div className="flex-1">
-                                                    <div className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</div>
-                                                    <div className={`flex items-center gap-2 mt-1.5 ${message.role === "user" ? "justify-end text-blue-100" : "text-slate-400"}`}>
+                                                <div className="flex-1 min-w-0">
+                                                    {message.role === "assistant" ? (
+                                                        <div className="text-sm prose prose-sm max-w-none 
+                                                            prose-p:leading-relaxed prose-p:my-2 first:prose-p:mt-0 last:prose-p:mb-0
+                                                            prose-headings:font-semibold prose-headings:tracking-tight prose-headings:my-3
+                                                            prose-h1:text-lg prose-h2:text-base prose-h3:text-sm
+                                                            prose-ul:my-2 prose-ul:pl-5
+                                                            prose-li:my-0.5
+                                                            prose-strong:font-bold prose-strong:text-foreground
+                                                            prose-code:bg-black/5 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none prose-code:text-xs prose-code:font-mono
+                                                            prose-pre:bg-slate-900 prose-pre:text-slate-50 prose-pre:p-3 prose-pre:rounded-lg
+                                                            prose-blockquote:border-l-4 prose-blockquote:border-slate-300 prose-blockquote:pl-4 prose-blockquote:italic"
+                                                        >
+                                                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                                {message.content}
+                                                            </ReactMarkdown>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</div>
+                                                    )}
+                                                    <div className={`flex items-center gap-2 mt-2 ${message.role === "user" ? "justify-end text-blue-100" : "text-slate-400"}`}>
                                                         <p className="text-[10px]">
-                                                            {message.timestamp.toLocaleTimeString("th-TH")}
+                                                            {formatTime(message.timestamp)}
                                                         </p>
                                                         {message.role === "assistant" && message.model && (
-                                                            <Badge variant="secondary" className="text-[9px] px-1 h-4 bg-white/50 text-slate-600">
+                                                            <Badge variant="secondary" className="text-[9px] px-1.5 h-4 bg-slate-100 text-slate-500 border-0">
                                                                 {message.model.toUpperCase()}
                                                             </Badge>
                                                         )}
@@ -357,9 +390,9 @@ export default function ChatPage() {
                                         className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                                     >
                                         <div
-                                            className={`max-w-[85%] rounded-2xl px-4 py-3 shadow-sm ${message.role === "user"
-                                                ? "bg-emerald-600 text-white rounded-tr-none"
-                                                : "bg-emerald-50 text-emerald-900 border border-emerald-100 rounded-tl-none"
+                                            className={`rounded-2xl px-4 py-3 shadow-sm ${message.role === "user"
+                                                ? "bg-emerald-600 text-white rounded-tr-none max-w-[85%]"
+                                                : "bg-emerald-50 text-emerald-900 border border-emerald-100 rounded-tl-none w-full"
                                                 }`}
                                         >
                                             <div className="flex items-start gap-2">
@@ -368,16 +401,32 @@ export default function ChatPage() {
                                                         {MODEL_ICONS.internal}
                                                     </span>
                                                 )}
-                                                <div className="flex-1">
-                                                    <div className="text-sm whitespace-pre-wrap leading-relaxed markdown-content">
-                                                        {message.content}
-                                                    </div>
-                                                    <div className={`flex items-center gap-2 mt-1.5 ${message.role === "user" ? "justify-end text-emerald-100" : "text-emerald-400"}`}>
+                                                <div className="flex-1 min-w-0">
+                                                    {message.role === "assistant" ? (
+                                                        <div className="text-sm prose prose-sm max-w-none 
+                                                            prose-p:leading-relaxed prose-p:my-2 first:prose-p:mt-0 last:prose-p:mb-0
+                                                            prose-headings:font-semibold prose-headings:tracking-tight prose-headings:my-3
+                                                            prose-h1:text-lg prose-h2:text-base prose-h3:text-sm
+                                                            prose-ul:my-2 prose-ul:pl-5
+                                                            prose-li:my-0.5
+                                                            prose-strong:font-bold prose-strong:text-emerald-800
+                                                            prose-code:bg-emerald-100/50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none prose-code:text-xs prose-code:font-mono prose-code:text-emerald-800
+                                                            prose-pre:bg-emerald-900 prose-pre:text-emerald-50 prose-pre:p-3 prose-pre:rounded-lg
+                                                            prose-blockquote:border-l-4 prose-blockquote:border-emerald-300 prose-blockquote:pl-4 prose-blockquote:italic"
+                                                        >
+                                                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                                                {message.content}
+                                                            </ReactMarkdown>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</div>
+                                                    )}
+                                                    <div className={`flex items-center gap-2 mt-2 ${message.role === "user" ? "justify-end text-emerald-100" : "text-emerald-400"}`}>
                                                         <p className="text-[10px]">
-                                                            {message.timestamp.toLocaleTimeString("th-TH")}
+                                                            {formatTime(message.timestamp)}
                                                         </p>
                                                         {message.role === "assistant" && (
-                                                            <Badge variant="secondary" className="text-[9px] px-1 h-4 bg-white/50 text-emerald-600">
+                                                            <Badge variant="secondary" className="text-[9px] px-1.5 h-4 bg-emerald-100/50 text-emerald-600 border-0">
                                                                 INTERNAL DB
                                                             </Badge>
                                                         )}
