@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Sarabun } from "next/font/google";
+import { Prompt } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
-const sarabun = Sarabun({
-  weight: ["300", "400", "500", "600", "700"],
+const prompt = Prompt({
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["thai", "latin"],
-  variable: "--font-sarabun",
+  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="th" suppressHydrationWarning>
-      <body className={`${sarabun.variable} font-sans antialiased`} suppressHydrationWarning>
+      <body className={`${prompt.variable} font-sans antialiased`} suppressHydrationWarning>
         {children}
         <Toaster />
       </body>

@@ -380,6 +380,20 @@ export default function ChatPage() {
                                         </div>
                                     </div>
                                 ))}
+                                {isLoading && (
+                                    <div className="flex justify-start">
+                                        <div className="max-w-[80%] rounded-2xl px-4 py-3 bg-slate-50 border border-slate-100 rounded-tl-none">
+                                            <div className="flex items-center gap-2">
+                                                <div className="flex gap-1">
+                                                    <div className="h-2 w-2 rounded-full bg-slate-400 animate-bounce" />
+                                                    <div className="h-2 w-2 rounded-full bg-slate-400 animate-bounce [animation-delay:0.2s]" />
+                                                    <div className="h-2 w-2 rounded-full bg-slate-400 animate-bounce [animation-delay:0.4s]" />
+                                                </div>
+                                                <span className="text-xs text-slate-400">กำลังประมวลผล...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                                 <div ref={messagesEndRef} />
                             </TabsContent>
 
@@ -445,7 +459,7 @@ export default function ChatPage() {
                                                     <div className="h-2 w-2 rounded-full bg-slate-400 animate-bounce [animation-delay:0.2s]" />
                                                     <div className="h-2 w-2 rounded-full bg-slate-400 animate-bounce [animation-delay:0.4s]" />
                                                 </div>
-                                                <span className="text-xs text-slate-400">กำลังวิเคราะห์ข้อมูล...</span>
+                                                <span className="text-xs text-slate-400">กำลังประมวลผล...</span>
                                             </div>
                                         </div>
                                     </div>
