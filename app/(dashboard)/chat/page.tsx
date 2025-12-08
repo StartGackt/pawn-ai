@@ -4,6 +4,7 @@ import * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Send, Sparkles, TrendingUp, BarChart3, FileText, MessageSquare, Database, Globe, LineChart, PieChart } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -274,7 +275,7 @@ export default function ChatPage() {
     };
 
     return (
-        <div className="space-y-6 h-[calc(100vh-8rem)]">
+        <div className="space-y-6 h-[calc(100vh-4rem)]">
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
@@ -334,9 +335,9 @@ export default function ChatPage() {
                                         className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                                     >
                                         <div
-                                            className={`rounded-2xl px-4 py-3 shadow-sm ${message.role === "user"
-                                                ? "bg-blue-600 text-white rounded-tr-none max-w-[85%]"
-                                                : "bg-slate-100 text-slate-800 rounded-tl-none w-full"
+                                            className={`${message.role === "user"
+                                                ? "rounded-2xl px-4 py-3 shadow-sm bg-blue-600 text-white rounded-tr-none max-w-[85%]"
+                                                : "w-full py-4 px-1" // Full width, no bubble for AI
                                                 }`}
                                         >
                                             <div className="flex items-start gap-2">
@@ -347,14 +348,14 @@ export default function ChatPage() {
                                                 )}
                                                 <div className="flex-1 min-w-0">
                                                     {message.role === "assistant" ? (
-                                                        <div className="text-sm prose prose-sm max-w-none 
+                                                        <div className="text-base prose max-w-none 
                                                             prose-p:leading-relaxed prose-p:my-2 first:prose-p:mt-0 last:prose-p:mb-0
                                                             prose-headings:font-semibold prose-headings:tracking-tight prose-headings:my-3
-                                                            prose-h1:text-lg prose-h2:text-base prose-h3:text-sm
+                                                            prose-h1:text-xl prose-h2:text-lg prose-h3:text-base
                                                             prose-ul:my-2 prose-ul:pl-5
                                                             prose-li:my-0.5
                                                             prose-strong:font-bold prose-strong:text-foreground
-                                                            prose-code:bg-black/5 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none prose-code:text-xs prose-code:font-mono
+                                                            prose-code:bg-black/5 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none prose-code:text-sm prose-code:font-mono
                                                             prose-pre:bg-slate-900 prose-pre:text-slate-50 prose-pre:p-3 prose-pre:rounded-lg
                                                             prose-blockquote:border-l-4 prose-blockquote:border-slate-300 prose-blockquote:pl-4 prose-blockquote:italic"
                                                         >
@@ -404,9 +405,9 @@ export default function ChatPage() {
                                         className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                                     >
                                         <div
-                                            className={`rounded-2xl px-4 py-3 shadow-sm ${message.role === "user"
-                                                ? "bg-emerald-600 text-white rounded-tr-none max-w-[85%]"
-                                                : "bg-emerald-50 text-emerald-900 border border-emerald-100 rounded-tl-none w-full"
+                                            className={`${message.role === "user"
+                                                ? "rounded-2xl px-4 py-3 shadow-sm bg-emerald-600 text-white rounded-tr-none max-w-[85%]"
+                                                : "w-full py-4 px-1" // Full width, no bubble for AI
                                                 }`}
                                         >
                                             <div className="flex items-start gap-2">
@@ -417,14 +418,14 @@ export default function ChatPage() {
                                                 )}
                                                 <div className="flex-1 min-w-0">
                                                     {message.role === "assistant" ? (
-                                                        <div className="text-sm prose prose-sm max-w-none 
+                                                        <div className="text-base prose max-w-none 
                                                             prose-p:leading-relaxed prose-p:my-2 first:prose-p:mt-0 last:prose-p:mb-0
                                                             prose-headings:font-semibold prose-headings:tracking-tight prose-headings:my-3
-                                                            prose-h1:text-lg prose-h2:text-base prose-h3:text-sm
+                                                            prose-h1:text-xl prose-h2:text-lg prose-h3:text-base
                                                             prose-ul:my-2 prose-ul:pl-5
                                                             prose-li:my-0.5
                                                             prose-strong:font-bold prose-strong:text-emerald-800
-                                                            prose-code:bg-emerald-100/50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none prose-code:text-xs prose-code:font-mono prose-code:text-emerald-800
+                                                            prose-code:bg-emerald-100/50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none prose-code:text-sm prose-code:font-mono prose-code:text-emerald-800
                                                             prose-pre:bg-emerald-900 prose-pre:text-emerald-50 prose-pre:p-3 prose-pre:rounded-lg
                                                             prose-blockquote:border-l-4 prose-blockquote:border-emerald-300 prose-blockquote:pl-4 prose-blockquote:italic"
                                                         >
@@ -469,19 +470,19 @@ export default function ChatPage() {
                         </CardContent>
 
                         <div className="border-t p-4 bg-white">
-                            <div className="flex gap-2">
-                                <Input
+                            <div className="flex gap-2 items-end">
+                                <Textarea
                                     value={input}
                                     onChange={(e) => setInput(e.target.value)}
-                                    onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
+                                    onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), handleSend())}
                                     placeholder={activeTab === 'external' ? "ถามเกี่ยวกับราคาทอง แนวโน้มตลาด..." : "ถามยอดจำนำ ทรัพย์คงเหลือ..."}
                                     disabled={isLoading}
-                                    className="flex-1"
+                                    className="flex-1 min-h-[60px] resize-none"
                                 />
                                 <Button
                                     onClick={handleSend}
                                     disabled={isLoading || !input.trim()}
-                                    className={activeTab === 'internal' ? 'bg-emerald-600 hover:bg-emerald-700' : ''}
+                                    className={`h-10 w-10 p-0 shrink-0 mb-1 ${activeTab === 'internal' ? 'bg-emerald-600 hover:bg-emerald-700' : ''}`}
                                 >
                                     <Send className="h-4 w-4" />
                                 </Button>
